@@ -25,8 +25,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-white text-foreground`}>
+    <html lang="en" className="light" style={{ colorScheme: "light" }}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen`} style={{ background: "#ffffff", color: "#111111" }}>
         <header className="sticky top-0 z-50 border-b bg-white/90 backdrop-blur-sm">
           <div className="mx-auto flex h-14 max-w-7xl items-center gap-3 px-4">
             <Link href="/" className="flex items-center gap-2 font-semibold text-primary">

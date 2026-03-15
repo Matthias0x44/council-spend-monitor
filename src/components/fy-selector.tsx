@@ -18,7 +18,8 @@ export function FYSelector({ years, current, slug }: FYSelectorProps) {
         const fy = e.target.value;
         router.push(`/councils/${slug}${fy ? `?fy=${fy}` : ""}`);
       }}
-      className="h-9 rounded-lg border bg-card px-3 text-sm font-medium outline-none focus:ring-2 focus:ring-ring"
+      className="h-9 rounded-lg border px-3 text-sm font-medium outline-none focus:ring-2 focus:ring-blue-400"
+      style={{ background: "#fff", color: "#111", borderColor: "#e5e7eb" }}
     >
       {years.map((y) => (
         <option key={y} value={y}>

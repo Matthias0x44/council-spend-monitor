@@ -108,26 +108,28 @@ export function TransactionTable({ slug, fy, directorates, categories }: Props) 
   const hasFilters = search || directorate || category;
 
   return (
-    <div className="rounded-xl border bg-card shadow-sm">
+    <div className="rounded-xl border shadow-sm" style={{ background: "#fff" }}>
       <div className="flex flex-col gap-3 border-b p-4 sm:flex-row sm:items-center sm:justify-between">
-        <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+        <h3 className="text-sm font-semibold uppercase tracking-wider" style={{ color: "#6b7280" }}>
           Transactions
         </h3>
         <div className="flex flex-wrap items-center gap-2">
           <div className="relative">
-            <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2" style={{ color: "#9ca3af" }} />
             <input
               type="text"
               placeholder="Search..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="h-8 w-48 rounded-lg border bg-background pl-8 pr-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+              className="h-8 w-48 rounded-lg border pl-8 pr-3 text-sm outline-none focus:ring-2 focus:ring-blue-400"
+              style={{ background: "#fff", color: "#111", borderColor: "#e5e7eb" }}
             />
           </div>
           <select
             value={directorate}
             onChange={(e) => setDirectorate(e.target.value)}
-            className="h-8 rounded-lg border bg-background px-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+            className="h-8 rounded-lg border px-2 text-sm outline-none focus:ring-2 focus:ring-blue-400"
+            style={{ background: "#fff", color: "#111", borderColor: "#e5e7eb" }}
           >
             <option value="">All directorates</option>
             {directorates.map((d) => (
@@ -139,7 +141,8 @@ export function TransactionTable({ slug, fy, directorates, categories }: Props) 
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="h-8 rounded-lg border bg-background px-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+            className="h-8 rounded-lg border px-2 text-sm outline-none focus:ring-2 focus:ring-blue-400"
+            style={{ background: "#fff", color: "#111", borderColor: "#e5e7eb" }}
           >
             <option value="">All categories</option>
             {categories.map((c) => (
@@ -155,14 +158,16 @@ export function TransactionTable({ slug, fy, directorates, categories }: Props) 
                 setDirectorate("");
                 setCategory("");
               }}
-              className="flex h-8 items-center gap-1 rounded-lg border px-2 text-sm text-muted-foreground hover:bg-muted"
+              className="flex h-8 items-center gap-1 rounded-lg border px-2 text-sm hover:bg-gray-50"
+              style={{ color: "#6b7280", borderColor: "#e5e7eb" }}
             >
               <X className="h-3 w-3" /> Clear
             </button>
           )}
           <button
             onClick={exportCSV}
-            className="flex h-8 items-center gap-1 rounded-lg border px-3 text-sm font-medium hover:bg-muted"
+            className="flex h-8 items-center gap-1 rounded-lg border px-3 text-sm font-medium hover:bg-gray-50"
+            style={{ color: "#111", borderColor: "#e5e7eb" }}
           >
             <Download className="h-3 w-3" /> CSV
           </button>
@@ -170,50 +175,50 @@ export function TransactionTable({ slug, fy, directorates, categories }: Props) 
       </div>
 
       <div className="overflow-x-auto">
-        <table className="w-full text-sm">
+        <table className="w-full text-sm" style={{ color: "#111" }}>
           <thead>
-            <tr className="border-b bg-muted/50">
+            <tr className="border-b" style={{ background: "#f9fafb" }}>
               <SortHeader label="Supplier" col="supplier" current={sortBy} dir={sortDir} onSort={handleSort} />
               <SortHeader label="Amount" col="amount" current={sortBy} dir={sortDir} onSort={handleSort} className="text-right" />
               <SortHeader label="Date" col="date" current={sortBy} dir={sortDir} onSort={handleSort} />
-              <th className="px-3 py-2 text-left font-medium text-muted-foreground">Directorate</th>
-              <th className="px-3 py-2 text-left font-medium text-muted-foreground">Service</th>
-              <th className="px-3 py-2 text-left font-medium text-muted-foreground">Description</th>
-              <th className="px-3 py-2 text-left font-medium text-muted-foreground">Source</th>
+              <th className="px-3 py-2 text-left font-medium" style={{ color: "#6b7280" }}>Directorate</th>
+              <th className="px-3 py-2 text-left font-medium" style={{ color: "#6b7280" }}>Service</th>
+              <th className="px-3 py-2 text-left font-medium" style={{ color: "#6b7280" }}>Description</th>
+              <th className="px-3 py-2 text-left font-medium" style={{ color: "#6b7280" }}>Source</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={7} className="px-3 py-8 text-center text-muted-foreground">
+                <td colSpan={7} className="px-3 py-8 text-center" style={{ color: "#6b7280" }}>
                   Loading...
                 </td>
               </tr>
             ) : !data || data.rows.length === 0 ? (
               <tr>
-                <td colSpan={7} className="px-3 py-8 text-center text-muted-foreground">
+                <td colSpan={7} className="px-3 py-8 text-center" style={{ color: "#6b7280" }}>
                   No transactions found
                 </td>
               </tr>
             ) : (
               data.rows.map((row) => (
-                <tr key={row.id} className="border-b transition-colors hover:bg-muted/30">
+                <tr key={row.id} className="border-b transition-colors hover:bg-gray-50">
                   <td className="max-w-[200px] truncate px-3 py-2 font-medium">
-                    {row.supplierName || "—"}
+                    {row.supplierName || "\u2014"}
                   </td>
                   <td className="whitespace-nowrap px-3 py-2 text-right font-mono">
                     {formatCurrencyDetailed(row.amount)}
                   </td>
-                  <td className="whitespace-nowrap px-3 py-2 text-muted-foreground">
-                    {row.date || row.month || "—"}
+                  <td className="whitespace-nowrap px-3 py-2" style={{ color: "#6b7280" }}>
+                    {row.date || row.month || "\u2014"}
                   </td>
-                  <td className="max-w-[150px] truncate px-3 py-2">{row.directorate || "—"}</td>
-                  <td className="max-w-[150px] truncate px-3 py-2">{row.service || "—"}</td>
-                  <td className="max-w-[200px] truncate px-3 py-2 text-muted-foreground">
-                    {row.description || "—"}
+                  <td className="max-w-[150px] truncate px-3 py-2">{row.directorate || "\u2014"}</td>
+                  <td className="max-w-[150px] truncate px-3 py-2">{row.service || "\u2014"}</td>
+                  <td className="max-w-[200px] truncate px-3 py-2" style={{ color: "#6b7280" }}>
+                    {row.description || "\u2014"}
                   </td>
-                  <td className="max-w-[120px] truncate px-3 py-2 text-xs text-muted-foreground">
-                    {row.sourceFile || "—"}
+                  <td className="max-w-[120px] truncate px-3 py-2 text-xs" style={{ color: "#9ca3af" }}>
+                    {row.sourceFile || "\u2014"}
                   </td>
                 </tr>
               ))
@@ -224,7 +229,7 @@ export function TransactionTable({ slug, fy, directorates, categories }: Props) 
 
       {data && data.totalPages > 1 && (
         <div className="flex items-center justify-between border-t px-4 py-3">
-          <span className="text-sm text-muted-foreground">
+          <span className="text-sm" style={{ color: "#6b7280" }}>
             {((data.page - 1) * data.pageSize + 1).toLocaleString()}
             {" - "}
             {Math.min(data.page * data.pageSize, data.total).toLocaleString()} of{" "}
@@ -234,17 +239,19 @@ export function TransactionTable({ slug, fy, directorates, categories }: Props) 
             <button
               disabled={data.page <= 1}
               onClick={() => setPage((p) => p - 1)}
-              className="flex h-8 w-8 items-center justify-center rounded-lg border hover:bg-muted disabled:opacity-30"
+              className="flex h-8 w-8 items-center justify-center rounded-lg border hover:bg-gray-50 disabled:opacity-30"
+              style={{ borderColor: "#e5e7eb" }}
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
-            <span className="px-2 text-sm">
+            <span className="px-2 text-sm" style={{ color: "#374151" }}>
               {data.page} / {data.totalPages}
             </span>
             <button
               disabled={data.page >= data.totalPages}
               onClick={() => setPage((p) => p + 1)}
-              className="flex h-8 w-8 items-center justify-center rounded-lg border hover:bg-muted disabled:opacity-30"
+              className="flex h-8 w-8 items-center justify-center rounded-lg border hover:bg-gray-50 disabled:opacity-30"
+              style={{ borderColor: "#e5e7eb" }}
             >
               <ChevronRight className="h-4 w-4" />
             </button>
@@ -273,7 +280,8 @@ function SortHeader({
   const active = current === col;
   return (
     <th
-      className={`cursor-pointer select-none px-3 py-2 text-left font-medium text-muted-foreground hover:text-foreground ${className}`}
+      className={`cursor-pointer select-none px-3 py-2 text-left font-medium hover:text-gray-900 ${className}`}
+      style={{ color: active ? "#111" : "#6b7280" }}
       onClick={() => onSort(col)}
     >
       {label}

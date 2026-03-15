@@ -53,8 +53,8 @@ export default async function CouncilDashboard({ params, searchParams }: PagePro
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold">{council.name}</h1>
-          <p className="text-sm text-muted-foreground">{council.region}</p>
+          <h1 className="text-2xl font-bold" style={{ color: "#111" }}>{council.name}</h1>
+          <p className="text-sm" style={{ color: "#6b7280" }}>{council.region}</p>
         </div>
         <FYSelector
           years={allFYs.map((fy) => fy.label)}

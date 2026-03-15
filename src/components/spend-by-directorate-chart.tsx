@@ -30,29 +30,30 @@ export function SpendByDirectorateChart({ data }: { data: DataItem[] }) {
   }));
 
   return (
-    <div className="rounded-xl border bg-card p-5 shadow-sm">
-      <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+    <div className="rounded-xl border p-5 shadow-sm" style={{ background: "#fff" }}>
+      <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider" style={{ color: "#6b7280" }}>
         Top Service Areas
       </h3>
       {chartData.length === 0 ? (
-        <p className="py-8 text-center text-muted-foreground">No data available</p>
+        <p className="py-8 text-center" style={{ color: "#6b7280" }}>No data available</p>
       ) : (
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={chartData} layout="vertical" margin={{ left: 10, right: 20 }}>
             <XAxis
               type="number"
               tickFormatter={(v) => formatCompact(v)}
-              tick={{ fontSize: 11 }}
+              tick={{ fontSize: 11, fill: "#374151" }}
             />
             <YAxis
               type="category"
               dataKey="name"
               width={160}
-              tick={{ fontSize: 11 }}
+              tick={{ fontSize: 11, fill: "#374151" }}
             />
             <Tooltip
               formatter={(value) => [formatCompact(Number(value)), "Spend"]}
-              contentStyle={{ fontSize: 12, background: "#fff", border: "1px solid #e5e7eb" }}
+              contentStyle={{ fontSize: 12, background: "#fff", border: "1px solid #e5e7eb", color: "#111" }}
+              itemStyle={{ color: "#111" }}
             />
             <Bar dataKey="value" radius={[0, 4, 4, 0]}>
               {chartData.map((_, i) => (

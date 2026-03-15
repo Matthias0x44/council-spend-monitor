@@ -26,22 +26,23 @@ export function MonthlyTrendChart({ data }: { data: DataItem[] }) {
   }));
 
   return (
-    <div className="rounded-xl border bg-card p-5 shadow-sm">
-      <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+    <div className="rounded-xl border p-5 shadow-sm" style={{ background: "#fff" }}>
+      <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider" style={{ color: "#6b7280" }}>
         Monthly Spend Trend
       </h3>
       {chartData.length === 0 ? (
-        <p className="py-8 text-center text-muted-foreground">No data available</p>
+        <p className="py-8 text-center" style={{ color: "#6b7280" }}>No data available</p>
       ) : (
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={chartData} margin={{ left: 10, right: 20 }}>
-            <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
-            <XAxis dataKey="label" tick={{ fontSize: 11 }} />
-            <YAxis tickFormatter={(v) => formatCompact(v)} tick={{ fontSize: 11 }} />
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+            <XAxis dataKey="label" tick={{ fontSize: 11, fill: "#374151" }} />
+            <YAxis tickFormatter={(v) => formatCompact(v)} tick={{ fontSize: 11, fill: "#374151" }} />
             <Tooltip
               formatter={(value) => [formatCompact(Number(value)), "Spend"]}
               labelFormatter={(label) => `Month: ${label}`}
-              contentStyle={{ fontSize: 12, background: "#fff", border: "1px solid #e5e7eb" }}
+              contentStyle={{ fontSize: 12, background: "#fff", border: "1px solid #e5e7eb", color: "#111" }}
+              itemStyle={{ color: "#111" }}
             />
             <Line
               type="monotone"

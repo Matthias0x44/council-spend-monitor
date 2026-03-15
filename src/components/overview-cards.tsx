@@ -83,6 +83,13 @@ export function OverviewCards({ overview, financialYear }: Props) {
   );
 }
 
+const ACCENT_COLORS = {
+  primary: "#1d4ed8",
+  destructive: "#dc2626",
+  success: "#16a34a",
+  muted: "#6b7280",
+};
+
 function Card({
   label,
   value,
@@ -96,21 +103,16 @@ function Card({
   icon: React.ReactNode;
   accent: "primary" | "destructive" | "success" | "muted";
 }) {
-  const accentClasses = {
-    primary: "text-primary",
-    destructive: "text-destructive",
-    success: "text-success",
-    muted: "text-muted-foreground",
-  };
+  const color = ACCENT_COLORS[accent];
 
   return (
-    <div className="flex flex-col gap-1 rounded-xl border bg-card p-5 shadow-sm">
-      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-        <span className={accentClasses[accent]}>{icon}</span>
+    <div className="flex flex-col gap-1 rounded-xl border p-5 shadow-sm" style={{ background: "#fff" }}>
+      <div className="flex items-center gap-2 text-sm" style={{ color: "#6b7280" }}>
+        <span style={{ color }}>{icon}</span>
         {label}
       </div>
-      <div className={`text-2xl font-bold ${accentClasses[accent]}`}>{value}</div>
-      {sub && <div className="text-xs text-muted-foreground">{sub}</div>}
+      <div className="text-2xl font-bold" style={{ color }}>{value}</div>
+      {sub && <div className="text-xs" style={{ color: "#6b7280" }}>{sub}</div>}
     </div>
   );
 }
