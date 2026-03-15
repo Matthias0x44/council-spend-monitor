@@ -26,36 +26,36 @@ export async function getLatestFinancialYear(councilId: number) {
 }
 
 export async function getOverview(councilId: number, fyId?: number) {
-  const totalBudget = await db
-    .select({
-      totalNet: sql<number>`COALESCE(SUM(${budgets.netBudget}), 0)`,
-      totalGross: sql<number>`COALESCE(SUM(${budgets.grossBudget}), 0)`,
-    })
-    .from(budgets)
-    .where(fyId ? eq(budgets.financialYearId, fyId) : sql`1=1`)
-    .get();
-
-  const totalOutturn = await db
-    .select({
-      totalOutturn: sql<number>`COALESCE(SUM(${outturns.netOutturn}), 0)`,
-      totalVariance: sql<number>`COALESCE(SUM(${outturns.variance}), 0)`,
-    })
-    .from(outturns)
-    .where(fyId ? eq(outturns.financialYearId, fyId) : sql`1=1`)
-    .get();
-
   const spendConditions: SQL[] = [eq(transactions.councilId, councilId)];
   if (fyId) spendConditions.push(eq(transactions.financialYearId, fyId));
 
-  const totalSpend = await db
-    .select({
-      total: sql<number>`COALESCE(SUM(${transactions.amount}), 0)`,
-      count: sql<number>`COUNT(*)`,
-      supplierCount: sql<number>`COUNT(DISTINCT ${transactions.supplierId})`,
-    })
-    .from(transactions)
-    .where(and(...spendConditions))
-    .get();
+  const [totalBudget, totalOutturn, totalSpend] = await Promise.all([
+    db
+      .select({
+        totalNet: sql<number>`COALESCE(SUM(${budgets.netBudget}), 0)`,
+        totalGross: sql<number>`COALESCE(SUM(${budgets.grossBudget}), 0)`,
+      })
+      .from(budgets)
+      .where(fyId ? eq(budgets.financialYearId, fyId) : sql`1=1`)
+      .get(),
+    db
+      .select({
+        totalOutturn: sql<number>`COALESCE(SUM(${outturns.netOutturn}), 0)`,
+        totalVariance: sql<number>`COALESCE(SUM(${outturns.variance}), 0)`,
+      })
+      .from(outturns)
+      .where(fyId ? eq(outturns.financialYearId, fyId) : sql`1=1`)
+      .get(),
+    db
+      .select({
+        total: sql<number>`COALESCE(SUM(${transactions.amount}), 0)`,
+        count: sql<number>`COUNT(*)`,
+        supplierCount: sql<number>`COUNT(DISTINCT ${transactions.supplierId})`,
+      })
+      .from(transactions)
+      .where(and(...spendConditions))
+      .get(),
+  ]);
 
   let yoyChange: number | null = null;
   if (fyId) {
@@ -254,30 +254,27 @@ export async function getSpendByDirectorate(councilId: number, fyId?: number) {
 export async function getTopSuppliers(councilId: number, fyId?: number, limit = 20) {
   const conditions: SQL[] = [eq(transactions.councilId, councilId)];
   if (fyId) conditions.push(eq(transactions.financialYearId, fyId));
+  const where = and(...conditions)!;
 
-  const totalSpend = await db
-    .select({ total: sql<number>`SUM(${transactions.amount})` })
-    .from(transactions)
-    .where(and(...conditions))
-    .get();
-
-  const topSuppliers = await db
-    .select({
+  const [totalSpend, topSup] = await Promise.all([
+    db.select({ total: sql<number>`SUM(${transactions.amount})` })
+      .from(transactions).where(where).get(),
+    db.select({
       supplierId: transactions.supplierId,
       supplierName: suppliers.name,
       total: sql<number>`SUM(${transactions.amount})`,
       count: sql<number>`COUNT(*)`,
-    })
-    .from(transactions)
-    .leftJoin(suppliers, eq(transactions.supplierId, suppliers.id))
-    .where(and(...conditions))
-    .groupBy(transactions.supplierId)
-    .orderBy(desc(sql`SUM(${transactions.amount})`))
-    .limit(limit)
-    .all();
+    }).from(transactions)
+      .leftJoin(suppliers, eq(transactions.supplierId, suppliers.id))
+      .where(where)
+      .groupBy(transactions.supplierId)
+      .orderBy(desc(sql`SUM(${transactions.amount})`))
+      .limit(limit)
+      .all(),
+  ]);
 
   const grandTotal = totalSpend?.total ?? 1;
-  return topSuppliers.map((s) => ({
+  return topSup.map((s) => ({
     ...s,
     percentage: grandTotal > 0 ? (s.total / grandTotal) * 100 : 0,
   }));
@@ -331,29 +328,48 @@ export async function getFlags(councilId: number, fyId?: number) {
   if (fyId) conditions.push(eq(transactions.financialYearId, fyId));
   const where = and(...conditions)!;
 
-  const totals = await db
-    .select({
+  const [totals, redactedSpend, blankCats, bigPayments, top5Suppliers] = await Promise.all([
+    db.select({
       total: sql<number>`COALESCE(SUM(${transactions.amount}), 0)`,
       count: sql<number>`COUNT(*)`,
-    })
-    .from(transactions)
-    .where(where)
-    .get();
-  const grandTotal = totals?.total ?? 1;
+    }).from(transactions).where(where).get(),
 
-  // --- 1. Redacted / undisclosed supplier spend ---
-  const redactedSpend = await db
-    .select({
+    db.select({
       total: sql<number>`COALESCE(SUM(${transactions.amount}), 0)`,
       count: sql<number>`COUNT(*)`,
-    })
-    .from(transactions)
-    .leftJoin(suppliers, eq(transactions.supplierId, suppliers.id))
-    .where(and(
-      where,
-      sql`(${suppliers.name} IN ('REDACTED DATA','REDACTED PERSONAL DATA','Redacted','REDACTED','Redacted Personal Data','Redacted Commercial Confidentiality') OR ${suppliers.name} IS NULL)`
-    ))
-    .get();
+    }).from(transactions)
+      .leftJoin(suppliers, eq(transactions.supplierId, suppliers.id))
+      .where(and(
+        where,
+        sql`(${suppliers.name} IN ('REDACTED DATA','REDACTED PERSONAL DATA','Redacted','REDACTED','Redacted Personal Data','Redacted Commercial Confidentiality') OR ${suppliers.name} IS NULL)`
+      )).get(),
+
+    db.select({
+      total: sql<number>`COALESCE(SUM(${transactions.amount}), 0)`,
+      count: sql<number>`COUNT(*)`,
+    }).from(transactions)
+      .where(and(
+        where,
+        sql`(${transactions.category} IS NULL OR ${transactions.category} = '' OR ${transactions.category} = 'REDACTED DATA')`
+      )).get(),
+
+    db.select({
+      supplierName: suppliers.name,
+      normalisedName: suppliers.normalisedName,
+      amount: transactions.amount,
+      date: transactions.date,
+      description: transactions.description,
+    }).from(transactions)
+      .leftJoin(suppliers, eq(transactions.supplierId, suppliers.id))
+      .where(and(where, gte(transactions.amount, 1_000_000)))
+      .orderBy(desc(transactions.amount))
+      .limit(50)
+      .all(),
+
+    getTopSuppliers(councilId, fyId, 5),
+  ]);
+
+  const grandTotal = totals?.total ?? 1;
 
   if (redactedSpend && redactedSpend.total > 0) {
     const pct = (redactedSpend.total / grandTotal) * 100;
@@ -365,19 +381,6 @@ export async function getFlags(councilId: number, fyId?: number) {
     });
   }
 
-  // --- 2. Transactions with no category data ---
-  const blankCats = await db
-    .select({
-      total: sql<number>`COALESCE(SUM(${transactions.amount}), 0)`,
-      count: sql<number>`COUNT(*)`,
-    })
-    .from(transactions)
-    .where(and(
-      where,
-      sql`(${transactions.category} IS NULL OR ${transactions.category} = '' OR ${transactions.category} = 'REDACTED DATA')`
-    ))
-    .get();
-
   if (blankCats && blankCats.count > 0) {
     const pct = (blankCats.total / grandTotal) * 100;
     flags.push({
@@ -387,22 +390,6 @@ export async function getFlags(councilId: number, fyId?: number) {
       detail: `${blankCats.count.toLocaleString()} transactions (${pct.toFixed(0)}% of spend) have blank or redacted category data`,
     });
   }
-
-  // --- 3. Large payments (>£1M) ---
-  const bigPayments = await db
-    .select({
-      supplierName: suppliers.name,
-      normalisedName: suppliers.normalisedName,
-      amount: transactions.amount,
-      date: transactions.date,
-      description: transactions.description,
-    })
-    .from(transactions)
-    .leftJoin(suppliers, eq(transactions.supplierId, suppliers.id))
-    .where(and(where, gte(transactions.amount, 1_000_000)))
-    .orderBy(desc(transactions.amount))
-    .limit(50)
-    .all();
 
   const redactedBig = bigPayments.filter((p) => isRedacted(p.supplierName));
   if (redactedBig.length > 0) {
@@ -430,9 +417,7 @@ export async function getFlags(councilId: number, fyId?: number) {
     });
   }
 
-  // --- 4. Supplier concentration ---
-  const topSuppliers = await getTopSuppliers(councilId, fyId, 5);
-  const top5Total = topSuppliers.reduce((sum, s) => sum + s.percentage, 0);
+  const top5Total = top5Suppliers.reduce((sum, s) => sum + s.percentage, 0);
   if (top5Total > 40) {
     flags.push({
       type: "supplier_concentration",
@@ -449,7 +434,6 @@ export async function getFlags(councilId: number, fyId?: number) {
     });
   }
 
-  // --- 5. Category year-on-year changes ---
   if (fyId) {
     const fy = await db
       .select()
@@ -473,8 +457,10 @@ export async function getFlags(councilId: number, fyId?: number) {
         .get();
 
       if (prevFy) {
-        const currentCats = await getSpendByCategory(councilId, fyId);
-        const prevCats = await getSpendByCategory(councilId, prevFy.id);
+        const [currentCats, prevCats] = await Promise.all([
+          getSpendByCategory(councilId, fyId),
+          getSpendByCategory(councilId, prevFy.id),
+        ]);
         const prevMap = new Map(prevCats.map((c) => [c.category, c.total]));
 
         const risingCats: { category: string; change: number; total: number; absolute: number }[] = [];

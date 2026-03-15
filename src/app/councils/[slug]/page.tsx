@@ -40,14 +40,17 @@ export default async function CouncilDashboard({ params, searchParams }: PagePro
 
   const fyId = targetFY?.id;
 
-  const overview = await getOverview(council.id, fyId);
-  const byCategory = await getSpendByCategory(council.id, fyId);
-  const byDirectorate = await getSpendByDirectorate(council.id, fyId);
-  const topSuppliers = await getTopSuppliers(council.id, fyId, 20);
-  const monthlyTrend = await getMonthlyTrend(council.id, fyId);
-  const flags = await getFlags(council.id, fyId);
-  const directorates = await getDirectoratesList(council.id);
-  const categories = await getCategoriesList(council.id);
+  const [overview, byCategory, byDirectorate, topSuppliers, monthlyTrend, flags, directorates, categories] =
+    await Promise.all([
+      getOverview(council.id, fyId),
+      getSpendByCategory(council.id, fyId),
+      getSpendByDirectorate(council.id, fyId),
+      getTopSuppliers(council.id, fyId, 20),
+      getMonthlyTrend(council.id, fyId),
+      getFlags(council.id, fyId),
+      getDirectoratesList(council.id),
+      getCategoriesList(council.id),
+    ]);
 
   return (
     <div className="flex flex-col gap-6">
