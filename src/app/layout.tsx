@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
-import { Building2 } from "lucide-react";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -29,9 +28,8 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen`} style={{ background: "#ffffff", color: "#111111" }}>
         <header className="sticky top-0 z-50 border-b bg-white/90 backdrop-blur-sm">
           <div className="mx-auto flex h-14 max-w-7xl items-center gap-3 px-4">
-            <Link href="/" className="flex items-center gap-2 font-semibold text-primary">
-              <Building2 className="h-5 w-5" />
-              <span>Council Spend Monitor</span>
+            <Link href="/" className="font-semibold" style={{ color: "#1d4ed8" }}>
+              Council Spend Monitor
             </Link>
           </div>
         </header>

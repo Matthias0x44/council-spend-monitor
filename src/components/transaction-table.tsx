@@ -203,7 +203,7 @@ export function TransactionTable({ slug, fy, directorates, categories }: Props) 
             ) : (
               data.rows.map((row) => (
                 <tr key={row.id} className="border-b transition-colors hover:bg-gray-50">
-                  <td className="max-w-[200px] truncate px-3 py-2 font-medium">
+                  <td className="max-w-[200px] truncate px-3 py-2 font-medium" title={row.supplierName || ""}>
                     {row.supplierName || "\u2014"}
                   </td>
                   <td className="whitespace-nowrap px-3 py-2 text-right font-mono">
@@ -212,12 +212,12 @@ export function TransactionTable({ slug, fy, directorates, categories }: Props) 
                   <td className="whitespace-nowrap px-3 py-2" style={{ color: "#6b7280" }}>
                     {row.date || row.month || "\u2014"}
                   </td>
-                  <td className="max-w-[150px] truncate px-3 py-2">{row.directorate || "\u2014"}</td>
-                  <td className="max-w-[150px] truncate px-3 py-2">{row.service || "\u2014"}</td>
-                  <td className="max-w-[200px] truncate px-3 py-2" style={{ color: "#6b7280" }}>
+                  <td className="max-w-[150px] truncate px-3 py-2" title={row.directorate || ""}>{row.directorate || "\u2014"}</td>
+                  <td className="max-w-[150px] truncate px-3 py-2" title={row.service || ""}>{row.service || "\u2014"}</td>
+                  <td className="max-w-[200px] truncate px-3 py-2" style={{ color: "#6b7280" }} title={row.description || ""}>
                     {row.description || "\u2014"}
                   </td>
-                  <td className="max-w-[120px] truncate px-3 py-2 text-xs" style={{ color: "#9ca3af" }}>
+                  <td className="max-w-[120px] truncate px-3 py-2 text-xs" style={{ color: "#9ca3af" }} title={row.sourceFile || ""}>
                     {row.sourceFile || "\u2014"}
                   </td>
                 </tr>
