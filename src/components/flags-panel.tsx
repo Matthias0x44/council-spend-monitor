@@ -1,4 +1,4 @@
-import { AlertTriangle, TrendingUp, Banknote } from "lucide-react";
+import { AlertTriangle, TrendingUp, Banknote, EyeOff, FileQuestion } from "lucide-react";
 
 interface Flag {
   type: string;
@@ -8,6 +8,8 @@ interface Flag {
 }
 
 const ICONS: Record<string, React.ReactNode> = {
+  redacted_spend: <EyeOff className="h-4 w-4" />,
+  missing_data: <FileQuestion className="h-4 w-4" />,
   supplier_concentration: <AlertTriangle className="h-4 w-4" />,
   rising_category: <TrendingUp className="h-4 w-4" />,
   large_payment: <Banknote className="h-4 w-4" />,
@@ -41,7 +43,7 @@ export function FlagsPanel({ flags }: { flags: Flag[] }) {
               </span>
               <div className="min-w-0">
                 <div className="text-sm font-medium leading-tight">{flag.title}</div>
-                <div className="mt-0.5 text-xs opacity-80">{flag.detail}</div>
+                <div className="mt-0.5 text-xs opacity-80" style={{ color: "#374151" }}>{flag.detail}</div>
               </div>
             </div>
           );

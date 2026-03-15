@@ -46,18 +46,45 @@ export function getOverview(councilId: number, fyId?: number) {
     .where(fyId ? eq(outturns.financialYearId, fyId) : sql`1=1`)
     .get();
 
+  const spendConditions: SQL[] = [eq(transactions.councilId, councilId)];
+  if (fyId) spendConditions.push(eq(transactions.financialYearId, fyId));
+
   const totalSpend = db
     .select({
       total: sql<number>`COALESCE(SUM(${transactions.amount}), 0)`,
       count: sql<number>`COUNT(*)`,
+      supplierCount: sql<number>`COUNT(DISTINCT ${transactions.supplierId})`,
     })
     .from(transactions)
-    .where(
-      fyId
-        ? and(eq(transactions.councilId, councilId), eq(transactions.financialYearId, fyId))
-        : eq(transactions.councilId, councilId)
-    )
+    .where(and(...spendConditions))
     .get();
+
+  // Year-on-year change
+  let yoyChange: number | null = null;
+  if (fyId) {
+    const fy = db.select().from(financialYears).where(eq(financialYears.id, fyId)).get();
+    if (fy) {
+      const parts = fy.label.split("-");
+      const prevStartYear = parseInt(parts[0]) - 1;
+      const prevLabel = `${prevStartYear}-${parts[0].slice(-2)}`;
+      const prevFy = db
+        .select()
+        .from(financialYears)
+        .where(and(eq(financialYears.councilId, councilId), eq(financialYears.label, prevLabel)))
+        .get();
+
+      if (prevFy) {
+        const prevSpend = db
+          .select({ total: sql<number>`COALESCE(SUM(${transactions.amount}), 0)` })
+          .from(transactions)
+          .where(and(eq(transactions.councilId, councilId), eq(transactions.financialYearId, prevFy.id)))
+          .get();
+        if (prevSpend && prevSpend.total > 0) {
+          yoyChange = (((totalSpend?.total ?? 0) - prevSpend.total) / prevSpend.total) * 100;
+        }
+      }
+    }
+  }
 
   return {
     budget: {
@@ -72,6 +99,8 @@ export function getOverview(councilId: number, fyId?: number) {
       total: totalSpend?.total ?? 0,
       transactionCount: totalSpend?.count ?? 0,
     },
+    supplierCount: totalSpend?.supplierCount ?? 0,
+    yoyChange,
   };
 }
 
@@ -167,7 +196,7 @@ export function getSpendByCategory(councilId: number, fyId?: number) {
   const conditions: SQL[] = [eq(transactions.councilId, councilId)];
   if (fyId) conditions.push(eq(transactions.financialYearId, fyId));
 
-  return db
+  const raw = db
     .select({
       category: transactions.category,
       total: sql<number>`SUM(${transactions.amount})`,
@@ -177,8 +206,12 @@ export function getSpendByCategory(councilId: number, fyId?: number) {
     .where(and(...conditions))
     .groupBy(transactions.category)
     .orderBy(desc(sql`SUM(${transactions.amount})`))
-    .all()
-    .filter((r) => r.category && r.category.trim() !== "");
+    .all();
+
+  return raw.map((r) => ({
+    ...r,
+    category: r.category && r.category.trim() !== "" ? r.category : "No Category",
+  }));
 }
 
 export function getSpendByDirectorate(councilId: number, fyId?: number) {
@@ -186,11 +219,9 @@ export function getSpendByDirectorate(councilId: number, fyId?: number) {
   const conditions: SQL[] = [eq(transactions.councilId, councilId)];
   if (fyId) conditions.push(eq(transactions.financialYearId, fyId));
 
-  // Kirklees doesn't have a "directorate" column; use "service" (cost centre description) instead
   const serviceCol = transactions.service;
   const dirCol = transactions.directorate;
 
-  // Try directorate first; if empty, fall back to service
   const dirResult = db
     .select({
       directorate: dirCol,
@@ -207,7 +238,7 @@ export function getSpendByDirectorate(councilId: number, fyId?: number) {
 
   if (dirResult.length > 0) return dirResult;
 
-  return db
+  const raw = db
     .select({
       directorate: serviceCol,
       total: sql<number>`SUM(${transactions.amount})`,
@@ -218,8 +249,12 @@ export function getSpendByDirectorate(councilId: number, fyId?: number) {
     .groupBy(serviceCol)
     .orderBy(desc(sql`SUM(${transactions.amount})`))
     .limit(15)
-    .all()
-    .filter((r) => r.directorate && r.directorate.trim() !== "");
+    .all();
+
+  return raw.map((r) => ({
+    ...r,
+    directorate: r.directorate && r.directorate.trim() !== "" ? r.directorate : "No Service Area",
+  }));
 }
 
 export function getTopSuppliers(councilId: number, fyId?: number, limit = 20) {
@@ -274,11 +309,138 @@ export function getMonthlyTrend(councilId: number, fyId?: number) {
     .filter((r) => r.month && r.month.trim() !== "");
 }
 
+const REDACTED_NAMES = new Set([
+  "REDACTED DATA",
+  "REDACTED PERSONAL DATA",
+  "Redacted",
+  "REDACTED",
+  "Redacted Personal Data",
+  "Redacted Commercial Confidentiality",
+]);
+
+function isRedacted(name: string | null | undefined): boolean {
+  if (!name) return false;
+  const trimmed = name.trim();
+  return REDACTED_NAMES.has(trimmed) || trimmed.toUpperCase().startsWith("REDACTED");
+}
+
+function fmtAmount(n: number): string {
+  if (Math.abs(n) >= 1_000_000_000) return `£${(n / 1_000_000_000).toFixed(1)}bn`;
+  if (Math.abs(n) >= 1_000_000) return `£${(n / 1_000_000).toFixed(1)}m`;
+  if (Math.abs(n) >= 1_000) return `£${(n / 1_000).toFixed(0)}k`;
+  return `£${n.toFixed(0)}`;
+}
+
 export function getFlags(councilId: number, fyId?: number) {
   const db = getDb();
   const flags: { type: string; severity: "high" | "medium" | "low"; title: string; detail: string }[] = [];
 
-  // 1. Supplier concentration
+  const conditions: SQL[] = [eq(transactions.councilId, councilId)];
+  if (fyId) conditions.push(eq(transactions.financialYearId, fyId));
+  const where = and(...conditions)!;
+
+  const totals = db
+    .select({
+      total: sql<number>`COALESCE(SUM(${transactions.amount}), 0)`,
+      count: sql<number>`COUNT(*)`,
+    })
+    .from(transactions)
+    .where(where)
+    .get();
+  const grandTotal = totals?.total ?? 1;
+  const grandCount = totals?.count ?? 0;
+
+  // --- 1. Redacted / undisclosed supplier spend ---
+  const redactedSpend = db
+    .select({
+      total: sql<number>`COALESCE(SUM(${transactions.amount}), 0)`,
+      count: sql<number>`COUNT(*)`,
+    })
+    .from(transactions)
+    .leftJoin(suppliers, eq(transactions.supplierId, suppliers.id))
+    .where(and(
+      where,
+      sql`(${suppliers.name} IN ('REDACTED DATA','REDACTED PERSONAL DATA','Redacted','REDACTED','Redacted Personal Data','Redacted Commercial Confidentiality') OR ${suppliers.name} IS NULL)`
+    ))
+    .get();
+
+  if (redactedSpend && redactedSpend.total > 0) {
+    const pct = (redactedSpend.total / grandTotal) * 100;
+    flags.push({
+      type: "redacted_spend",
+      severity: pct > 30 ? "high" : pct > 15 ? "medium" : "low",
+      title: `${fmtAmount(redactedSpend.total)} to redacted suppliers`,
+      detail: `${redactedSpend.count.toLocaleString()} payments (${pct.toFixed(0)}% of total spend) to undisclosed vendors`,
+    });
+  }
+
+  // --- 2. Transactions with no category data ---
+  const blankCats = db
+    .select({
+      total: sql<number>`COALESCE(SUM(${transactions.amount}), 0)`,
+      count: sql<number>`COUNT(*)`,
+    })
+    .from(transactions)
+    .where(and(
+      where,
+      sql`(${transactions.category} IS NULL OR ${transactions.category} = '' OR ${transactions.category} = 'REDACTED DATA')`
+    ))
+    .get();
+
+  if (blankCats && blankCats.count > 0) {
+    const pct = (blankCats.total / grandTotal) * 100;
+    flags.push({
+      type: "missing_data",
+      severity: pct > 30 ? "high" : pct > 15 ? "medium" : "low",
+      title: `${fmtAmount(blankCats.total)} with no category`,
+      detail: `${blankCats.count.toLocaleString()} transactions (${pct.toFixed(0)}% of spend) have blank or redacted category data`,
+    });
+  }
+
+  // --- 3. Large payments (>£1M) — show named and redacted separately ---
+  const bigPayments = db
+    .select({
+      supplierName: suppliers.name,
+      normalisedName: suppliers.normalisedName,
+      amount: transactions.amount,
+      date: transactions.date,
+      description: transactions.description,
+    })
+    .from(transactions)
+    .leftJoin(suppliers, eq(transactions.supplierId, suppliers.id))
+    .where(and(where, gte(transactions.amount, 1_000_000)))
+    .orderBy(desc(transactions.amount))
+    .limit(50)
+    .all();
+
+  const redactedBig = bigPayments.filter((p) => isRedacted(p.supplierName));
+  if (redactedBig.length > 0) {
+    const redactedBigTotal = redactedBig.reduce((s, p) => s + p.amount, 0);
+    flags.push({
+      type: "large_payment",
+      severity: "high",
+      title: `${redactedBig.length} large payments to redacted suppliers`,
+      detail: `${fmtAmount(redactedBigTotal)} total across payments over £1m to undisclosed vendors`,
+    });
+  }
+
+  const namedBig = bigPayments.filter((p) => !isRedacted(p.supplierName) && p.supplierName);
+  const seenSuppliers = new Set<string>();
+  for (const p of namedBig) {
+    const key = p.normalisedName || p.supplierName || "";
+    if (seenSuppliers.has(key)) continue;
+    seenSuppliers.add(key);
+    if (seenSuppliers.size > 3) break;
+
+    flags.push({
+      type: "large_payment",
+      severity: p.amount >= 5_000_000 ? "high" : "medium",
+      title: `${fmtAmount(p.amount)} to ${p.supplierName}`,
+      detail: p.description || `${p.date || ""}`,
+    });
+  }
+
+  // --- 4. Supplier concentration ---
   const topSuppliers = getTopSuppliers(councilId, fyId, 5);
   const top5Total = topSuppliers.reduce((sum, s) => sum + s.percentage, 0);
   if (top5Total > 40) {
@@ -297,34 +459,7 @@ export function getFlags(councilId: number, fyId?: number) {
     });
   }
 
-  // 2. Big individual payments (> £500k)
-  const conditions: SQL[] = [eq(transactions.councilId, councilId)];
-  if (fyId) conditions.push(eq(transactions.financialYearId, fyId));
-
-  const bigPayments = db
-    .select({
-      supplierName: suppliers.name,
-      amount: transactions.amount,
-      date: transactions.date,
-      description: transactions.description,
-    })
-    .from(transactions)
-    .leftJoin(suppliers, eq(transactions.supplierId, suppliers.id))
-    .where(and(...conditions, gte(transactions.amount, 500000)))
-    .orderBy(desc(transactions.amount))
-    .limit(5)
-    .all();
-
-  for (const p of bigPayments) {
-    flags.push({
-      type: "large_payment",
-      severity: "medium",
-      title: `Large payment: £${(p.amount / 1000).toFixed(0)}k to ${p.supplierName || "Unknown"}`,
-      detail: p.description || `Date: ${p.date || "Unknown"}`,
-    });
-  }
-
-  // 3. Category year-on-year changes
+  // --- 5. Category year-on-year changes ---
   if (fyId) {
     const fy = db
       .select()
@@ -352,25 +487,26 @@ export function getFlags(councilId: number, fyId?: number) {
         const prevCats = getSpendByCategory(councilId, prevFy.id);
         const prevMap = new Map(prevCats.map((c) => [c.category, c.total]));
 
-        const risingCats: { category: string; change: number; total: number }[] = [];
+        const risingCats: { category: string; change: number; total: number; absolute: number }[] = [];
         for (const cat of currentCats) {
           const prev = prevMap.get(cat.category);
-          if (prev && prev > 10000 && cat.total > 50000) {
+          if (prev && prev > 200_000 && cat.total > 200_000) {
             const change = ((cat.total - prev) / prev) * 100;
-            if (change > 30) {
-              risingCats.push({ category: cat.category || "", change, total: cat.total });
+            const absolute = cat.total - prev;
+            if (change > 30 && absolute > 100_000) {
+              risingCats.push({ category: cat.category || "No Category", change, total: cat.total, absolute });
             }
           }
         }
         risingCats
-          .sort((a, b) => b.total * b.change - a.total * a.change)
-          .slice(0, 5)
+          .sort((a, b) => b.absolute - a.absolute)
+          .slice(0, 3)
           .forEach((rc) => {
             flags.push({
               type: "rising_category",
               severity: rc.change > 100 ? "high" : "medium",
-              title: `Rising category: ${rc.category}`,
-              detail: `Up ${rc.change.toFixed(0)}% year-on-year`,
+              title: `Rising: ${rc.category}`,
+              detail: `Up ${rc.change.toFixed(0)}% (${fmtAmount(rc.absolute)}) year-on-year`,
             });
           });
       }

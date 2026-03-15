@@ -1,10 +1,13 @@
-import { formatCompact } from "@/lib/format";
-import { PoundSterling, TrendingUp, TrendingDown, Receipt, ArrowUpDown } from "lucide-react";
+import { formatCompact, formatCurrency } from "@/lib/format";
+import { PoundSterling, TrendingUp, TrendingDown, Receipt, Users, ArrowUpDown } from "lucide-react";
 
 interface Overview {
   budget: { net: number; gross: number };
   outturn: { net: number; variance: number };
   spend: { total: number; transactionCount: number };
+  supplierCount?: number;
+  avgTransaction?: number;
+  yoyChange?: number | null;
 }
 
 interface Props {
@@ -17,39 +20,33 @@ export function OverviewCards({ overview, financialYear }: Props) {
   const hasOutturn = overview.outturn.net !== 0;
   const variance = overview.outturn.variance;
   const isOverspend = variance > 0;
+  const avg = overview.spend.transactionCount > 0
+    ? overview.spend.total / overview.spend.transactionCount
+    : 0;
 
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <Card
+        label="Total Spend"
+        value={formatCompact(overview.spend.total)}
+        sub={`${overview.spend.transactionCount.toLocaleString()} transactions`}
+        icon={<PoundSterling className="h-4 w-4" />}
+        accent="primary"
+      />
+
       {hasBudget ? (
         <Card
           label="Net Budget"
           value={formatCompact(overview.budget.net)}
           sub={overview.budget.gross ? `Gross: ${formatCompact(overview.budget.gross)}` : undefined}
-          icon={<PoundSterling className="h-4 w-4" />}
-          accent="primary"
-        />
-      ) : (
-        <Card
-          label="Net Budget"
-          value="No data"
-          sub="Budget PDF not yet ingested"
-          icon={<PoundSterling className="h-4 w-4" />}
-          accent="primary"
-        />
-      )}
-
-      {hasOutturn ? (
-        <Card
-          label="Outturn"
-          value={formatCompact(overview.outturn.net)}
           icon={<Receipt className="h-4 w-4" />}
           accent="primary"
         />
       ) : (
         <Card
-          label="Recorded Spend"
-          value={formatCompact(overview.spend.total)}
-          sub={`${overview.spend.transactionCount.toLocaleString()} transactions (>£500)`}
+          label="Avg Transaction"
+          value={formatCurrency(avg)}
+          sub="Per payment (>£500)"
           icon={<Receipt className="h-4 w-4" />}
           accent="primary"
         />
@@ -62,21 +59,29 @@ export function OverviewCards({ overview, financialYear }: Props) {
           icon={isOverspend ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
           accent={isOverspend ? "destructive" : "success"}
         />
+      ) : overview.yoyChange != null ? (
+        <Card
+          label="Year-on-Year"
+          value={`${overview.yoyChange > 0 ? "+" : ""}${overview.yoyChange.toFixed(1)}%`}
+          sub="vs previous year"
+          icon={overview.yoyChange > 0 ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
+          accent={Math.abs(overview.yoyChange) > 10 ? "destructive" : "muted"}
+        />
       ) : (
         <Card
-          label="Variance"
-          value={hasBudget && overview.spend.total ? formatCompact(overview.spend.total - overview.budget.net) : "N/A"}
-          sub={hasBudget ? "Spend vs budget" : undefined}
+          label="Year-on-Year"
+          value="—"
+          sub="No prior year data"
           icon={<ArrowUpDown className="h-4 w-4" />}
           accent="muted"
         />
       )}
 
       <Card
-        label="Transactions"
-        value={overview.spend.transactionCount.toLocaleString()}
-        sub={`Total: ${formatCompact(overview.spend.total)}`}
-        icon={<Receipt className="h-4 w-4" />}
+        label="Suppliers"
+        value={(overview.supplierCount ?? 0).toLocaleString()}
+        sub="Unique suppliers paid"
+        icon={<Users className="h-4 w-4" />}
         accent="primary"
       />
     </div>
