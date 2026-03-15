@@ -30,24 +30,24 @@ export default async function CouncilDashboard({ params, searchParams }: PagePro
   const { slug } = await params;
   const { fy: fyParam } = await searchParams;
 
-  const council = getCouncilBySlug(slug);
+  const council = await getCouncilBySlug(slug);
   if (!council) notFound();
 
-  const allFYs = getFinancialYears(council.id);
+  const allFYs = await getFinancialYears(council.id);
   const targetFY = fyParam
     ? allFYs.find((fy) => fy.label === fyParam)
-    : getLatestFinancialYear(council.id);
+    : await getLatestFinancialYear(council.id);
 
   const fyId = targetFY?.id;
 
-  const overview = getOverview(council.id, fyId);
-  const byCategory = getSpendByCategory(council.id, fyId);
-  const byDirectorate = getSpendByDirectorate(council.id, fyId);
-  const topSuppliers = getTopSuppliers(council.id, fyId, 20);
-  const monthlyTrend = getMonthlyTrend(council.id, fyId);
-  const flags = getFlags(council.id, fyId);
-  const directorates = getDirectoratesList(council.id);
-  const categories = getCategoriesList(council.id);
+  const overview = await getOverview(council.id, fyId);
+  const byCategory = await getSpendByCategory(council.id, fyId);
+  const byDirectorate = await getSpendByDirectorate(council.id, fyId);
+  const topSuppliers = await getTopSuppliers(council.id, fyId, 20);
+  const monthlyTrend = await getMonthlyTrend(council.id, fyId);
+  const flags = await getFlags(council.id, fyId);
+  const directorates = await getDirectoratesList(council.id);
+  const categories = await getCategoriesList(council.id);
 
   return (
     <div className="flex flex-col gap-6">

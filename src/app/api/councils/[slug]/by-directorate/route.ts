@@ -6,15 +6,15 @@ export async function GET(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params;
-  const council = getCouncilBySlug(slug);
+  const council = await getCouncilBySlug(slug);
   if (!council) {
     return NextResponse.json({ error: "Council not found" }, { status: 404 });
   }
 
   const fyLabel = request.nextUrl.searchParams.get("fy");
-  const allFYs = getFinancialYears(council.id);
+  const allFYs = await getFinancialYears(council.id);
   const targetFY = fyLabel ? allFYs.find((fy) => fy.label === fyLabel) : undefined;
 
-  const data = getSpendByDirectorate(council.id, targetFY?.id);
+  const data = await getSpendByDirectorate(council.id, targetFY?.id);
   return NextResponse.json(data);
 }

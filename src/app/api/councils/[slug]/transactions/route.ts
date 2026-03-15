@@ -6,17 +6,17 @@ export async function GET(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params;
-  const council = getCouncilBySlug(slug);
+  const council = await getCouncilBySlug(slug);
   if (!council) {
     return NextResponse.json({ error: "Council not found" }, { status: 404 });
   }
 
   const sp = request.nextUrl.searchParams;
-  const allFYs = getFinancialYears(council.id);
+  const allFYs = await getFinancialYears(council.id);
   const fyLabel = sp.get("fy");
   const targetFY = fyLabel ? allFYs.find((fy) => fy.label === fyLabel) : undefined;
 
-  const result = getTransactions(council.id, {
+  const result = await getTransactions(council.id, {
     fyId: targetFY?.id,
     directorate: sp.get("directorate") || undefined,
     category: sp.get("category") || undefined,

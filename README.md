@@ -1,17 +1,17 @@
 # Council Spend Monitor
 
-A public-finance dashboard for UK council spending data. Built with Next.js, SQLite, and Drizzle ORM.
+A public-finance dashboard for UK council spending data. Built with Next.js, Turso/SQLite, and Drizzle ORM.
 
 ## Features
 
-- **Overview cards** — recorded spend, transaction counts, variance
+- **Overview cards** — total spend, avg transaction, year-on-year change, supplier count
+- **Transparency flags** — redacted supplier spend, missing category data, large payments
 - **Spend breakdowns** — by service area, category, and supplier
 - **Monthly trend** — line chart of spending over time
-- **Spending flags** — supplier concentration, rising categories, large one-off payments
-- **Transaction table** — searchable, filterable, sortable, with CSV export
-- **Financial year selector** — switch between years
+- **Transaction table** — searchable, filterable, sortable, with CSV export and hover tooltips
+- **Financial year selector** — switch between years (2017–18 to 2025–26)
 
-## Getting Started
+## Getting Started (Local)
 
 ### 1. Install dependencies
 
@@ -27,20 +27,52 @@ Downloads data from Kirklees Council's transparency page and ingests it into a l
 npm run seed
 ```
 
-This runs three steps: scrape → ingest expenditure → ingest budgets.
-
 ### 3. Run the dev server
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000). Locally, the app reads from `data/council-spend.db`.
+
+## Deploying to Vercel
+
+The app uses [Turso](https://turso.tech) (cloud-hosted SQLite) for production.
+
+### 1. Create a Turso database
+
+```bash
+curl -sSfL https://get.tur.so/install.sh | bash
+turso auth login
+turso db create council-spend
+```
+
+### 2. Push local data to Turso
+
+```bash
+./scripts/push-to-turso.sh council-spend
+```
+
+### 3. Get credentials
+
+```bash
+turso db show council-spend --url
+turso db tokens create council-spend
+```
+
+### 4. Set environment variables on Vercel
+
+Add these to your Vercel project settings:
+
+- `TURSO_DATABASE_URL` — the URL from step 3
+- `TURSO_AUTH_TOKEN` — the token from step 3
+
+Then redeploy.
 
 ## Tech Stack
 
 - **Next.js 16** (App Router, Server Components)
-- **SQLite** via better-sqlite3
+- **Turso / LibSQL** for serverless-compatible SQLite
 - **Drizzle ORM** for type-safe queries
 - **Recharts** for data visualisation
 - **Tailwind CSS** for styling
