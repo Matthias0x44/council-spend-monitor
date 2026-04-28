@@ -13,9 +13,15 @@ if (!TURSO_URL || !TURSO_TOKEN) {
 }
 
 async function main() {
+  // Debug: show credential shape (not values) to diagnose secrets issues
+  const urlTrimmed = TURSO_URL!.trim();
+  const tokenTrimmed = TURSO_TOKEN!.trim();
+  console.log(`TURSO_URL length=${TURSO_URL!.length}, trimmed=${urlTrimmed.length}, starts_with_libsql=${urlTrimmed.startsWith("libsql://")}, preview=${urlTrimmed.slice(0, 40)}...`);
+  console.log(`TURSO_TOKEN length=${TURSO_TOKEN!.length}, trimmed=${tokenTrimmed.length}, starts_with_eyJ=${tokenTrimmed.startsWith("eyJ")}`);
+
   console.log(`Reading local database: ${LOCAL_DB}`);
   const local = new Database(LOCAL_DB, { readonly: true });
-  const turso = createClient({ url: TURSO_URL!, authToken: TURSO_TOKEN });
+  const turso = createClient({ url: urlTrimmed, authToken: tokenTrimmed });
 
   // Test connection first
   try {
