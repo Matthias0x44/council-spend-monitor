@@ -44,14 +44,20 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="text-center">
-        <p className="text-sm" style={{ color: "#6b7280" }}>MVP: starting with</p>
+      <div className="flex gap-4 text-center">
         <Link
           href="/councils/kirklees"
-          className="text-lg font-semibold underline-offset-4 hover:underline"
-          style={{ color: "#1d4ed8" }}
+          className="rounded-lg border px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-50"
+          style={{ color: "#1d4ed8", borderColor: "#e5e7eb" }}
         >
           Kirklees Council &rarr;
+        </Link>
+        <Link
+          href="/councils"
+          className="rounded-lg border px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-50"
+          style={{ color: "#111", borderColor: "#e5e7eb" }}
+        >
+          Browse all councils
         </Link>
       </div>
     </div>

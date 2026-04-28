@@ -27,9 +27,16 @@ export default function RootLayout({
     <html lang="en" className="light" style={{ colorScheme: "light" }}>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen`} style={{ background: "#ffffff", color: "#111111" }}>
         <header className="sticky top-0 z-50 border-b bg-white/90 backdrop-blur-sm">
-          <div className="mx-auto flex h-14 max-w-7xl items-center gap-3 px-4">
+          <div className="mx-auto flex h-14 max-w-7xl items-center gap-6 px-4">
             <Link href="/" className="font-semibold" style={{ color: "#1d4ed8" }}>
               Council Spend Monitor
+            </Link>
+            <Link
+              href="/councils"
+              className="text-sm transition-colors hover:underline"
+              style={{ color: "#6b7280" }}
+            >
+              All Councils
             </Link>
           </div>
         </header>

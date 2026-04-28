@@ -5,6 +5,12 @@ export const councils = sqliteTable("councils", {
   name: text("name").notNull(),
   slug: text("slug").notNull().unique(),
   region: text("region"),
+  transparencyUrl: text("transparency_url"),
+  dataGovId: text("data_gov_id"),
+  scrapeProfile: text("scrape_profile"), // JSON column mapping override
+  scrapeStatus: text("scrape_status").default("pending"), // pending | active | failing | disabled
+  lastScrapedAt: text("last_scraped_at"),
+  filePattern: text("file_pattern"), // regex for filtering download links
 });
 
 export const financialYears = sqliteTable(
@@ -52,9 +58,11 @@ export const sourceDocuments = sqliteTable(
     url: text("url").notNull(),
     type: text("type").notNull(), // expenditure | budget | accounts | procurement_card
     downloadedAt: text("downloaded_at"),
+    columnMapping: text("column_mapping"), // JSON: detected header → canonical field mapping
   },
   (table) => [
     index("source_doc_council_idx").on(table.councilId),
+    index("source_doc_url_idx").on(table.url),
   ]
 );
 

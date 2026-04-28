@@ -1,22 +1,36 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
 
-const COUNCILS = [
-  { name: "Kirklees Council", slug: "kirklees", region: "West Yorkshire" },
-];
+interface Council {
+  id: number;
+  name: string;
+  slug: string;
+  region: string | null;
+  scrapeStatus: string | null;
+  transactionCount: number;
+}
 
 export function CouncilSearch() {
   const [query, setQuery] = useState("");
   const [focused, setFocused] = useState(false);
+  const [councils, setCouncils] = useState<Council[]>([]);
   const router = useRouter();
 
-  const filtered = COUNCILS.filter(
+  useEffect(() => {
+    fetch("/api/councils")
+      .then((r) => r.json())
+      .then((data: Council[]) => setCouncils(data))
+      .catch(() => {});
+  }, []);
+
+  const filtered = councils.filter(
     (c) =>
-      c.name.toLowerCase().includes(query.toLowerCase()) ||
-      c.region?.toLowerCase().includes(query.toLowerCase())
+      c.scrapeStatus === "active" &&
+      (c.name.toLowerCase().includes(query.toLowerCase()) ||
+        c.region?.toLowerCase().includes(query.toLowerCase()))
   );
 
   const showDropdown = focused && query.length > 0 && filtered.length > 0;
@@ -24,7 +38,10 @@ export function CouncilSearch() {
   return (
     <div className="relative w-full max-w-lg">
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2" style={{ color: "#9ca3af" }} />
+        <Search
+          className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2"
+          style={{ color: "#9ca3af" }}
+        />
         <input
           type="text"
           placeholder="Search for a council..."
@@ -37,17 +54,32 @@ export function CouncilSearch() {
         />
       </div>
       {showDropdown && (
-        <div className="absolute top-full left-0 z-10 mt-1 w-full rounded-xl border shadow-lg" style={{ background: "#fff", borderColor: "#e5e7eb" }}>
+        <div
+          className="absolute top-full left-0 z-10 mt-1 w-full rounded-xl border shadow-lg max-h-80 overflow-y-auto"
+          style={{ background: "#fff", borderColor: "#e5e7eb" }}
+        >
           {filtered.map((c) => (
             <button
               key={c.slug}
-              className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-gray-50 first:rounded-t-xl last:rounded-b-xl"
+              className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left transition-colors hover:bg-gray-50 first:rounded-t-xl last:rounded-b-xl"
               onMouseDown={() => router.push(`/councils/${c.slug}`)}
             >
               <div>
-                <div className="font-medium" style={{ color: "#111" }}>{c.name}</div>
-                <div className="text-sm" style={{ color: "#6b7280" }}>{c.region}</div>
+                <div className="font-medium" style={{ color: "#111" }}>
+                  {c.name}
+                </div>
+                <div className="text-sm" style={{ color: "#6b7280" }}>
+                  {c.region}
+                </div>
               </div>
+              {c.transactionCount > 0 && (
+                <div
+                  className="text-xs whitespace-nowrap"
+                  style={{ color: "#6b7280" }}
+                >
+                  {c.transactionCount.toLocaleString()} txns
+                </div>
+              )}
             </button>
           ))}
         </div>

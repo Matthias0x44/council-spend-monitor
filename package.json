@@ -10,7 +10,10 @@
     "scrape": "tsx scripts/scrape.ts",
     "ingest": "tsx scripts/ingest.ts",
     "ingest:budgets": "tsx scripts/ingest-budgets.ts",
-    "seed": "tsx scripts/seed.ts"
+    "seed": "tsx scripts/seed.ts",
+    "seed:registry": "tsx scripts/seed-registry.ts",
+    "pipeline": "tsx scripts/pipeline.ts",
+    "pipeline:all": "tsx scripts/pipeline.ts --status active"
   },
   "dependencies": {
     "@libsql/client": "^0.17.0",
