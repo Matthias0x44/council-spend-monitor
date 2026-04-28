@@ -12,83 +12,150 @@ if (!TURSO_URL || !TURSO_TOKEN) {
   process.exit(1);
 }
 
-// Drop order respects foreign key dependencies (children first)
-const DROP_ORDER = [
-  "transactions",
-  "budgets",
-  "outturns",
-  "source_documents",
-  "suppliers",
-  "financial_years",
-  "councils",
-];
-
 async function main() {
   console.log(`Reading local database: ${LOCAL_DB}`);
   const local = new Database(LOCAL_DB, { readonly: true });
   const turso = createClient({ url: TURSO_URL!, authToken: TURSO_TOKEN });
 
-  // Drop all tables in FK-safe order
-  console.log("Dropping existing tables...");
-  for (const table of DROP_ORDER) {
+  // Test connection first
+  try {
+    const r = await turso.execute("SELECT 1 as ok");
+    console.log("Turso connection OK");
+  } catch (err) {
+    console.error("Cannot connect to Turso:", err);
+    process.exit(1);
+  }
+
+  // Use hardcoded DDL that we know works with Turso
+  const DDL_STATEMENTS = [
+    "DROP TABLE IF EXISTS transactions",
+    "DROP TABLE IF EXISTS budgets",
+    "DROP TABLE IF EXISTS outturns",
+    "DROP TABLE IF EXISTS source_documents",
+    "DROP TABLE IF EXISTS suppliers",
+    "DROP TABLE IF EXISTS financial_years",
+    "DROP TABLE IF EXISTS councils",
+
+    `CREATE TABLE IF NOT EXISTS councils (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      slug TEXT NOT NULL UNIQUE,
+      region TEXT,
+      transparency_url TEXT,
+      data_gov_id TEXT,
+      scrape_profile TEXT,
+      scrape_status TEXT DEFAULT 'pending',
+      last_scraped_at TEXT,
+      file_pattern TEXT
+    )`,
+    `CREATE TABLE IF NOT EXISTS financial_years (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      council_id INTEGER NOT NULL REFERENCES councils(id),
+      label TEXT NOT NULL,
+      start_date TEXT NOT NULL,
+      end_date TEXT NOT NULL
+    )`,
+    `CREATE TABLE IF NOT EXISTS suppliers (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      council_id INTEGER NOT NULL REFERENCES councils(id),
+      name TEXT NOT NULL,
+      normalised_name TEXT NOT NULL
+    )`,
+    `CREATE TABLE IF NOT EXISTS source_documents (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      council_id INTEGER NOT NULL REFERENCES councils(id),
+      financial_year_id INTEGER REFERENCES financial_years(id),
+      filename TEXT NOT NULL,
+      url TEXT NOT NULL,
+      type TEXT NOT NULL,
+      downloaded_at TEXT,
+      column_mapping TEXT
+    )`,
+    `CREATE TABLE IF NOT EXISTS budgets (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      financial_year_id INTEGER NOT NULL REFERENCES financial_years(id),
+      directorate TEXT,
+      service TEXT,
+      category TEXT,
+      net_budget REAL,
+      gross_budget REAL
+    )`,
+    `CREATE TABLE IF NOT EXISTS outturns (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      financial_year_id INTEGER NOT NULL REFERENCES financial_years(id),
+      directorate TEXT,
+      service TEXT,
+      net_outturn REAL,
+      variance REAL
+    )`,
+    `CREATE TABLE IF NOT EXISTS transactions (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      council_id INTEGER NOT NULL REFERENCES councils(id),
+      financial_year_id INTEGER REFERENCES financial_years(id),
+      supplier_id INTEGER REFERENCES suppliers(id),
+      service TEXT,
+      directorate TEXT,
+      category TEXT,
+      description TEXT,
+      amount REAL NOT NULL,
+      date TEXT,
+      month TEXT,
+      source_document_id INTEGER REFERENCES source_documents(id)
+    )`,
+
+    "CREATE INDEX IF NOT EXISTS fy_council_idx ON financial_years(council_id)",
+    "CREATE INDEX IF NOT EXISTS supplier_normalised_idx ON suppliers(council_id, normalised_name)",
+    "CREATE INDEX IF NOT EXISTS source_doc_council_idx ON source_documents(council_id)",
+    "CREATE INDEX IF NOT EXISTS source_doc_url_idx ON source_documents(url)",
+    "CREATE INDEX IF NOT EXISTS budget_fy_idx ON budgets(financial_year_id)",
+    "CREATE INDEX IF NOT EXISTS outturn_fy_idx ON outturns(financial_year_id)",
+    "CREATE INDEX IF NOT EXISTS txn_council_date_idx ON transactions(council_id, date)",
+    "CREATE INDEX IF NOT EXISTS txn_supplier_idx ON transactions(supplier_id)",
+    "CREATE INDEX IF NOT EXISTS txn_directorate_idx ON transactions(council_id, directorate)",
+    "CREATE INDEX IF NOT EXISTS txn_category_idx ON transactions(council_id, category)",
+    "CREATE INDEX IF NOT EXISTS txn_month_idx ON transactions(council_id, month)",
+    "CREATE INDEX IF NOT EXISTS txn_fy_idx ON transactions(council_id, financial_year_id)",
+  ];
+
+  console.log("Creating schema...");
+  for (const stmt of DDL_STATEMENTS) {
+    const preview = stmt.trim().slice(0, 60);
     try {
-      await turso.execute(`DROP TABLE IF EXISTS "${table}"`);
-    } catch (err) {
-      console.warn(`  Could not drop ${table}: ${err}`);
+      await turso.execute(stmt);
+      console.log(`  OK: ${preview}...`);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error(`  FAIL: ${preview}... → ${msg}`);
     }
   }
 
-  // Get table DDL and create in reverse drop order (parents first)
-  const tables = local
-    .prepare("SELECT name, sql FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name")
-    .all() as { name: string; sql: string }[];
+  // Copy data — insert order respects FK constraints
+  const TABLE_ORDER = [
+    "councils",
+    "financial_years",
+    "suppliers",
+    "source_documents",
+    "budgets",
+    "outturns",
+    "transactions",
+  ];
 
-  console.log(`Found ${tables.length} tables: ${tables.map((t) => t.name).join(", ")}`);
-
-  const createOrder = [...DROP_ORDER].reverse();
-  for (const tableName of createOrder) {
-    const table = tables.find((t) => t.name === tableName);
-    if (!table) continue;
-    console.log(`Creating table: ${table.name}`);
-    const ddl = table.sql.replace(/CREATE TABLE/, "CREATE TABLE IF NOT EXISTS");
-    await turso.execute(ddl);
-  }
-
-  // Create indexes
-  const indexes = local
-    .prepare("SELECT sql FROM sqlite_master WHERE type='index' AND sql IS NOT NULL")
-    .all() as { sql: string }[];
-
-  for (const idx of indexes) {
-    const safeSQL = idx.sql.replace(/CREATE INDEX/, "CREATE INDEX IF NOT EXISTS");
-    try {
-      await turso.execute(safeSQL);
-    } catch {
-      // index may reference a column or table that doesn't exist in this schema version
-    }
-  }
-  console.log(`Created ${indexes.length} indexes`);
-
-  // Copy data table by table in batches (parents first)
-  for (const tableName of createOrder) {
-    const table = tables.find((t) => t.name === tableName);
-    if (!table) continue;
-
-    const count = (local.prepare(`SELECT COUNT(*) as c FROM "${table.name}"`).get() as { c: number }).c;
-    console.log(`Pushing ${table.name}: ${count.toLocaleString()} rows`);
+  for (const tableName of TABLE_ORDER) {
+    const count = (local.prepare(`SELECT COUNT(*) as c FROM "${tableName}"`).get() as { c: number }).c;
+    console.log(`\nPushing ${tableName}: ${count.toLocaleString()} rows`);
     if (count === 0) continue;
 
-    const cols = local.prepare(`PRAGMA table_info("${table.name}")`).all() as { name: string }[];
+    const cols = local.prepare(`PRAGMA table_info("${tableName}")`).all() as { name: string }[];
     const colNames = cols.map((c) => c.name);
     const placeholders = colNames.map(() => "?").join(", ");
-    const insertSQL = `INSERT INTO "${table.name}" (${colNames.map(c => `"${c}"`).join(", ")}) VALUES (${placeholders})`;
+    const insertSQL = `INSERT INTO ${tableName} (${colNames.join(", ")}) VALUES (${placeholders})`;
 
     const BATCH_SIZE = 200;
     let offset = 0;
 
     while (offset < count) {
       const rows = local
-        .prepare(`SELECT * FROM "${table.name}" LIMIT ${BATCH_SIZE} OFFSET ${offset}`)
+        .prepare(`SELECT * FROM "${tableName}" LIMIT ${BATCH_SIZE} OFFSET ${offset}`)
         .all() as Record<string, unknown>[];
 
       const statements = rows.map((row) => ({
@@ -101,9 +168,18 @@ async function main() {
         }),
       }));
 
-      await turso.batch(statements);
-      offset += rows.length;
+      try {
+        await turso.batch(statements);
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : String(err);
+        console.error(`  Batch error at offset ${offset}: ${msg}`);
+        // Try smaller batches
+        for (const stmt of statements) {
+          try { await turso.execute(stmt); } catch { /* skip */ }
+        }
+      }
 
+      offset += rows.length;
       if (offset % 10000 < BATCH_SIZE) {
         console.log(`  ${offset.toLocaleString()} / ${count.toLocaleString()}`);
       }
