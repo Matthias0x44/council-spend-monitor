@@ -205,7 +205,7 @@ async function main() {
   sqlite.pragma("journal_mode = WAL");
   sqlite.pragma("foreign_keys = ON");
 
-  // Ensure schema exists
+  // Ensure full schema exists (fresh DB on CI)
   sqlite.exec(`
     CREATE TABLE IF NOT EXISTS councils (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -219,9 +219,46 @@ async function main() {
       last_scraped_at TEXT,
       file_pattern TEXT
     );
+    CREATE TABLE IF NOT EXISTS financial_years (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      council_id INTEGER NOT NULL REFERENCES councils(id),
+      label TEXT NOT NULL,
+      start_date TEXT NOT NULL,
+      end_date TEXT NOT NULL
+    );
+    CREATE TABLE IF NOT EXISTS suppliers (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      council_id INTEGER NOT NULL REFERENCES councils(id),
+      name TEXT NOT NULL,
+      normalised_name TEXT NOT NULL
+    );
+    CREATE TABLE IF NOT EXISTS source_documents (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      council_id INTEGER NOT NULL REFERENCES councils(id),
+      financial_year_id INTEGER REFERENCES financial_years(id),
+      filename TEXT NOT NULL,
+      url TEXT NOT NULL,
+      type TEXT NOT NULL,
+      downloaded_at TEXT,
+      column_mapping TEXT
+    );
+    CREATE TABLE IF NOT EXISTS transactions (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      council_id INTEGER NOT NULL REFERENCES councils(id),
+      financial_year_id INTEGER REFERENCES financial_years(id),
+      supplier_id INTEGER REFERENCES suppliers(id),
+      service TEXT,
+      directorate TEXT,
+      category TEXT,
+      description TEXT,
+      amount REAL NOT NULL,
+      date TEXT,
+      month TEXT,
+      source_document_id INTEGER REFERENCES source_documents(id)
+    );
   `);
 
-  // Migrate existing table
+  // Migrate existing DBs that may be missing new columns
   const migrations = [
     "ALTER TABLE councils ADD COLUMN transparency_url TEXT",
     "ALTER TABLE councils ADD COLUMN data_gov_id TEXT",
