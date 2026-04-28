@@ -1,0 +1,65 @@
+name: Scrape Council Data
+
+on:
+  schedule:
+    # Weekly full scan — Sunday 3am UTC
+    - cron: "0 3 * * 0"
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: "Process a specific council slug (leave empty for all active)"
+        required: false
+        type: string
+      status:
+        description: "Process councils with this status (default: active)"
+        required: false
+        default: "active"
+        type: string
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Seed registry (discover new councils from data.gov.uk)
+        run: npx tsx scripts/seed-registry.ts
+        env:
+          NODE_ENV: production
+
+      - name: Run pipeline
+        run: |
+          ARGS=""
+          if [ -n "${{ inputs.slug }}" ]; then
+            ARGS="--slug ${{ inputs.slug }}"
+          elif [ -n "${{ inputs.status }}" ]; then
+            ARGS="--status ${{ inputs.status }}"
+          fi
+          npx tsx scripts/pipeline.ts $ARGS
+        env:
+          NODE_ENV: production
+
+      - name: Push data to Turso
+        run: |
+          npm install -g @libsql/client
+          npx tsx scripts/push-to-turso.ts
+        env:
+          TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+          TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+
+      - name: Upload raw data as artifact (for debugging)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: council-data-${{ github.run_number }}
+          path: data/council-spend.db
+          retention-days: 7
