@@ -123,13 +123,13 @@ const MANUAL_COUNCILS: ManualCouncil[] = [
   // Already scraped
   { name: "Kirklees Council", slug: "kirklees", region: "West Yorkshire", transparencyUrl: "https://www.kirklees.gov.uk/beta/information-and-data/expenditure-data.aspx" },
 
-  // Major metro boroughs
-  { name: "Birmingham City Council", slug: "birmingham", region: "West Midlands", transparencyUrl: "https://www.birmingham.gov.uk/info/50209/open_data/1082/spending_over_500" },
-  { name: "Manchester City Council", slug: "manchester", region: "Greater Manchester", transparencyUrl: "https://www.manchester.gov.uk/info/200110/budgets_and_spending/6774/spending_data" },
-  { name: "Leeds City Council", slug: "leeds", region: "West Yorkshire", transparencyUrl: "https://www.leeds.gov.uk/your-council/spending-and-finance/spending-over-ps500" },
-  { name: "Sheffield City Council", slug: "sheffield", region: "South Yorkshire", transparencyUrl: "https://www.sheffield.gov.uk/your-city-council/council-finance/spending" },
-  { name: "Liverpool City Council", slug: "liverpool", region: "Merseyside", transparencyUrl: "https://liverpool.gov.uk/council/transparency/spending-over-500/" },
-  { name: "Bristol City Council", slug: "bristol", region: "South West", transparencyUrl: "https://www.bristol.gov.uk/council-spending-and-performance/spending-over-500" },
+  // Major metro boroughs — verified URLs April 2026
+  { name: "Birmingham City Council", slug: "birmingham", region: "West Midlands", transparencyUrl: "https://www.birmingham.gov.uk/info/20215/corporate_procurement_services/517/invoicing_the_council/5" },
+  { name: "Manchester City Council", slug: "manchester", region: "Greater Manchester", transparencyUrl: "https://www.manchester.gov.uk/open-data/local-government-transparency-code" },
+  { name: "Leeds City Council", slug: "leeds", region: "West Yorkshire", transparencyUrl: "https://datamillnorth.org/dataset/council-spending-2gpp0" },
+  { name: "Sheffield City Council", slug: "sheffield", region: "South Yorkshire", transparencyUrl: "https://datamillnorth.org/dataset/council-spend-over-250-emd0m" },
+  { name: "Liverpool City Council", slug: "liverpool", region: "Merseyside", transparencyUrl: "https://liverpool.gov.uk/council/spending-and-performance/transparency-in-local-government/" },
+  { name: "Bristol City Council", slug: "bristol", region: "South West", transparencyUrl: "https://www.bristol.gov.uk/council/council-spending-and-performance/spending-over-500" },
   { name: "Newcastle City Council", slug: "newcastle", region: "Tyne and Wear" },
   { name: "Nottingham City Council", slug: "nottingham", region: "East Midlands" },
   { name: "Leicester City Council", slug: "leicester", region: "East Midlands" },
