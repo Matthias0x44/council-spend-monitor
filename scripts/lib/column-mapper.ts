@@ -22,7 +22,9 @@ const FIELD_VARIANTS: Record<CanonicalField, string[]> = {
     "supplier name",
     "supplier",
     "beneficiary",
+    "beneficiary name",
     "payee",
+    "payee name",
     "merchant name",
     "company name",
     "creditor name",
@@ -30,7 +32,6 @@ const FIELD_VARIANTS: Record<CanonicalField, string[]> = {
     "vendor",
     "payment to",
     "paid to",
-    "body name",
     "organisation name",
     "organisation",
     "mch.merchant name",
@@ -143,6 +144,43 @@ function normalizeHeader(header: string): string {
 }
 
 /**
+ * Headers that should never be assigned to a canonical field, even if
+ * they happen to substring-match a variant. These typically refer to
+ * the *publishing* authority (per the UK Local Government Transparency
+ * Code) or to transaction identifiers/VAT numbers — never to the supplier.
+ */
+const HEADER_BLOCKLIST: ReadonlySet<string> = new Set([
+  "body",
+  "body name",
+  "body uri",
+  "publisher",
+  "publisher name",
+  "publishing body",
+  "publishing body name",
+  "authority",
+  "authority name",
+  "local authority",
+  "local authority name",
+  "council uri",
+  "lea",
+  "lea name",
+  "transaction number",
+  "transaction id",
+  "transaction identifier",
+  "vat number",
+  "vat registration number",
+  "vat reg no",
+  "supplier id",
+  "vendor number",
+  "vendor id",
+  "supplier number",
+]);
+
+function isBlockedHeader(header: string): boolean {
+  return HEADER_BLOCKLIST.has(normalizeHeader(header));
+}
+
+/**
  * Try to map a single header to a canonical field.
  * Returns the field and a confidence score (0-1).
  */
@@ -151,6 +189,7 @@ function scoreHeader(
 ): { field: CanonicalField; score: number } | null {
   const norm = normalizeHeader(header);
   if (!norm) return null;
+  if (HEADER_BLOCKLIST.has(norm)) return null;
 
   // Pass 1: exact match against known variants (highest confidence)
   for (const [field, variants] of Object.entries(FIELD_VARIANTS)) {
@@ -258,6 +297,22 @@ export function detectColumns(
     mappedCount++;
   }
 
+  // Fallback: UK Local Government Transparency Code uses a bare "Name"
+  // column for the supplier/beneficiary. We don't include "name" in the
+  // variants list (it would substring-match too aggressively), so handle
+  // it here only if no other supplier candidate has been chosen.
+  if (!usedFields.has("supplier")) {
+    const nameHeader = headers.find(
+      (h) => normalizeHeader(h) === "name" && !mapping[h] && !isBlockedHeader(h)
+    );
+    if (nameHeader) {
+      mapping[nameHeader] = "supplier";
+      usedFields.add("supplier");
+      totalScore += 0.7;
+      mappedCount++;
+    }
+  }
+
   // Collect unmapped headers
   for (const header of headers) {
     if (!mapping[header]) unmapped.push(header);
@@ -267,6 +322,62 @@ export function detectColumns(
   const confidence = mappedCount > 0 ? totalScore / mappedCount : 0;
 
   return { mapping, unmapped, confidence, missingRequired };
+}
+
+/**
+ * Sanity-check the supplier column by inspecting actual values. If the
+ * column is dominated by URLs/URIs (a tell-tale sign we picked a Linked
+ * Data publisher identifier instead of the real payee), try to swap to
+ * a different available column. Returns the (possibly updated) mapping
+ * along with a warning message if a swap was made.
+ */
+export function validateSupplierColumn(
+  mapping: ColumnMapping,
+  rows: Record<string, unknown>[],
+  headers: string[]
+): { mapping: ColumnMapping; warning?: string } {
+  const supplierHeader = Object.keys(mapping).find(
+    (h) => mapping[h] === "supplier"
+  );
+  if (!supplierHeader) return { mapping };
+
+  const sample = rows.slice(0, 100);
+  if (sample.length === 0) return { mapping };
+
+  let urlLike = 0;
+  let nonEmpty = 0;
+  for (const row of sample) {
+    const v = row[supplierHeader];
+    if (v == null || v === "") continue;
+    nonEmpty++;
+    const s = String(v).trim().toLowerCase();
+    if (s.startsWith("http://") || s.startsWith("https://")) urlLike++;
+  }
+
+  if (nonEmpty === 0 || urlLike / nonEmpty < 0.5) return { mapping };
+
+  // Supplier column looks like URIs — try to find a better column.
+  // Prefer a literal "Name" column not already mapped or blocked.
+  const nameHeader = headers.find(
+    (h) =>
+      normalizeHeader(h) === "name" &&
+      !isBlockedHeader(h) &&
+      mapping[h] !== "supplier"
+  );
+  if (nameHeader) {
+    const newMapping = { ...mapping };
+    delete newMapping[supplierHeader];
+    newMapping[nameHeader] = "supplier";
+    return {
+      mapping: newMapping,
+      warning: `Supplier column "${supplierHeader}" looked like URIs (${urlLike}/${nonEmpty}); remapped to "${nameHeader}"`,
+    };
+  }
+
+  return {
+    mapping,
+    warning: `Supplier column "${supplierHeader}" appears dominated by URIs (${urlLike}/${nonEmpty}) and no replacement column was found`,
+  };
 }
 
 /**

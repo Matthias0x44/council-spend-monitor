@@ -15,6 +15,7 @@ import * as path from "path";
 import {
   detectColumns,
   applyMapping,
+  validateSupplierColumn,
   type ColumnMapping,
   type CanonicalField,
 } from "./column-mapper";
@@ -122,6 +123,15 @@ export function ingestFile(opts: IngestOptions): IngestResult {
       missingRequired: detection.missingRequired,
     };
   }
+
+  // Sanity-check the chosen supplier column against actual values.
+  // Catches cases like Bristol's "Body Name" column (an OS Linked Data
+  // URI for the publishing council) being mistaken for the supplier.
+  const validated = validateSupplierColumn(detection.mapping, rows, headers);
+  if (validated.warning) {
+    console.warn(`  [warn] ${filename}: ${validated.warning}`);
+  }
+  detection.mapping = validated.mapping;
 
   // Determine file month/FY from filename
   const fileMonth = monthFromFilename(filename);
@@ -261,7 +271,9 @@ export function ingestFile(opts: IngestOptions): IngestResult {
   for (const row of rows) {
     const mapped = applyMapping(row, detection.mapping);
 
-    const supplierName = String(mapped.supplier || "").trim() || "Redacted";
+    const rawSupplier = String(mapped.supplier || "").trim();
+    const rawDateStr = String(mapped.date || "").trim();
+    const rawDesc = String(mapped.description || "").trim();
     let amount = 0;
     if (typeof mapped.amount === "number") {
       amount = mapped.amount;
@@ -274,6 +286,15 @@ export function ingestFile(opts: IngestOptions): IngestResult {
       continue;
     }
 
+    // Skip summary/totals rows: many councils append a grand-total line at the
+    // bottom of each file with only an amount populated. We treat any row with
+    // no supplier, no date, and no description as such a summary line.
+    if (!rawSupplier && !rawDateStr && !rawDesc) {
+      skipped++;
+      continue;
+    }
+
+    const supplierName = rawSupplier || "Redacted";
     const supplierId = getOrCreateSupplier(supplierName);
     const rawDate = mapped.date;
     const date = parseExcelDate(rawDate as string | number);
