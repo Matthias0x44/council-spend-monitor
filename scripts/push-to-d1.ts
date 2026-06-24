@@ -29,6 +29,36 @@ import * as path from "path";
 
 const LOCAL_DB = path.join(process.cwd(), "data", "council-spend.db");
 
+/**
+ * Tiny zero-dep .env loader. We don't pull in `dotenv` since this is the
+ * only place we need it, and Node's --env-file flag isn't reliably forwarded
+ * through tsx in all setups.
+ */
+function loadDotenv(): void {
+  const envPath = path.join(process.cwd(), ".env");
+  if (!fs.existsSync(envPath)) return;
+  const text = fs.readFileSync(envPath, "utf8");
+  for (const rawLine of text.split(/\r?\n/)) {
+    const line = rawLine.trim();
+    if (!line || line.startsWith("#")) continue;
+    const eq = line.indexOf("=");
+    if (eq === -1) continue;
+    const key = line.slice(0, eq).trim();
+    let value = line.slice(eq + 1).trim();
+    if (
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))
+    ) {
+      value = value.slice(1, -1);
+    }
+    if (process.env[key] === undefined && value !== "") {
+      process.env[key] = value;
+    }
+  }
+}
+
+loadDotenv();
+
 const ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID;
 const API_TOKEN = process.env.CLOUDFLARE_API_TOKEN;
 const DB_ID = process.env.D1_DATABASE_ID;
@@ -241,22 +271,30 @@ async function pushTable(
   whereClause = ""
 ): Promise<number> {
   const cols = table.columns;
-  const rows = local
-    .prepare(`SELECT ${cols.join(", ")} FROM ${table.name} ${whereClause}`)
-    .all() as Record<string, unknown>[];
+  const colList = cols.map((c) => `"${c}"`).join(", ");
+  const startedAt = Date.now();
 
-  if (rows.length === 0) {
+  // Use a streaming iterator so we don't materialise the full result set in
+  // memory — `transactions` alone is 600k rows / ~120MB.
+  const stmt = local.prepare(
+    `SELECT ${cols.join(", ")} FROM ${table.name} ${whereClause}`
+  );
+  const totalRow = local
+    .prepare(`SELECT COUNT(*) AS c FROM ${table.name} ${whereClause}`)
+    .get() as { c: number };
+  const total = totalRow.c;
+
+  if (total === 0) {
     console.log(`  ${table.name}: 0 rows`);
     return 0;
   }
 
-  const colList = cols.map((c) => `"${c}"`).join(", ");
   let pushed = 0;
-  const startedAt = Date.now();
+  let buffer: Record<string, unknown>[] = [];
 
-  for (let i = 0; i < rows.length; i += BATCH_SIZE) {
-    const batch = rows.slice(i, i + BATCH_SIZE);
-    const valuesSql = batch
+  const flush = async () => {
+    if (buffer.length === 0) return;
+    const valuesSql = buffer
       .map(
         (row) =>
           `(${cols.map((c) => escapeLiteral(row[c])).join(", ")})`
@@ -264,14 +302,26 @@ async function pushTable(
       .join(",\n  ");
     const sql = `INSERT INTO ${table.name} (${colList}) VALUES\n  ${valuesSql};`;
     await d1RawExec(sql);
-    pushed += batch.length;
-    if (pushed % (BATCH_SIZE * 20) === 0 || pushed === rows.length) {
+    pushed += buffer.length;
+    buffer = [];
+
+    if (pushed % (BATCH_SIZE * 20) === 0 || pushed === total) {
       const elapsed = ((Date.now() - startedAt) / 1000).toFixed(1);
+      const rate = (pushed / Math.max(1, Date.now() - startedAt)) * 1000;
       console.log(
-        `  ${table.name}: ${pushed.toLocaleString()}/${rows.length.toLocaleString()} (${elapsed}s)`
+        `  ${table.name}: ${pushed.toLocaleString()}/${total.toLocaleString()} ` +
+          `(${elapsed}s, ${rate.toFixed(0)} rows/s)`
       );
     }
+  };
+
+  for (const row of stmt.iterate() as IterableIterator<Record<string, unknown>>) {
+    buffer.push(row);
+    if (buffer.length >= BATCH_SIZE) {
+      await flush();
+    }
   }
+  await flush();
 
   return pushed;
 }
