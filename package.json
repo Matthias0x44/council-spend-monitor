@@ -13,7 +13,10 @@
     "seed": "tsx scripts/seed.ts",
     "seed:registry": "tsx scripts/seed-registry.ts",
     "pipeline": "tsx scripts/pipeline.ts",
-    "pipeline:all": "tsx scripts/pipeline.ts --status active"
+    "pipeline:all": "tsx scripts/pipeline.ts --status active",
+    "d1:migrate:local": "wrangler d1 execute council-spend --local --file=scripts/d1/schema.sql",
+    "d1:migrate:remote": "wrangler d1 execute council-spend --remote --file=scripts/d1/schema.sql",
+    "d1:push": "tsx scripts/push-to-d1.ts"
   },
   "dependencies": {
     "@libsql/client": "^0.17.0",
@@ -47,6 +50,7 @@
     "eslint-config-next": "16.1.6",
     "tailwindcss": "^4",
     "tsx": "^4.21.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "^4.0.0"
   }
 }

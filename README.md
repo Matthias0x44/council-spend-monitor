@@ -35,39 +35,57 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000). Locally, the app reads from `data/council-spend.db`.
 
-## Deploying to Vercel
+## Deploying to Cloudflare
 
-The app uses [Turso](https://turso.tech) (cloud-hosted SQLite) for production.
+The app is being migrated from Vercel + Turso to Cloudflare Pages + D1.
+Local dev still uses `better-sqlite3` against `data/council-spend.db`.
 
-### 1. Create a Turso database
-
-```bash
-curl -sSfL https://get.tur.so/install.sh | bash
-turso auth login
-turso db create council-spend
-```
-
-### 2. Push local data to Turso
+### 1. Provision Cloudflare resources
 
 ```bash
-./scripts/push-to-turso.sh council-spend
+npx wrangler login
+npx wrangler d1 create council-spend
 ```
 
-### 3. Get credentials
+Copy the `database_id` printed by the create command into `wrangler.toml`
+(replace `REPLACE_WITH_D1_DATABASE_ID`).
+
+### 2. Apply schema
 
 ```bash
-turso db show council-spend --url
-turso db tokens create council-spend
+npm run d1:migrate:remote
 ```
 
-### 4. Set environment variables on Vercel
+This runs `scripts/d1/schema.sql` against the remote D1 database.
+`scripts/d1/schema.sql` is the canonical DDL — local `pipeline.ts` and
+`seed-registry.ts` read from the same file.
 
-Add these to your Vercel project settings:
+### 3. Set credentials
 
-- `TURSO_DATABASE_URL` — the URL from step 3
-- `TURSO_AUTH_TOKEN` — the token from step 3
+Create an API token at
+[dash.cloudflare.com/profile/api-tokens](https://dash.cloudflare.com/profile/api-tokens)
+with the `Account → D1 → Edit` permission. Find your account id in any
+dashboard URL (`/accounts/<id>/...`) or via `wrangler whoami`.
 
-Then redeploy.
+Add to `.env` for local pushes:
+
+```bash
+CLOUDFLARE_ACCOUNT_ID=...
+CLOUDFLARE_API_TOKEN=...
+D1_DATABASE_ID=...
+```
+
+And to GitHub Actions repo secrets, with the same names.
+
+### 4. Push local data to D1
+
+```bash
+npm run d1:push                # full replace
+npm run d1:push -- --slug bristol   # scoped to one council
+```
+
+The scoped form deletes only that council's rows in D1 before re-inserting,
+so you can re-scrape one council without affecting the others.
 
 ## Tech Stack
 
