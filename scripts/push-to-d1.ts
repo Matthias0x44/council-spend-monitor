@@ -51,7 +51,10 @@ function loadDotenv(): void {
     ) {
       value = value.slice(1, -1);
     }
-    if (process.env[key] === undefined && value !== "") {
+    // Override empty/unset shell vars too — earlier `source .env` calls
+    // can leave keys exported as empty strings, which would otherwise
+    // shadow the real values we're loading here.
+    if (!process.env[key] && value !== "") {
       process.env[key] = value;
     }
   }
