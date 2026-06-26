@@ -28,6 +28,15 @@ export interface IngestOptions {
   fileUrl: string;
   db: ReturnType<typeof drizzle>;
   sqlite: InstanceType<typeof Database>;
+  /**
+   * Drop rows where `|amount|` is below this threshold. The UK Local
+   * Government Transparency Code only mandates publishing transactions
+   * over £500, so anything smaller is best-effort extra data that bloats
+   * storage without much analytical value. Set to 0 to disable.
+   *
+   * Defaults to MIN_TXN_AMOUNT env var, then 500.
+   */
+  minAmount?: number;
 }
 
 export interface IngestResult {
@@ -97,6 +106,13 @@ function readSpreadsheet(filePath: string): Record<string, unknown>[] {
 export function ingestFile(opts: IngestOptions): IngestResult {
   const { councilId, filePath, fileUrl, db, sqlite } = opts;
   const filename = path.basename(filePath);
+  const envMin = Number(process.env.MIN_TXN_AMOUNT);
+  const minAmount =
+    opts.minAmount !== undefined
+      ? opts.minAmount
+      : Number.isFinite(envMin)
+      ? envMin
+      : 500;
 
   // Read spreadsheet
   const rows = readSpreadsheet(filePath);
@@ -282,6 +298,13 @@ export function ingestFile(opts: IngestOptions): IngestResult {
     }
 
     if (amount === 0) {
+      skipped++;
+      continue;
+    }
+
+    // Drop sub-threshold rows (default £500 — UK Transparency Code minimum).
+    // Uses absolute value so micro-refunds are filtered along with micro-payments.
+    if (minAmount > 0 && Math.abs(amount) < minAmount) {
       skipped++;
       continue;
     }
