@@ -32,8 +32,6 @@ const FIELD_VARIANTS: Record<CanonicalField, string[]> = {
     "vendor",
     "payment to",
     "paid to",
-    "organisation name",
-    "organisation",
     "mch.merchant name",
     "mch.merchant name - original",
   ],
@@ -150,9 +148,16 @@ function normalizeHeader(header: string): string {
  * Code) or to transaction identifiers/VAT numbers — never to the supplier.
  */
 const HEADER_BLOCKLIST: ReadonlySet<string> = new Set([
+  // Publishing-authority identifiers (the council *itself*, not its suppliers).
+  // Per the UK Local Government Transparency Code, "Body" / "Organisation" /
+  // "Authority" describe the publishing council. Their value is the same on
+  // every row, which collapses analytics if mistaken for the supplier column.
   "body",
   "body name",
   "body uri",
+  "organisation",
+  "organisation name",
+  "organisation uri",
   "publisher",
   "publisher name",
   "publishing body",
@@ -161,12 +166,17 @@ const HEADER_BLOCKLIST: ReadonlySet<string> = new Set([
   "authority name",
   "local authority",
   "local authority name",
+  "council",
+  "council name",
   "council uri",
   "lea",
   "lea name",
+  // Identifier/reference columns that can substring-match field variants.
   "transaction number",
   "transaction id",
   "transaction identifier",
+  "transaction no",
+  "transaction no.",
   "vat number",
   "vat registration number",
   "vat reg no",
@@ -341,42 +351,87 @@ export function validateSupplierColumn(
   );
   if (!supplierHeader) return { mapping };
 
-  const sample = rows.slice(0, 100);
+  const sample = rows.slice(0, 200);
   if (sample.length === 0) return { mapping };
 
   let urlLike = 0;
   let nonEmpty = 0;
+  const valueCounts = new Map<string, number>();
   for (const row of sample) {
     const v = row[supplierHeader];
     if (v == null || v === "") continue;
     nonEmpty++;
-    const s = String(v).trim().toLowerCase();
-    if (s.startsWith("http://") || s.startsWith("https://")) urlLike++;
+    const trimmed = String(v).trim();
+    const lower = trimmed.toLowerCase();
+    if (lower.startsWith("http://") || lower.startsWith("https://")) {
+      urlLike++;
+    }
+    valueCounts.set(trimmed, (valueCounts.get(trimmed) || 0) + 1);
+  }
+  if (nonEmpty === 0) return { mapping };
+
+  // Two failure patterns we want to catch:
+  //   1. >=50% of values are URIs (Bristol's "Body Name" → OS Linked Data URI)
+  //   2. A single value dominates >=80% of rows (Rochdale's "ORGANISATION
+  //      NAME" → council's own name, repeated on every line)
+  const looksLikeUris = urlLike / nonEmpty >= 0.5;
+  let topValue: { value: string; count: number } | null = null;
+  for (const [value, count] of valueCounts) {
+    if (!topValue || count > topValue.count) topValue = { value, count };
+  }
+  const dominationRatio = topValue ? topValue.count / nonEmpty : 0;
+  // Require at least 20 sampled rows before trusting the dominance ratio —
+  // otherwise small files trivially have one "dominant" value.
+  const looksLikePublisher = nonEmpty >= 20 && dominationRatio >= 0.8;
+
+  if (!looksLikeUris && !looksLikePublisher) return { mapping };
+
+  // Pick the best replacement column from the headers that haven't been
+  // claimed yet. Preference order: an exact "Name" column, then "Supplier
+  // Name" / "Vendor Name" / "Payee Name" / etc., then anything containing
+  // "supplier" / "vendor" / "payee" as a whole-word match.
+  const claimed = new Set(Object.keys(mapping));
+  const candidates = headers.filter(
+    (h) => h !== supplierHeader && !claimed.has(h) && !isBlockedHeader(h)
+  );
+
+  const supplierKeywords = [
+    /^supplier name$/,
+    /^vendor name$/,
+    /^payee name$/,
+    /^beneficiary name$/,
+    /^merchant name$/,
+    /^name$/,
+    /\bsupplier\b/,
+    /\bvendor\b/,
+    /\bpayee\b/,
+    /\bbeneficiary\b/,
+    /\bmerchant\b/,
+  ];
+  let replacement: string | null = null;
+  for (const pattern of supplierKeywords) {
+    replacement = candidates.find((h) => pattern.test(normalizeHeader(h))) || null;
+    if (replacement) break;
   }
 
-  if (nonEmpty === 0 || urlLike / nonEmpty < 0.5) return { mapping };
+  const reason = looksLikeUris
+    ? `URIs (${urlLike}/${nonEmpty})`
+    : `single value "${topValue!.value.slice(0, 40)}" dominates ` +
+      `${topValue!.count}/${nonEmpty} rows`;
 
-  // Supplier column looks like URIs — try to find a better column.
-  // Prefer a literal "Name" column not already mapped or blocked.
-  const nameHeader = headers.find(
-    (h) =>
-      normalizeHeader(h) === "name" &&
-      !isBlockedHeader(h) &&
-      mapping[h] !== "supplier"
-  );
-  if (nameHeader) {
+  if (replacement) {
     const newMapping = { ...mapping };
     delete newMapping[supplierHeader];
-    newMapping[nameHeader] = "supplier";
+    newMapping[replacement] = "supplier";
     return {
       mapping: newMapping,
-      warning: `Supplier column "${supplierHeader}" looked like URIs (${urlLike}/${nonEmpty}); remapped to "${nameHeader}"`,
+      warning: `Supplier column "${supplierHeader}" looked wrong (${reason}); remapped to "${replacement}"`,
     };
   }
 
   return {
     mapping,
-    warning: `Supplier column "${supplierHeader}" appears dominated by URIs (${urlLike}/${nonEmpty}) and no replacement column was found`,
+    warning: `Supplier column "${supplierHeader}" looked wrong (${reason}) and no replacement column was found`,
   };
 }
 
