@@ -21,8 +21,8 @@ export function CouncilSearch() {
 
   useEffect(() => {
     fetch("/api/councils")
-      .then((r) => r.json())
-      .then((data: Council[]) => setCouncils(data))
+      .then((r) => r.json() as Promise<Council[]>)
+      .then((data) => setCouncils(data))
       .catch(() => {});
   }, []);
 

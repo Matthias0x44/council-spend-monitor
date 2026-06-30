@@ -1,12 +1,13 @@
-import { db } from "@/db";
+import { getDb } from "@/db";
 import { councils, transactions } from "@/db/schema";
-import { sql, eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import Link from "next/link";
 import { CouncilSearch } from "@/components/council-search";
 
 export const dynamic = "force-dynamic";
 
 export default async function CouncilsPage() {
+  const db = await getDb();
   const allCouncils = await db
     .select({
       id: councils.id,
@@ -15,11 +16,11 @@ export default async function CouncilsPage() {
       region: councils.region,
       scrapeStatus: councils.scrapeStatus,
       lastScrapedAt: councils.lastScrapedAt,
-      transactionCount: sql<number>`(
-        SELECT COUNT(*) FROM transactions WHERE transactions.council_id = ${councils.id}
-      )`,
+      transactionCount: sql<number>`COALESCE(COUNT(${transactions.id}), 0)`,
     })
     .from(councils)
+    .leftJoin(transactions, eq(transactions.councilId, councils.id))
+    .groupBy(councils.id)
     .orderBy(councils.name)
     .all();
 

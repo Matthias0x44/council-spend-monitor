@@ -56,7 +56,7 @@ export function TransactionTable({ slug, fy, directorates, categories }: Props) 
 
     try {
       const res = await fetch(`/api/councils/${slug}/transactions?${params}`);
-      const json = await res.json();
+      const json = (await res.json()) as ApiResponse;
       setData(json);
     } catch {
       setData(null);

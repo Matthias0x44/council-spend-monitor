@@ -1,0 +1,28 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "council-spend-monitor",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-06-01",
+  // nodejs_compat: needed by @opennextjs/cloudflare and any Node-style libs.
+  // global_fetch_strictly_public: required when our app fetches public URLs
+  // (data.gov.uk, council pages) so workerd doesn't restrict cross-origin
+  // fetches through the Worker.
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  // Logged in the dashboard, useful for `wrangler tail`.
+  "observability": {
+    "enabled": true
+  },
+  // D1 database that holds the council-spend data. The binding name "DB" is
+  // what src/db/index.ts looks for at runtime via getCloudflareContext().
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "council-spend",
+      "database_id": "e1775f4f-2c8c-40c8-bc31-5b09ba536313"
+    }
+  ]
+}

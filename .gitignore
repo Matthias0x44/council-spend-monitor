@@ -42,6 +42,9 @@ yarn-error.log*
 .dev.vars
 worker-configuration.d.ts
 
+# opennextjs build output
+/.open-next/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

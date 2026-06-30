@@ -1,12 +1,14 @@
-import { db } from "@/db";
+import { getDb } from "@/db";
 import { councils, financialYears, budgets, outturns, transactions, suppliers, sourceDocuments } from "@/db/schema";
 import { eq, and, desc, asc, sql, gte, SQL } from "drizzle-orm";
 
 export async function getCouncilBySlug(slug: string) {
+  const db = await getDb();
   return db.select().from(councils).where(eq(councils.slug, slug)).get();
 }
 
 export async function getFinancialYears(councilId: number) {
+  const db = await getDb();
   return db
     .select()
     .from(financialYears)
@@ -16,6 +18,7 @@ export async function getFinancialYears(councilId: number) {
 }
 
 export async function getLatestFinancialYear(councilId: number) {
+  const db = await getDb();
   return db
     .select()
     .from(financialYears)
@@ -26,6 +29,7 @@ export async function getLatestFinancialYear(councilId: number) {
 }
 
 export async function getOverview(councilId: number, fyId?: number) {
+  const db = await getDb();
   const spendConditions: SQL[] = [eq(transactions.councilId, councilId)];
   if (fyId) spendConditions.push(eq(transactions.financialYearId, fyId));
 
@@ -118,6 +122,7 @@ export interface TransactionFilters {
 }
 
 export async function getTransactions(councilId: number, filters: TransactionFilters) {
+  const db = await getDb();
   const page = filters.page || 1;
   const pageSize = filters.pageSize || 50;
   const offset = (page - 1) * pageSize;
@@ -188,6 +193,7 @@ export async function getTransactions(councilId: number, filters: TransactionFil
 }
 
 export async function getSpendByCategory(councilId: number, fyId?: number) {
+  const db = await getDb();
   const conditions: SQL[] = [eq(transactions.councilId, councilId)];
   if (fyId) conditions.push(eq(transactions.financialYearId, fyId));
 
@@ -210,6 +216,7 @@ export async function getSpendByCategory(councilId: number, fyId?: number) {
 }
 
 export async function getSpendByDirectorate(councilId: number, fyId?: number) {
+  const db = await getDb();
   const conditions: SQL[] = [eq(transactions.councilId, councilId)];
   if (fyId) conditions.push(eq(transactions.financialYearId, fyId));
 
@@ -252,6 +259,7 @@ export async function getSpendByDirectorate(councilId: number, fyId?: number) {
 }
 
 export async function getTopSuppliers(councilId: number, fyId?: number, limit = 20) {
+  const db = await getDb();
   const conditions: SQL[] = [eq(transactions.councilId, councilId)];
   if (fyId) conditions.push(eq(transactions.financialYearId, fyId));
   const where = and(...conditions)!;
@@ -281,6 +289,7 @@ export async function getTopSuppliers(councilId: number, fyId?: number, limit = 
 }
 
 export async function getMonthlyTrend(councilId: number, fyId?: number) {
+  const db = await getDb();
   const conditions: SQL[] = [eq(transactions.councilId, councilId)];
   if (fyId) conditions.push(eq(transactions.financialYearId, fyId));
 
@@ -322,6 +331,7 @@ function fmtAmount(n: number): string {
 }
 
 export async function getFlags(councilId: number, fyId?: number) {
+  const db = await getDb();
   const flags: { type: string; severity: "high" | "medium" | "low"; title: string; detail: string }[] = [];
 
   const conditions: SQL[] = [eq(transactions.councilId, councilId)];
@@ -493,6 +503,7 @@ export async function getFlags(councilId: number, fyId?: number) {
 }
 
 export async function getDirectoratesList(councilId: number) {
+  const db = await getDb();
   const raw = await db
     .select({ directorate: transactions.directorate })
     .from(transactions)
@@ -504,6 +515,7 @@ export async function getDirectoratesList(councilId: number) {
 }
 
 export async function getCategoriesList(councilId: number) {
+  const db = await getDb();
   const raw = await db
     .select({ category: transactions.category })
     .from(transactions)
