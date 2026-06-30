@@ -23,6 +23,9 @@ const FIELD_VARIANTS: Record<CanonicalField, string[]> = {
     "supplier",
     "beneficiary",
     "beneficiary name",
+    // Leeds CSVs through mid-2020 have a typo in the header.
+    "benificiary",
+    "benificiary name",
     "payee",
     "payee name",
     "merchant name",
@@ -56,9 +59,10 @@ const FIELD_VARIANTS: Record<CanonicalField, string[]> = {
     "net value",
     "invoiced",
     "invoiced amount",
-    "spend",
-    "expenditure",
     "payment value",
+    // Stockport's "All Spend" CSVs use a snake_case header. normalizeHeader
+    // collapses underscores into spaces so we list it both ways for clarity.
+    "net_amount",
   ],
   date: [
     "payment date",
@@ -138,7 +142,10 @@ const KEYWORD_SCORES: Record<CanonicalField, string[]> = {
 };
 
 function normalizeHeader(header: string): string {
-  return header.toLowerCase().trim().replace(/\s+/g, " ");
+  return header
+    .toLowerCase()
+    .trim()
+    .replace(/[\s_]+/g, " ");
 }
 
 /**
@@ -356,12 +363,14 @@ export function validateSupplierColumn(
 
   let urlLike = 0;
   let nonEmpty = 0;
+  let totalLen = 0;
   const valueCounts = new Map<string, number>();
   for (const row of sample) {
     const v = row[supplierHeader];
     if (v == null || v === "") continue;
     nonEmpty++;
     const trimmed = String(v).trim();
+    totalLen += trimmed.length;
     const lower = trimmed.toLowerCase();
     if (lower.startsWith("http://") || lower.startsWith("https://")) {
       urlLike++;
@@ -370,21 +379,31 @@ export function validateSupplierColumn(
   }
   if (nonEmpty === 0) return { mapping };
 
-  // Two failure patterns we want to catch:
+  // Failure patterns we want to catch:
   //   1. >=50% of values are URIs (Bristol's "Body Name" → OS Linked Data URI)
   //   2. A single value dominates >=80% of rows (Rochdale's "ORGANISATION
   //      NAME" → council's own name, repeated on every line)
+  //   3. The column is a low-cardinality flag/code field (Leeds' "Capital Or
+  //      Revenue" → "R" / "C"). Real supplier names average tens of chars
+  //      and produce hundreds of unique values per file.
   const looksLikeUris = urlLike / nonEmpty >= 0.5;
   let topValue: { value: string; count: number } | null = null;
   for (const [value, count] of valueCounts) {
     if (!topValue || count > topValue.count) topValue = { value, count };
   }
   const dominationRatio = topValue ? topValue.count / nonEmpty : 0;
-  // Require at least 20 sampled rows before trusting the dominance ratio —
-  // otherwise small files trivially have one "dominant" value.
   const looksLikePublisher = nonEmpty >= 20 && dominationRatio >= 0.8;
+  const avgLen = totalLen / nonEmpty;
+  const distinctRatio = valueCounts.size / nonEmpty;
+  const looksLikeFlagColumn =
+    nonEmpty >= 20 &&
+    avgLen <= 3 &&
+    valueCounts.size <= 5 &&
+    distinctRatio < 0.1;
 
-  if (!looksLikeUris && !looksLikePublisher) return { mapping };
+  if (!looksLikeUris && !looksLikePublisher && !looksLikeFlagColumn) {
+    return { mapping };
+  }
 
   // Pick the best replacement column from the headers that haven't been
   // claimed yet. Preference order: an exact "Name" column, then "Supplier
@@ -416,6 +435,9 @@ export function validateSupplierColumn(
 
   const reason = looksLikeUris
     ? `URIs (${urlLike}/${nonEmpty})`
+    : looksLikeFlagColumn
+    ? `flag column (${valueCounts.size} distinct values, avg ` +
+      `${avgLen.toFixed(1)} chars across ${nonEmpty} rows)`
     : `single value "${topValue!.value.slice(0, 40)}" dominates ` +
       `${topValue!.count}/${nonEmpty} rows`;
 
@@ -432,6 +454,87 @@ export function validateSupplierColumn(
   return {
     mapping,
     warning: `Supplier column "${supplierHeader}" looked wrong (${reason}) and no replacement column was found`,
+  };
+}
+
+function parseNumericCell(v: unknown): number | null {
+  if (v == null || v === "") return null;
+  if (typeof v === "number") return Number.isFinite(v) ? v : null;
+  const cleaned = String(v).replace(/[£$€,\s]/g, "").replace(/^\((.+)\)$/, "-$1");
+  if (!cleaned || cleaned === "-") return null;
+  const n = parseFloat(cleaned);
+  return Number.isFinite(n) ? n : null;
+}
+
+/**
+ * Sanity-check the amount column by sampling rows. If <50% of values
+ * parse as numbers, the mapper probably picked a description-style
+ * column whose header happened to substring-match an amount variant
+ * (e.g. Stockport's "Summary of Purpose of Expenditure"). Try to swap
+ * to a column whose values *are* numeric.
+ */
+export function validateAmountColumn(
+  mapping: ColumnMapping,
+  rows: Record<string, unknown>[],
+  headers: string[]
+): { mapping: ColumnMapping; warning?: string } {
+  const amountHeader = Object.keys(mapping).find(
+    (h) => mapping[h] === "amount"
+  );
+  if (!amountHeader) return { mapping };
+
+  const sample = rows.slice(0, 200);
+  if (sample.length === 0) return { mapping };
+
+  let numeric = 0;
+  let nonEmpty = 0;
+  for (const row of sample) {
+    const v = row[amountHeader];
+    if (v == null || v === "") continue;
+    nonEmpty++;
+    if (parseNumericCell(v) !== null) numeric++;
+  }
+  if (nonEmpty === 0) return { mapping };
+  if (numeric / nonEmpty >= 0.5) return { mapping };
+
+  // Pick the column with the most numeric values among unclaimed headers.
+  const claimed = new Set(Object.keys(mapping));
+  let best: { header: string; score: number } | null = null;
+  for (const h of headers) {
+    if (h === amountHeader) continue;
+    if (claimed.has(h)) continue;
+    if (isBlockedHeader(h)) continue;
+    let hits = 0;
+    let total = 0;
+    for (const row of sample) {
+      const v = row[h];
+      if (v == null || v === "") continue;
+      total++;
+      if (parseNumericCell(v) !== null) hits++;
+    }
+    if (total < 10) continue;
+    const score = hits / total;
+    if (score < 0.8) continue;
+    if (!best || score > best.score) best = { header: h, score };
+  }
+
+  if (best) {
+    const newMapping = { ...mapping };
+    delete newMapping[amountHeader];
+    newMapping[best.header] = "amount";
+    return {
+      mapping: newMapping,
+      warning:
+        `Amount column "${amountHeader}" was only ${numeric}/${nonEmpty} ` +
+        `numeric; remapped to "${best.header}" (${Math.round(best.score * 100)}% numeric)`,
+    };
+  }
+
+  return {
+    mapping,
+    warning:
+      `Amount column "${amountHeader}" was only ${numeric}/${nonEmpty} ` +
+      `numeric; no better column found`,
   };
 }
 

@@ -117,6 +117,13 @@ interface ManualCouncil {
   slug: string;
   region: string;
   transparencyUrl?: string;
+  /**
+   * data.gov.uk CKAN package id. Set this for councils whose discovery
+   * page is a JS-rendered SPA (DataMill North, etc.) or otherwise hard
+   * to scrape — we fall back to CKAN's package_show API which returns
+   * direct resource URLs.
+   */
+  dataGovId?: string;
 }
 
 const MANUAL_COUNCILS: ManualCouncil[] = [
@@ -126,7 +133,7 @@ const MANUAL_COUNCILS: ManualCouncil[] = [
   // Major metro boroughs — verified URLs April 2026
   { name: "Birmingham City Council", slug: "birmingham", region: "West Midlands", transparencyUrl: "https://www.birmingham.gov.uk/info/20215/corporate_procurement_services/517/invoicing_the_council/5" },
   { name: "Manchester City Council", slug: "manchester", region: "Greater Manchester", transparencyUrl: "https://www.manchester.gov.uk/open-data/local-government-transparency-code" },
-  { name: "Leeds City Council", slug: "leeds", region: "West Yorkshire", transparencyUrl: "https://datamillnorth.org/dataset/council-spending-2gpp0" },
+  { name: "Leeds City Council", slug: "leeds", region: "West Yorkshire", dataGovId: "80446967-46ef-4283-bf65-1014ecfc4fbc" },
   { name: "Sheffield City Council", slug: "sheffield", region: "South Yorkshire", transparencyUrl: "https://datamillnorth.org/dataset/council-spend-over-250-emd0m" },
   { name: "Liverpool City Council", slug: "liverpool", region: "Merseyside", transparencyUrl: "https://liverpool.gov.uk/council/spending-and-performance/transparency-in-local-government/" },
   { name: "Bristol City Council", slug: "bristol", region: "South West", transparencyUrl: "https://www.bristol.gov.uk/council/council-spending-and-performance/spending-over-500" },
@@ -171,7 +178,7 @@ const MANUAL_COUNCILS: ManualCouncil[] = [
   { name: "Rochdale Borough Council", slug: "rochdale", region: "Greater Manchester" },
   { name: "Bolton Council", slug: "bolton", region: "Greater Manchester" },
   { name: "Wigan Council", slug: "wigan", region: "Greater Manchester" },
-  { name: "Stockport Council", slug: "stockport", region: "Greater Manchester" },
+  { name: "Stockport Council", slug: "stockport", region: "Greater Manchester", dataGovId: "0c5487f4-c863-4f99-b882-459d3acf4b54" },
   { name: "Tameside Council", slug: "tameside", region: "Greater Manchester" },
   { name: "Oldham Council", slug: "oldham", region: "Greater Manchester" },
   { name: "Trafford Council", slug: "trafford", region: "Greater Manchester" },
@@ -242,18 +249,27 @@ async function main() {
       .get();
 
     if (existing) {
-      // Update transparency URL if we have one and it's missing
+      let didUpdate = false;
       if (mc.transparencyUrl && !existing.transparencyUrl) {
-        sqlite.exec(
-          `UPDATE councils SET transparency_url = '${mc.transparencyUrl}' WHERE id = ${existing.id}`
-        );
-        updatedManual++;
+        sqlite
+          .prepare(`UPDATE councils SET transparency_url = ? WHERE id = ?`)
+          .run(mc.transparencyUrl, existing.id);
+        didUpdate = true;
       }
+      if (mc.dataGovId && !existing.dataGovId) {
+        sqlite
+          .prepare(`UPDATE councils SET data_gov_id = ? WHERE id = ?`)
+          .run(mc.dataGovId, existing.id);
+        didUpdate = true;
+      }
+      if (didUpdate) updatedManual++;
       // Mark Kirklees as active (already has data)
       if (mc.slug === "kirklees") {
-        sqlite.exec(
-          `UPDATE councils SET scrape_status = 'active', transparency_url = '${mc.transparencyUrl}' WHERE id = ${existing.id}`
-        );
+        sqlite
+          .prepare(
+            `UPDATE councils SET scrape_status = 'active', transparency_url = COALESCE(?, transparency_url) WHERE id = ?`
+          )
+          .run(mc.transparencyUrl || null, existing.id);
       }
     } else {
       db.insert(schema.councils)
@@ -262,6 +278,7 @@ async function main() {
           slug: mc.slug,
           region: mc.region,
           transparencyUrl: mc.transparencyUrl || null,
+          dataGovId: mc.dataGovId || null,
           scrapeStatus: mc.slug === "kirklees" ? "active" : "pending",
         })
         .run();

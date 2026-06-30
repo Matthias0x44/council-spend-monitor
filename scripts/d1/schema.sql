@@ -90,3 +90,7 @@ CREATE INDEX IF NOT EXISTS txn_directorate_idx ON transactions(council_id, direc
 CREATE INDEX IF NOT EXISTS txn_category_idx ON transactions(council_id, category);
 CREATE INDEX IF NOT EXISTS txn_month_idx ON transactions(council_id, month);
 CREATE INDEX IF NOT EXISTS txn_fy_idx ON transactions(council_id, financial_year_id);
+-- Foreign-key check shortcut: cleanly delete a council's source_documents,
+-- suppliers, or financial_years rows without scanning the whole transactions
+-- table for orphan references.
+CREATE INDEX IF NOT EXISTS txn_source_doc_idx ON transactions(source_document_id);

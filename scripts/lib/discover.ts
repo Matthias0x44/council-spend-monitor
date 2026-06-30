@@ -236,27 +236,72 @@ export async function discoverViaHtml(
 // Combined discovery
 // ---------------------------------------------------------------------------
 
+/**
+ * Many councils publish the same monthly file in multiple formats
+ * (Stockport's "All Spend" is in both CSV and XLSX; data.gov.uk
+ * resources sometimes duplicate). De-duplicate by a normalised
+ * basename so we only ingest the data once. Format preference:
+ * CSV > XLSX > XLS.
+ */
+const FORMAT_RANK: Record<string, number> = { csv: 0, xlsx: 1, xls: 2 };
+
+function dedupeFiles(files: DiscoveredFile[]): DiscoveredFile[] {
+  const byKey = new Map<string, DiscoveredFile>();
+  for (const f of files) {
+    const stem = f.filename
+      .toLowerCase()
+      .replace(/\.[a-z0-9]+$/, "")
+      .replace(/[\s_+\-.]+/g, "");
+    if (!stem) {
+      byKey.set(f.url, f);
+      continue;
+    }
+    const existing = byKey.get(stem);
+    if (!existing) {
+      byKey.set(stem, f);
+      continue;
+    }
+    const rankNew = FORMAT_RANK[f.format] ?? 99;
+    const rankOld = FORMAT_RANK[existing.format] ?? 99;
+    if (rankNew < rankOld) byKey.set(stem, f);
+  }
+  return [...byKey.values()];
+}
+
 export async function discoverFiles(
   config: CouncilConfig
 ): Promise<DiscoveredFile[]> {
+  let files: DiscoveredFile[] = [];
+
   // Try CKAN first if available
   if (config.dataGovId) {
     try {
-      const files = await discoverViaCkan(config.dataGovId);
-      if (files.length > 0) return files;
-      console.log(`  CKAN returned 0 files for ${config.slug}, falling back to HTML`);
+      files = await discoverViaCkan(config.dataGovId);
+      if (files.length === 0) {
+        console.log(`  CKAN returned 0 files for ${config.slug}, falling back to HTML`);
+      }
     } catch (err) {
       console.warn(`  CKAN failed for ${config.slug}: ${err}, falling back to HTML`);
     }
   }
 
   // Fall back to HTML scraping
-  if (config.transparencyUrl) {
-    return discoverViaHtml(config.transparencyUrl, config.filePattern);
+  if (files.length === 0 && config.transparencyUrl) {
+    files = await discoverViaHtml(config.transparencyUrl, config.filePattern);
   }
 
-  console.warn(`  No discovery source for ${config.slug} (no CKAN ID or transparency URL)`);
-  return [];
+  if (files.length === 0) {
+    console.warn(`  No discovery source for ${config.slug} (no CKAN ID or transparency URL)`);
+    return [];
+  }
+
+  const deduped = dedupeFiles(files);
+  if (deduped.length !== files.length) {
+    console.log(
+      `  Deduped ${files.length} → ${deduped.length} files for ${config.slug}`
+    );
+  }
+  return deduped;
 }
 
 // ---------------------------------------------------------------------------

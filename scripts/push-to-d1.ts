@@ -254,18 +254,40 @@ async function clearAll(): Promise<void> {
   console.log("  Cleared");
 }
 
+/** D1 enforces a per-query CPU budget (~30s). DELETEs against a single
+ * council's transaction table can exceed that when row counts hit the
+ * mid-six-figure range, so chunk by primary key in 50k-row windows. */
+async function deleteInBatches(
+  table: string,
+  whereClause: string,
+  batchSize = 50_000
+): Promise<number> {
+  let deleted = 0;
+  for (;;) {
+    const sql =
+      `DELETE FROM ${table} WHERE rowid IN ` +
+      `(SELECT rowid FROM ${table} WHERE ${whereClause} LIMIT ${batchSize})`;
+    const json = await d1Execute(sql);
+    const changes =
+      (json.result?.[0] as { meta?: { changes?: number } })?.meta?.changes ?? 0;
+    deleted += changes;
+    if (changes < batchSize) return deleted;
+  }
+}
+
 async function clearCouncilScope(slug: string, councilId: number): Promise<void> {
   console.log(`Clearing existing data for council "${slug}" (id=${councilId})...`);
-  const stmts = [
-    `DELETE FROM transactions WHERE council_id = ${councilId};`,
-    `DELETE FROM source_documents WHERE council_id = ${councilId};`,
-    `DELETE FROM suppliers WHERE council_id = ${councilId};`,
-    `DELETE FROM outturns WHERE financial_year_id IN (SELECT id FROM financial_years WHERE council_id = ${councilId});`,
-    `DELETE FROM budgets   WHERE financial_year_id IN (SELECT id FROM financial_years WHERE council_id = ${councilId});`,
-    `DELETE FROM financial_years WHERE council_id = ${councilId};`,
-  ];
-  await d1RawExec(stmts.join("\n"));
-  console.log("  Cleared");
+  const fyScope = `financial_year_id IN (SELECT id FROM financial_years WHERE council_id = ${councilId})`;
+  const t = await deleteInBatches("transactions", `council_id = ${councilId}`);
+  const sd = await deleteInBatches("source_documents", `council_id = ${councilId}`);
+  const s = await deleteInBatches("suppliers", `council_id = ${councilId}`);
+  const o = await deleteInBatches("outturns", fyScope);
+  const b = await deleteInBatches("budgets", fyScope);
+  const fy = await deleteInBatches("financial_years", `council_id = ${councilId}`);
+  console.log(
+    `  Cleared: transactions=${t.toLocaleString()} source_docs=${sd} ` +
+      `suppliers=${s} budgets=${b} outturns=${o} financial_years=${fy}`
+  );
 }
 
 async function pushTable(
@@ -373,18 +395,13 @@ async function main() {
   }
   const cid = council.id;
 
-  // Always upsert the council row first, in case the registry changed.
-  await d1Execute(
-    `DELETE FROM councils WHERE id = ?`,
-    [cid]
-  );
-  await pushTable(
-    local,
-    TABLES[0],
-    `WHERE id = ${cid}`
-  );
-
+  // Clear dependent rows first so we don't hit FK errors when refreshing
+  // the council row itself.
   await clearCouncilScope(slug!, cid);
+
+  // Refresh the council row (may have new transparency_url, data_gov_id, etc).
+  await d1Execute(`DELETE FROM councils WHERE id = ?`, [cid]);
+  await pushTable(local, TABLES[0], `WHERE id = ${cid}`);
 
   const scopedWhere: Record<string, string> = {
     financial_years: `WHERE council_id = ${cid}`,

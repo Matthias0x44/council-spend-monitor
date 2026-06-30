@@ -16,6 +16,7 @@ import {
   detectColumns,
   applyMapping,
   validateSupplierColumn,
+  validateAmountColumn,
   type ColumnMapping,
   type CanonicalField,
 } from "./column-mapper";
@@ -90,12 +91,52 @@ function financialYearFromMonth(month: string): string {
   return `${startYear}-${endShort}`;
 }
 
+/**
+ * Detect whether a buffer looks like Windows-1252 / Latin-1 rather than UTF-8.
+ * Some councils (notably Stockport) publish CSVs in cp1252 where the pound
+ * sign appears as raw 0xA3. Reading those bytes as UTF-8 produces replacement
+ * characters and breaks amount parsing.
+ */
+function looksLikeCp1252(buf: Buffer): boolean {
+  let highBytes = 0;
+  let invalidUtf8 = 0;
+  const limit = Math.min(buf.length, 64 * 1024);
+  for (let i = 0; i < limit; i++) {
+    const b = buf[i];
+    if (b < 0x80) continue;
+    highBytes++;
+    // Validate as UTF-8 continuation: a 0xC2..0xF4 byte should be followed
+    // by 1..3 0x80..0xBF bytes. Anything else is suspicious.
+    if (b >= 0xc2 && b <= 0xf4) {
+      const next = buf[i + 1];
+      if (next === undefined || next < 0x80 || next > 0xbf) invalidUtf8++;
+      else i++; // skip one continuation byte
+    } else {
+      invalidUtf8++;
+    }
+  }
+  return highBytes > 0 && invalidUtf8 / Math.max(1, highBytes) > 0.5;
+}
+
 function readSpreadsheet(filePath: string): Record<string, unknown>[] {
   const buf = fs.readFileSync(filePath);
+  const isCsv = filePath.toLowerCase().endsWith(".csv");
+
+  // SheetJS assumes UTF-8 for CSVs and silently produces replacement chars
+  // for bytes that aren't valid UTF-8. Some councils (Stockport's "All
+  // Spend" CSVs) publish in Windows-1252 where 0xA3 = £; decode those
+  // ourselves so amounts like "£3,340" parse instead of becoming NaN.
+  if (isCsv && looksLikeCp1252(buf)) {
+    const decoder = new TextDecoder("windows-1252");
+    const text = decoder.decode(buf);
+    const workbook = XLSX.read(text, { type: "string", raw: false });
+    const sheetName = workbook.SheetNames[0];
+    return XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: "" });
+  }
+
   const workbook = XLSX.read(buf, { type: "buffer" });
   const sheetName = workbook.SheetNames[0];
-  const sheet = workbook.Sheets[sheetName];
-  return XLSX.utils.sheet_to_json(sheet, { defval: "" });
+  return XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: "" });
 }
 
 /**
@@ -143,11 +184,20 @@ export function ingestFile(opts: IngestOptions): IngestResult {
   // Sanity-check the chosen supplier column against actual values.
   // Catches cases like Bristol's "Body Name" column (an OS Linked Data
   // URI for the publishing council) being mistaken for the supplier.
-  const validated = validateSupplierColumn(detection.mapping, rows, headers);
-  if (validated.warning) {
-    console.warn(`  [warn] ${filename}: ${validated.warning}`);
+  const supplierCheck = validateSupplierColumn(detection.mapping, rows, headers);
+  if (supplierCheck.warning) {
+    console.warn(`  [warn] ${filename}: ${supplierCheck.warning}`);
   }
-  detection.mapping = validated.mapping;
+  detection.mapping = supplierCheck.mapping;
+
+  // Same for the amount column — Stockport's "Summary of Purpose of
+  // Expenditure" header substring-matches the "expenditure" variant but
+  // holds free-text descriptions, not numbers.
+  const amountCheck = validateAmountColumn(detection.mapping, rows, headers);
+  if (amountCheck.warning) {
+    console.warn(`  [warn] ${filename}: ${amountCheck.warning}`);
+  }
+  detection.mapping = amountCheck.mapping;
 
   // Determine file month/FY from filename
   const fileMonth = monthFromFilename(filename);
