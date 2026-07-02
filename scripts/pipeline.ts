@@ -15,7 +15,7 @@ import * as schema from "../src/db/schema";
 import * as path from "path";
 import * as fs from "fs";
 import { discoverFiles, downloadFile, type DiscoveredFile } from "./lib/discover";
-import { ingestFile } from "./lib/ingest";
+import { ingestFile, monthFromFilename } from "./lib/ingest";
 
 const DB_PATH = path.join(process.cwd(), "data", "council-spend.db");
 const RAW_DIR = path.join(process.cwd(), "data", "raw");
@@ -29,25 +29,37 @@ interface PipelineStats {
   errors: string[];
 }
 
-function parseArgs(): { slug?: string; status?: string; concurrency: number } {
+function parseArgs(): {
+  slug?: string;
+  slugs?: string[];
+  status?: string;
+  concurrency: number;
+  since?: string;
+} {
   const args = process.argv.slice(2);
   let slug: string | undefined;
+  let slugs: string[] | undefined;
   let status: string | undefined;
   let concurrency = 5;
+  let since: string | undefined;
 
   for (let i = 0; i < args.length; i++) {
     if (args[i] === "--slug" && args[i + 1]) slug = args[++i];
+    if (args[i] === "--slugs" && args[i + 1])
+      slugs = args[++i].split(",").map((s) => s.trim()).filter(Boolean);
     if (args[i] === "--status" && args[i + 1]) status = args[++i];
     if (args[i] === "--concurrency" && args[i + 1]) concurrency = parseInt(args[++i]);
+    if (args[i] === "--since" && args[i + 1]) since = args[++i];
   }
 
-  return { slug, status, concurrency };
+  return { slug, slugs, status, concurrency, since };
 }
 
 async function processCouncil(
   councilRow: typeof schema.councils.$inferSelect,
   db: ReturnType<typeof drizzle>,
-  sqlite: InstanceType<typeof Database>
+  sqlite: InstanceType<typeof Database>,
+  sinceMonth?: string
 ): Promise<PipelineStats> {
   const stats: PipelineStats = {
     slug: councilRow.slug,
@@ -81,6 +93,23 @@ async function processCouncil(
 
   stats.filesDiscovered = files.length;
   console.log(`  Found ${files.length} files`);
+
+  // File-level date cutoff: skip files whose filename clearly indicates a
+  // month before the cutoff. This avoids downloading years of history we're
+  // going to drop at ingest anyway. Files without a parseable month in the
+  // filename are kept and filtered row-by-row during ingest.
+  if (sinceMonth) {
+    const before = files.length;
+    files = files.filter((f) => {
+      const m = monthFromFilename(f.filename);
+      return !m || m >= sinceMonth;
+    });
+    if (files.length !== before) {
+      console.log(
+        `  Skipped ${before - files.length} file(s) dated before ${sinceMonth}`
+      );
+    }
+  }
 
   // Filter to new files only (not already in source_documents)
   const existingUrls = new Set(
@@ -129,6 +158,7 @@ async function processCouncil(
         fileUrl: file.url,
         db,
         sqlite,
+        sinceMonth,
       });
 
       stats.totalInserted += result.inserted;
@@ -152,7 +182,11 @@ async function processCouncil(
 }
 
 async function main() {
-  const { slug, status, concurrency } = parseArgs();
+  const { slug, slugs, status, concurrency, since } = parseArgs();
+  const sinceMonth = since || process.env.SINCE_MONTH;
+  if (sinceMonth) {
+    console.log(`Date cutoff: keeping transactions dated ${sinceMonth} or later`);
+  }
 
   fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
   const sqlite = new Database(DB_PATH);
@@ -196,6 +230,24 @@ async function main() {
       process.exit(1);
     }
     councils = [c];
+  } else if (slugs && slugs.length > 0) {
+    councils = [];
+    for (const s of slugs) {
+      const c = db
+        .select()
+        .from(schema.councils)
+        .where(eq(schema.councils.slug, s))
+        .get();
+      if (!c) {
+        console.warn(`  Skipping unknown slug '${s}' (not in registry)`);
+        continue;
+      }
+      councils.push(c);
+    }
+    if (councils.length === 0) {
+      console.error("None of the requested slugs exist in the registry");
+      process.exit(1);
+    }
   } else {
     const targetStatus = status || "active";
     councils = db
@@ -213,7 +265,7 @@ async function main() {
   for (let i = 0; i < councils.length; i += concurrency) {
     const batch = councils.slice(i, i + concurrency);
     const batchResults = await Promise.all(
-      batch.map((c) => processCouncil(c, db, sqlite))
+      batch.map((c) => processCouncil(c, db, sqlite, sinceMonth))
     );
     allStats.push(...batchResults);
 

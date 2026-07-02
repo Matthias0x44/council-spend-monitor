@@ -224,11 +224,17 @@ const TABLES: TableSpec[] = [
   },
 ];
 
-function parseArgs(): { mode: "replace" | "slug"; slug?: string } {
+function parseArgs(): { mode: "replace" | "slug"; slugs?: string[] } {
   const args = process.argv.slice(2);
   for (let i = 0; i < args.length; i++) {
     if (args[i] === "--slug" && args[i + 1]) {
-      return { mode: "slug", slug: args[++i] };
+      return { mode: "slug", slugs: [args[++i]] };
+    }
+    if (args[i] === "--slugs" && args[i + 1]) {
+      return {
+        mode: "slug",
+        slugs: args[++i].split(",").map((s) => s.trim()).filter(Boolean),
+      };
     }
     if (args[i] === "--replace") return { mode: "replace" };
   }
@@ -351,9 +357,51 @@ async function pushTable(
   return pushed;
 }
 
+async function pushCouncilScoped(
+  local: InstanceType<typeof Database>,
+  slug: string
+): Promise<number> {
+  const council = local
+    .prepare("SELECT id FROM councils WHERE slug = ?")
+    .get(slug) as { id: number } | undefined;
+  if (!council) {
+    console.error(`Council "${slug}" not found in local DB. Skipping.`);
+    return 0;
+  }
+  const cid = council.id;
+
+  // Clear dependent rows first so we don't hit FK errors when refreshing
+  // the council row itself.
+  await clearCouncilScope(slug, cid);
+
+  // Refresh the council row (may have new transparency_url, data_gov_id, etc).
+  await d1Execute(`DELETE FROM councils WHERE id = ?`, [cid]);
+  await pushTable(local, TABLES[0], `WHERE id = ${cid}`);
+
+  const scopedWhere: Record<string, string> = {
+    financial_years: `WHERE council_id = ${cid}`,
+    suppliers: `WHERE council_id = ${cid}`,
+    source_documents: `WHERE council_id = ${cid}`,
+    budgets: `WHERE financial_year_id IN (SELECT id FROM financial_years WHERE council_id = ${cid})`,
+    outturns: `WHERE financial_year_id IN (SELECT id FROM financial_years WHERE council_id = ${cid})`,
+    transactions: `WHERE council_id = ${cid}`,
+  };
+
+  let total = 0;
+  for (const t of TABLES) {
+    if (t.name === "councils") continue;
+    total += await pushTable(local, t, scopedWhere[t.name] || "");
+  }
+  console.log(`  Done: ${total.toLocaleString()} rows pushed for "${slug}".`);
+  return total;
+}
+
 async function main() {
-  const { mode, slug } = parseArgs();
-  console.log(`Pushing local SQLite → D1 (db=${DB_NAME}, mode=${mode}${slug ? `, slug=${slug}` : ""})`);
+  const { mode, slugs } = parseArgs();
+  console.log(
+    `Pushing local SQLite → D1 (db=${DB_NAME}, mode=${mode}` +
+      `${slugs ? `, slugs=${slugs.join(",")}` : ""})`
+  );
   console.log(`  Local DB: ${LOCAL_DB}`);
 
   if (!fs.existsSync(LOCAL_DB)) {
@@ -385,39 +433,15 @@ async function main() {
     return;
   }
 
-  // Scoped per-council push.
-  const council = local
-    .prepare("SELECT id FROM councils WHERE slug = ?")
-    .get(slug!) as { id: number } | undefined;
-  if (!council) {
-    console.error(`Council "${slug}" not found in local DB.`);
-    process.exit(1);
+  // Scoped push for one or more councils.
+  let grand = 0;
+  for (const s of slugs!) {
+    console.log(`\n${"-".repeat(50)}\nCouncil: ${s}`);
+    grand += await pushCouncilScoped(local, s);
   }
-  const cid = council.id;
-
-  // Clear dependent rows first so we don't hit FK errors when refreshing
-  // the council row itself.
-  await clearCouncilScope(slug!, cid);
-
-  // Refresh the council row (may have new transparency_url, data_gov_id, etc).
-  await d1Execute(`DELETE FROM councils WHERE id = ?`, [cid]);
-  await pushTable(local, TABLES[0], `WHERE id = ${cid}`);
-
-  const scopedWhere: Record<string, string> = {
-    financial_years: `WHERE council_id = ${cid}`,
-    suppliers: `WHERE council_id = ${cid}`,
-    source_documents: `WHERE council_id = ${cid}`,
-    budgets: `WHERE financial_year_id IN (SELECT id FROM financial_years WHERE council_id = ${cid})`,
-    outturns: `WHERE financial_year_id IN (SELECT id FROM financial_years WHERE council_id = ${cid})`,
-    transactions: `WHERE council_id = ${cid}`,
-  };
-
-  let total = 0;
-  for (const t of TABLES) {
-    if (t.name === "councils") continue;
-    total += await pushTable(local, t, scopedWhere[t.name] || "");
-  }
-  console.log(`\nDone. ${total.toLocaleString()} rows pushed for "${slug}".`);
+  console.log(
+    `\nDone. ${grand.toLocaleString()} rows pushed across ${slugs!.length} council(s).`
+  );
 }
 
 main().catch((err) => {

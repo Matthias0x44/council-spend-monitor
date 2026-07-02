@@ -38,6 +38,15 @@ export interface IngestOptions {
    * Defaults to MIN_TXN_AMOUNT env var, then 500.
    */
   minAmount?: number;
+  /**
+   * Drop rows whose transaction month is before this `YYYY-MM` cutoff.
+   * Used to cap ingestion to the most recent financial years so D1 stays
+   * within its storage budget. Rows with an unparseable date are kept
+   * (the file-level filter in the pipeline handles bulk old files).
+   *
+   * Defaults to the SINCE_MONTH env var, else undefined (no cutoff).
+   */
+  sinceMonth?: string;
 }
 
 export interface IngestResult {
@@ -73,11 +82,42 @@ function parseExcelDate(value: string | number): string {
   return "";
 }
 
-function monthFromFilename(filename: string): string {
+const MONTH_NAME_TO_NUM: Record<string, string> = {
+  jan: "01", feb: "02", mar: "03", apr: "04", may: "05", jun: "06",
+  jul: "07", aug: "08", sep: "09", oct: "10", nov: "11", dec: "12",
+};
+
+export function monthFromFilename(filename: string): string {
+  // ISO-ish: 2024-04-01 / 2024_04 / 2024 04
   const match = filename.match(/(\d{4})[- _](\d{2})[- _]\d{2}/);
   if (match) return `${match[1]}-${match[2]}`;
-  const monthMatch = filename.match(/(\d{4})[- _](\d{2})/);
-  if (monthMatch) return `${monthMatch[1]}-${monthMatch[2]}`;
+  const monthMatch = filename.match(/(\d{4})[- _](\d{2})(?!\d)/);
+  if (monthMatch) {
+    const mm = parseInt(monthMatch[2]);
+    if (mm >= 1 && mm <= 12) return `${monthMatch[1]}-${monthMatch[2]}`;
+  }
+
+  // Month-name formats used by many stale/legacy feeds, in either order:
+  //   "payments-april2010", "february_2012_payments", "Published September 2010",
+  //   "2011-march", "spend-oct-2024"
+  const lower = filename.toLowerCase();
+  const nameThenYear = lower.match(
+    /(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[^0-9]{0,4}(\d{4})/
+  );
+  if (nameThenYear) {
+    const mm = MONTH_NAME_TO_NUM[nameThenYear[1]];
+    const yyyy = nameThenYear[2];
+    if (mm && +yyyy >= 2000 && +yyyy <= 2100) return `${yyyy}-${mm}`;
+  }
+  const yearThenName = lower.match(
+    /(\d{4})[^0-9]{0,4}(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*/
+  );
+  if (yearThenName) {
+    const mm = MONTH_NAME_TO_NUM[yearThenName[2]];
+    const yyyy = yearThenName[1];
+    if (mm && +yyyy >= 2000 && +yyyy <= 2100) return `${yyyy}-${mm}`;
+  }
+
   return "";
 }
 
@@ -154,6 +194,9 @@ export function ingestFile(opts: IngestOptions): IngestResult {
       : Number.isFinite(envMin)
       ? envMin
       : 500;
+
+  const sinceMonth =
+    opts.sinceMonth !== undefined ? opts.sinceMonth : process.env.SINCE_MONTH;
 
   // Read spreadsheet
   const rows = readSpreadsheet(filePath);
@@ -367,11 +410,20 @@ export function ingestFile(opts: IngestOptions): IngestResult {
       continue;
     }
 
-    const supplierName = rawSupplier || "Redacted";
-    const supplierId = getOrCreateSupplier(supplierName);
     const rawDate = mapped.date;
     const date = parseExcelDate(rawDate as string | number);
     const txMonth = date ? date.slice(0, 7) : fileMonth;
+
+    // Cap to recent financial years: drop rows dated before the cutoff.
+    // Rows with an unparseable month are kept (rare; caught upstream by
+    // the pipeline's file-level filter).
+    if (sinceMonth && txMonth && txMonth < sinceMonth) {
+      skipped++;
+      continue;
+    }
+
+    const supplierName = rawSupplier || "Redacted";
+    const supplierId = getOrCreateSupplier(supplierName);
     const txFyLabel = txMonth ? financialYearFromMonth(txMonth) : fileFyLabel;
     const rowFyId = txFyLabel ? getOrCreateFY(txFyLabel) : null;
 
