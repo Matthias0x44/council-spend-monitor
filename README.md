@@ -132,11 +132,24 @@ Or connect the GitHub repo in the dashboard (**Workers & Pages → Create → Wo
 | Setting | Value |
 |---|---|
 | Build command | `npm run cf:build` |
-| Deploy command | *(leave empty — wrangler reads `wrangler.jsonc`)* |
+| Deploy command | `npm run cf:deploy` |
+
+**The deploy command must build too.** Workers Builds runs the build and
+deploy phases in separate containers that don't share a filesystem, so the
+`.open-next/` output from the build phase is gone by the time the deploy
+phase runs. The default deploy command `npx wrangler deploy` then delegates
+to `opennextjs-cloudflare deploy`, which fails with *"Could not find
+compiled Open Next config, did you run the build command?"*. Our
+`cf:deploy` script chains `opennextjs-cloudflare build && ... deploy` so the
+bundle is rebuilt in the deploy step. (The Build command above is then only
+useful as an early failure signal — the deploy phase rebuilds regardless.)
 
 **Not** `npm run build` — that runs plain Next.js, which tries to open
 `data/council-spend.db` during the build and produces output Workers
 cannot run.
+
+Workers runs Next 15 (`next@15.5.x`): `@opennextjs/cloudflare` cannot yet
+bundle Next 16.2.x output. See the top-level note in `package.json` history.
 
 The first deploy creates the Worker under the name in `wrangler.jsonc`
 (`council-spend-monitor`) at
