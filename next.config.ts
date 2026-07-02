@@ -6,6 +6,23 @@ const nextConfig: NextConfig = {
   // Telling Next not to bundle it keeps the Workers build smaller and
   // avoids webpack trying to resolve its native bindings.
   serverExternalPackages: ["better-sqlite3"],
+  // Keep the local dev data out of the traced server bundle. The deployed
+  // Worker reads from the D1 binding, never the local SQLite file or the
+  // scraped CSVs, so tracing `data/` (2.8 GB) into `.open-next` just fills
+  // the disk and blows the Worker size limit. Scope this to `data/` only —
+  // excluding `.next/**` would strip the webpack/turbopack runtime chunks
+  // that copyTracedFiles must copy, breaking the esbuild bundle.
+  outputFileTracingExcludes: {
+    "*": ["data/**"],
+  },
+  // Next requires these metadata helpers via dynamic `require()` strings that
+  // @vercel/nft can't statically resolve, so they're left out of the traced
+  // server bundle and OpenNext's esbuild pass fails with "Could not resolve
+  // ../lib/metadata/{is,get}-metadata-route". Force them (the whole metadata
+  // dir, to be safe) into the trace.
+  outputFileTracingIncludes: {
+    "**/*": ["./node_modules/next/dist/lib/metadata/**"],
+  },
 };
 
 export default nextConfig;
