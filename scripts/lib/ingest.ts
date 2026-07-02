@@ -414,10 +414,12 @@ export function ingestFile(opts: IngestOptions): IngestResult {
     const date = parseExcelDate(rawDate as string | number);
     const txMonth = date ? date.slice(0, 7) : fileMonth;
 
-    // Cap to recent financial years: drop rows dated before the cutoff.
-    // Rows with an unparseable month are kept (rare; caught upstream by
-    // the pipeline's file-level filter).
-    if (sinceMonth && txMonth && txMonth < sinceMonth) {
+    // Cap to recent financial years. When a cutoff is active we also drop
+    // rows we can't date at all (no parseable transaction date and no month
+    // in the filename): an undated row can't be confirmed to fall inside the
+    // window, and keeping them lets stale files with unrecognised date
+    // formats leak years of old data past the cutoff.
+    if (sinceMonth && (!txMonth || txMonth < sinceMonth)) {
       skipped++;
       continue;
     }

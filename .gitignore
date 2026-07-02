@@ -55,3 +55,6 @@ next-env.d.ts
 /data/*.db-shm
 /data/*.db-wal
 /data/dump.sql
+
+# freshness probe output
+/data/fresh-councils.json
