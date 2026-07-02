@@ -1,5 +1,10 @@
 import * as schema from "./schema";
 import type { DrizzleD1Database } from "drizzle-orm/d1";
+// Import the type explicitly rather than relying on the ambient `D1Database`
+// global from the (gitignored) `worker-configuration.d.ts`. That file exists
+// locally after `npm run cf:types` but not on Cloudflare's build runner, so
+// referencing the global there fails type-check during `cf:build`.
+import type { D1Database } from "@cloudflare/workers-types";
 
 /**
  * Runtime-aware Drizzle instance.
