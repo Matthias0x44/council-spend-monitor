@@ -25,8 +25,6 @@ export default async function CouncilsPage() {
     .all();
 
   const active = allCouncils.filter((c) => c.scrapeStatus === "active");
-  const pending = allCouncils.filter((c) => c.scrapeStatus === "pending");
-  const failing = allCouncils.filter((c) => c.scrapeStatus === "failing");
 
   const regions = [...new Set(active.map((c) => c.region).filter(Boolean))].sort();
 
@@ -37,7 +35,7 @@ export default async function CouncilsPage() {
           All Councils
         </h1>
         <p className="text-sm" style={{ color: "#6b7280" }}>
-          {active.length} councils with data, {pending.length} coming soon
+          {active.length} local authorities with published spending data
         </p>
       </div>
 
@@ -119,31 +117,6 @@ export default async function CouncilsPage() {
         </div>
       )}
 
-      {pending.length > 0 && (
-        <div className="flex flex-col gap-3">
-          <h2 className="text-lg font-semibold" style={{ color: "#111" }}>
-            Coming Soon
-          </h2>
-          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {pending.map((c) => (
-              <div
-                key={c.slug}
-                className="rounded-lg border p-3 opacity-60"
-                style={{ background: "#f9fafb", borderColor: "#e5e7eb" }}
-              >
-                <div className="text-sm font-medium" style={{ color: "#111" }}>
-                  {c.name}
-                </div>
-                {c.region && (
-                  <div className="text-xs" style={{ color: "#9ca3af" }}>
-                    {c.region}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

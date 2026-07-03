@@ -208,10 +208,16 @@ function scoreHeader(
   if (!norm) return null;
   if (HEADER_BLOCKLIST.has(norm)) return null;
 
-  // Pass 1: exact match against known variants (highest confidence)
+  // Pass 1: exact match against known variants (highest confidence).
+  // Variants are listed most-specific-first, so when two different headers
+  // exact-match the same field (e.g. Kirklees has both "Cost Centre" and
+  // "Cost Centre Description", both valid `service` variants), the earlier
+  // variant should win. A tiny index penalty encodes that preference without
+  // dropping below the substring-match tier (0.8).
   for (const [field, variants] of Object.entries(FIELD_VARIANTS)) {
-    if (variants.includes(norm)) {
-      return { field: field as CanonicalField, score: 1.0 };
+    const idx = variants.indexOf(norm);
+    if (idx !== -1) {
+      return { field: field as CanonicalField, score: 1.0 - idx * 0.001 };
     }
   }
 
@@ -535,6 +541,108 @@ export function validateAmountColumn(
     warning:
       `Amount column "${amountHeader}" was only ${numeric}/${nonEmpty} ` +
       `numeric; no better column found`,
+  };
+}
+
+/** A value that is only digits (plus separators) — a code, not a label. */
+function isNumericCode(v: unknown): boolean {
+  if (v == null || v === "") return false;
+  if (typeof v === "number") return true;
+  return /^[0-9][0-9\s\-/.]*$/.test(String(v).trim());
+}
+
+/**
+ * Sanity-check the chosen service column by inspecting values. Councils
+ * often publish a numeric cost-centre *code* ("Cost Centre" = 660789)
+ * alongside its human label ("Cost Centre Description" = "Disabled
+ * Facilities"). Both headers exact-match the `service` variants, and if the
+ * code column wins we end up showing meaningless numbers. If the mapped
+ * service column is dominated by numeric codes, swap to an unclaimed
+ * descriptive column; if none exists, drop the mapping (blank beats a code).
+ */
+export function validateServiceColumn(
+  mapping: ColumnMapping,
+  rows: Record<string, unknown>[],
+  headers: string[]
+): { mapping: ColumnMapping; warning?: string } {
+  const serviceHeader = Object.keys(mapping).find(
+    (h) => mapping[h] === "service"
+  );
+  if (!serviceHeader) return { mapping };
+
+  const sample = rows.slice(0, 200);
+  if (sample.length === 0) return { mapping };
+
+  let numericCode = 0;
+  let nonEmpty = 0;
+  for (const row of sample) {
+    const v = row[serviceHeader];
+    if (v == null || v === "") continue;
+    nonEmpty++;
+    if (isNumericCode(v)) numericCode++;
+  }
+  if (nonEmpty === 0) return { mapping };
+  if (numericCode / nonEmpty < 0.6) return { mapping };
+
+  const claimed = new Set(Object.keys(mapping));
+  const candidates = headers.filter(
+    (h) => h !== serviceHeader && !claimed.has(h) && !isBlockedHeader(h)
+  );
+
+  // Prefer an explicit descriptive service label, in specificity order.
+  const preferred = [
+    "cost centre description",
+    "cost centre name",
+    "service area description",
+    "service description",
+    "service area",
+    "service",
+    "department name",
+    "department",
+  ];
+  let replacement: string | null = null;
+  for (const p of preferred) {
+    replacement = candidates.find((h) => normalizeHeader(h) === p) || null;
+    if (replacement) break;
+  }
+
+  // Otherwise, any unclaimed service-ish header whose values are mostly text.
+  if (!replacement) {
+    for (const h of candidates) {
+      if (!/(description|service|area|purpose|cost centre|department)/.test(normalizeHeader(h))) {
+        continue;
+      }
+      let text = 0;
+      let total = 0;
+      for (const row of sample) {
+        const v = row[h];
+        if (v == null || v === "") continue;
+        total++;
+        if (!isNumericCode(v)) text++;
+      }
+      if (total >= 10 && text / total >= 0.7) {
+        replacement = h;
+        break;
+      }
+    }
+  }
+
+  const newMapping = { ...mapping };
+  delete newMapping[serviceHeader];
+  if (replacement) {
+    newMapping[replacement] = "service";
+    return {
+      mapping: newMapping,
+      warning:
+        `Service column "${serviceHeader}" was mostly numeric codes ` +
+        `(${numericCode}/${nonEmpty}); remapped to "${replacement}"`,
+    };
+  }
+  return {
+    mapping: newMapping,
+    warning:
+      `Service column "${serviceHeader}" was mostly numeric codes ` +
+      `(${numericCode}/${nonEmpty}) with no descriptive replacement; left blank`,
   };
 }
 

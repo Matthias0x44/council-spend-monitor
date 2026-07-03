@@ -17,6 +17,7 @@ import {
   applyMapping,
   validateSupplierColumn,
   validateAmountColumn,
+  validateServiceColumn,
   type ColumnMapping,
   type CanonicalField,
 } from "./column-mapper";
@@ -241,6 +242,15 @@ export function ingestFile(opts: IngestOptions): IngestResult {
     console.warn(`  [warn] ${filename}: ${amountCheck.warning}`);
   }
   detection.mapping = amountCheck.mapping;
+
+  // And the service column — many councils publish a numeric cost-centre
+  // *code* ("Cost Centre" = 660789) that exact-matches a `service` variant;
+  // swap it for the human-readable description when one exists.
+  const serviceCheck = validateServiceColumn(detection.mapping, rows, headers);
+  if (serviceCheck.warning) {
+    console.warn(`  [warn] ${filename}: ${serviceCheck.warning}`);
+  }
+  detection.mapping = serviceCheck.mapping;
 
   // Determine file month/FY from filename
   const fileMonth = monthFromFilename(filename);
