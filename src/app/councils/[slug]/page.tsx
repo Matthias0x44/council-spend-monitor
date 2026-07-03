@@ -66,10 +66,7 @@ export default async function CouncilDashboard({ params, searchParams }: PagePro
         />
       </div>
 
-      <OverviewCards
-        overview={overview}
-        financialYear={targetFY?.label ?? "All years"}
-      />
+      <OverviewCards overview={overview} />
 
       {flags.length > 0 && <FlagsPanel flags={flags} />}
 

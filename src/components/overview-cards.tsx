@@ -12,10 +12,9 @@ interface Overview {
 
 interface Props {
   overview: Overview;
-  financialYear: string;
 }
 
-export function OverviewCards({ overview, financialYear }: Props) {
+export function OverviewCards({ overview }: Props) {
   const hasBudget = overview.budget.net !== 0 || overview.budget.gross !== 0;
   const hasOutturn = overview.outturn.net !== 0;
   const variance = overview.outturn.variance;

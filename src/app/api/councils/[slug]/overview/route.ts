@@ -15,7 +15,7 @@ export async function GET(
   const fyLabel = searchParams.get("fy");
 
   const allFYs = await getFinancialYears(council.id);
-  let targetFY = fyLabel
+  const targetFY = fyLabel
     ? allFYs.find((fy) => fy.label === fyLabel)
     : await getLatestFinancialYear(council.id);
 

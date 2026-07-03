@@ -4,7 +4,7 @@ import { eq, and } from "drizzle-orm";
 import * as schema from "../src/db/schema";
 import * as fs from "fs";
 import * as path from "path";
-// @ts-ignore - pdf-parse v1 uses CommonJS default export
+// @ts-expect-error - pdf-parse v1 uses CommonJS default export
 import pdf from "pdf-parse";
 
 const DB_PATH = path.join(process.cwd(), "data", "council-spend.db");
