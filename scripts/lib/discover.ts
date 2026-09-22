@@ -31,9 +31,8 @@ function decodeFilename(value: string): string {
   try { return decodeURIComponent(value); } catch { return value; }
 }
 
-export function isPaymentPublication(value: string): boolean {
-  return !/budget|outturn|statement.of.accounts|pay.multiple|senior.salar|contracts?[\s._-]*register|procurement.pipeline|business[\s._-]*rates|non[\s._-]*domestic[\s._-]*rates|council[\s._-]*tax|asset[\s._-]*register|organisational[\s._-]*chart/i.test(value);
-}
+import { isPaymentPublication } from "./publication-type.mjs";
+export { isPaymentPublication } from "./publication-type.mjs";
 
 const SPEND_KEYWORDS =
   /spend|expenditure|payment|supplier|invoice|over.500|over.250|transparency/i;

@@ -20,6 +20,11 @@ db.exec("INSERT INTO budgets(financial_year_id,net_budget) VALUES(1,100),(2,9999
 const insert=db.prepare("INSERT INTO transactions(council_id,financial_year_id,supplier_id,amount,date,month,description) VALUES(1,1,?,?,?,?,?)");
 const day=w.labels[0].slice(0,4)+"-04-01";
 for(let i=0;i<520;i++)insert.run(i%2+1,i===0?-10:10,day,day.slice(0,7),"=example, \"quoted\"");
+db.exec("INSERT INTO suppliers(id,council_id,name,normalised_name) VALUES(3,2,'REDACTED','REDACTED')");
+db.prepare("INSERT INTO financial_years(id,council_id,label,start_date,end_date) VALUES(3,2,?,?,?)").run(w.labels[1],w.labels[1].slice(0,4)+"-04-01",w.labels[0].slice(0,4)+"-03-31");
+for(const [supplier,amount] of [[null,250],[3,100]])db.prepare("INSERT INTO transactions(council_id,financial_year_id,supplier_id,amount,date,month,directorate,category) VALUES(2,2,?,?,?,?, 'Current service','Current category')").run(supplier,amount,day,day.slice(0,7));
+const olderDay=w.labels[1].slice(0,4)+"-04-01";
+db.prepare("INSERT INTO transactions(council_id,financial_year_id,amount,date,month,directorate,category) VALUES(2,3,100,?,?,'Old service','Old category')").run(olderDay,olderDay.slice(0,7));
 db.close();
 test("CSV text is escaped and formulas neutralised; negative amounts stay numeric",()=>{
  assert.equal(csvCell('A, "B"'),'"A, ""B"""');assert.equal(csvCell('=1+1'),'"\'=1+1"');assert.equal(csvCell(-500),'"-500"');
@@ -40,4 +45,14 @@ test("API validates filters and unavailable years; export includes more than a p
  assert.equal((await request('fy=1900-01')).status,404);
  const response=await request('format=csv');assert.equal(response.status,200);
  const csv=await response.text();assert.equal(csv.trim().split('\r\n').length,521);
+});
+
+test("dashboard filters follow the selected year and missing suppliers are not called redacted",async()=>{
+ const {getFlags,getDirectoratesList,getCategoriesList,getTopSuppliers}=await import('../src/lib/queries');
+ assert.deepEqual(await getDirectoratesList(2,2),['Current service']);
+ assert.deepEqual(await getCategoriesList(2,2),['Current category']);
+ const flags=await getFlags(2,2,await getTopSuppliers(2,2,20));
+ const redacted=flags.find(f=>f.type==='redacted_spend');
+ assert.equal(redacted?.title,'£100 to redacted suppliers');
+ assert.match(redacted?.detail||'',/^1 payments/);
 });

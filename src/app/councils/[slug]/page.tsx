@@ -4,7 +4,6 @@ import {
   getOverview,
   getCoverage,
   getFinancialYears,
-  getLatestFinancialYear,
   getSpendByCategory,
   getSpendByDirectorate,
   getTopSuppliers,
@@ -37,23 +36,24 @@ export default async function CouncilDashboard({ params, searchParams }: PagePro
   const allFYs = await getFinancialYears(council.id);
   const targetFY = fyParam
     ? allFYs.find((fy) => fy.label === fyParam)
-    : await getLatestFinancialYear(council.id);
+    : allFYs[0];
 
   if (fyParam && !targetFY) notFound();
   if (!targetFY) return <div className="rounded-xl border bg-white p-6"><h1 className="text-2xl font-bold">{council.name}</h1><p className="mt-3">No verified transaction data is available in the five-year window. This does not mean the council spent nothing.</p></div>;
   const fyId = targetFY.id;
-  const coverage = await getCoverage(council.id, fyId);
+  const topSuppliersPromise = getTopSuppliers(council.id, fyId, 20);
 
-  const [overview, byCategory, byDirectorate, topSuppliers, monthlyTrend, flags, directorates, categories] =
+  const [overview, byCategory, byDirectorate, topSuppliers, monthlyTrend, flags, directorates, categories, coverage] =
     await Promise.all([
       getOverview(council.id, fyId),
       getSpendByCategory(council.id, fyId),
       getSpendByDirectorate(council.id, fyId),
-      getTopSuppliers(council.id, fyId, 20),
+      topSuppliersPromise,
       getMonthlyTrend(council.id, fyId),
-      getFlags(council.id, fyId),
-      getDirectoratesList(council.id),
-      getCategoriesList(council.id),
+      topSuppliersPromise.then(suppliers => getFlags(council.id, fyId, suppliers)),
+      getDirectoratesList(council.id, fyId),
+      getCategoriesList(council.id, fyId),
+      getCoverage(council.id, fyId),
     ]);
 
   return (

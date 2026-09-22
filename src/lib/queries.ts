@@ -5,8 +5,15 @@ import { councils, financialYears, budgets, outturns, transactions, suppliers, s
 import { eq, and, desc, asc, sql, gte, SQL, lt } from "drizzle-orm";
 
 
-function validTransactionPeriod(): SQL {
-  return sql`${transactions.month} GLOB '[0-9][0-9][0-9][0-9]-[0-1][0-9]' AND substr(${transactions.month},6,2) BETWEEN '01' AND '12' AND ${transactions.month} <= ${fiscalWindow().through.slice(0,7)} AND (${transactions.date} IS NULL OR ${transactions.date} = '' OR (${transactions.date} <= ${fiscalWindow().through} AND strftime('%Y-%m-%d',julianday(${transactions.date})) = ${transactions.date}))`;
+function validTransactionPeriod(fyId?: number): SQL {
+  // D1's sampled statistics select the five-year month index even when a
+  // council/year key is known. Unary + keeps the ISO-text comparisons but
+  // excludes that competing range from index selection. EXPLAIN and live
+  // measurements confirm the year index reads fewer rows. Both operands are
+  // text; never bind numeric dates here (unary + removes column affinity).
+  const month = fyId ? sql`+${transactions.month}` : sql`${transactions.month}`;
+  const window = fiscalWindow();
+  return sql`${month} GLOB '[0-9][0-9][0-9][0-9]-[0-1][0-9]' AND substr(${month},6,2) BETWEEN '01' AND '12' AND ${month} >= ${window.start.slice(0,7)} AND ${month} < ${window.endExclusive.slice(0,7)} AND ${month} <= ${window.through.slice(0,7)} AND (${transactions.date} IS NULL OR ${transactions.date} = '' OR (${transactions.date} <= ${window.through} AND strftime('%Y-%m-%d',julianday(${transactions.date})) = ${transactions.date}))`;
 }
 
 export async function getCouncilBySlug(slug: string) {
@@ -37,7 +44,7 @@ export async function getLatestFinancialYear(councilId: number) {
 
 export async function getOverview(councilId: number, fyId?: number) {
   const db = await getDb();
-  const spendConditions: SQL[] = [eq(transactions.councilId, councilId), validTransactionPeriod(), gte(transactions.month, fiscalWindow().start.slice(0, 7)), lt(transactions.month, fiscalWindow().endExclusive.slice(0, 7))];
+  const spendConditions: SQL[] = [eq(transactions.councilId, councilId), validTransactionPeriod(fyId)];
   if (fyId) spendConditions.push(eq(transactions.financialYearId, fyId));
 
   const [totalBudget, totalOutturn, totalSpend] = await Promise.all([
@@ -106,13 +113,13 @@ export interface TransactionFilters {
   sortDir?: "asc" | "desc";
 }
 
-export async function getTransactions(councilId: number, filters: TransactionFilters) {
+export async function getTransactions(councilId: number, filters: TransactionFilters, knownTotal?: number) {
   const db = await getDb();
   const page = Math.max(1, Math.min(100000, Math.trunc(filters.page || 1)));
   const pageSize = Math.max(1, Math.min(500, Math.trunc(filters.pageSize || 50)));
   const offset = (page - 1) * pageSize;
 
-  const conditions: SQL[] = [eq(transactions.councilId, councilId), validTransactionPeriod(), gte(transactions.month, fiscalWindow().start.slice(0, 7)), lt(transactions.month, fiscalWindow().endExclusive.slice(0, 7))];
+  const conditions: SQL[] = [eq(transactions.councilId, councilId), validTransactionPeriod(filters.fyId)];
 
   if (filters.fyId) conditions.push(eq(transactions.financialYearId, filters.fyId));
   if (filters.directorate) conditions.push(eq(transactions.directorate, filters.directorate));
@@ -168,11 +175,13 @@ export async function getTransactions(councilId: number, filters: TransactionFil
     .offset(offset)
     .all();
 
-  const countResult = await db
+  // A streaming export reuses its initial count instead of rescanning the
+  // entire ledger for every 500-row chunk.
+  const countResult = knownTotal === undefined ? await db
     .select({ count: sql<number>`COUNT(*)` })
     .from(transactions)
     .where(where)
-    .get();
+    .get() : { count: knownTotal };
 
   return {
     rows: rows.map(row => {
@@ -188,7 +197,7 @@ export async function getTransactions(councilId: number, filters: TransactionFil
 
 export async function getSpendByCategory(councilId: number, fyId?: number) {
   const db = await getDb();
-  const conditions: SQL[] = [eq(transactions.councilId, councilId), validTransactionPeriod(), gte(transactions.month, fiscalWindow().start.slice(0, 7)), lt(transactions.month, fiscalWindow().endExclusive.slice(0, 7))];
+  const conditions: SQL[] = [eq(transactions.councilId, councilId), validTransactionPeriod(fyId)];
   if (fyId) conditions.push(eq(transactions.financialYearId, fyId));
 
   const raw = await db
@@ -211,7 +220,7 @@ export async function getSpendByCategory(councilId: number, fyId?: number) {
 
 export async function getSpendByDirectorate(councilId: number, fyId?: number) {
   const db = await getDb();
-  const conditions: SQL[] = [eq(transactions.councilId, councilId), validTransactionPeriod(), gte(transactions.month, fiscalWindow().start.slice(0, 7)), lt(transactions.month, fiscalWindow().endExclusive.slice(0, 7))];
+  const conditions: SQL[] = [eq(transactions.councilId, councilId), validTransactionPeriod(fyId)];
   if (fyId) conditions.push(eq(transactions.financialYearId, fyId));
 
   const label = sql<string>`COALESCE(NULLIF(TRIM(${transactions.directorate}), ''), NULLIF(TRIM(${transactions.service}), ''), 'No Service Area')`;
@@ -225,7 +234,7 @@ export async function getSpendByDirectorate(councilId: number, fyId?: number) {
 
 export async function getTopSuppliers(councilId: number, fyId?: number, limit = 20) {
   const db = await getDb();
-  const conditions: SQL[] = [eq(transactions.councilId, councilId), validTransactionPeriod(), gte(transactions.month, fiscalWindow().start.slice(0, 7)), lt(transactions.month, fiscalWindow().endExclusive.slice(0, 7))];
+  const conditions: SQL[] = [eq(transactions.councilId, councilId), validTransactionPeriod(fyId)];
   if (fyId) conditions.push(eq(transactions.financialYearId, fyId));
   const where = and(...conditions)!;
 
@@ -255,7 +264,7 @@ export async function getTopSuppliers(councilId: number, fyId?: number, limit = 
 
 export async function getMonthlyTrend(councilId: number, fyId?: number) {
   const db = await getDb();
-  const conditions: SQL[] = [eq(transactions.councilId, councilId), validTransactionPeriod(), gte(transactions.month, fiscalWindow().start.slice(0, 7)), lt(transactions.month, fiscalWindow().endExclusive.slice(0, 7))];
+  const conditions: SQL[] = [eq(transactions.councilId, councilId), validTransactionPeriod(fyId)];
   if (fyId) conditions.push(eq(transactions.financialYearId, fyId));
 
   const raw = await db
@@ -308,38 +317,26 @@ function fmtAmount(n: number): string {
   return `£${n.toFixed(0)}`;
 }
 
-export async function getFlags(councilId: number, fyId?: number) {
+export async function getFlags(councilId: number, fyId?: number, suppliedTopSuppliers?: Awaited<ReturnType<typeof getTopSuppliers>>) {
   const db = await getDb();
   const flags: { type: string; severity: "high" | "medium" | "low"; title: string; detail: string }[] = [];
 
-  const conditions: SQL[] = [eq(transactions.councilId, councilId), validTransactionPeriod(), gte(transactions.month, fiscalWindow().start.slice(0, 7)), lt(transactions.month, fiscalWindow().endExclusive.slice(0, 7))];
+  const conditions: SQL[] = [eq(transactions.councilId, councilId), validTransactionPeriod(fyId)];
   if (fyId) conditions.push(eq(transactions.financialYearId, fyId));
   const where = and(...conditions)!;
 
-  const [totals, redactedSpend, blankCats, bigPayments, top5Suppliers] = await Promise.all([
+  // One pass supplies the three quality totals. A missing supplier is not
+  // evidence that the publisher deliberately redacted it.
+  const [quality, bigPayments, top5Suppliers] = await Promise.all([
     db.select({
       total: sql<number>`COALESCE(SUM(${transactions.amount}), 0)`,
-      count: sql<number>`COUNT(*)`,
-    }).from(transactions).where(where).get(),
-
-    db.select({
-      total: sql<number>`COALESCE(SUM(${transactions.amount}), 0)`,
-      count: sql<number>`COUNT(*)`,
+      redactedTotal: sql<number>`COALESCE(SUM(CASE WHEN UPPER(TRIM(${suppliers.name})) LIKE 'REDACTED%' THEN ${transactions.amount} ELSE 0 END), 0)`,
+      redactedCount: sql<number>`SUM(CASE WHEN UPPER(TRIM(${suppliers.name})) LIKE 'REDACTED%' THEN 1 ELSE 0 END)`,
+      blankTotal: sql<number>`COALESCE(SUM(CASE WHEN ${transactions.category} IS NULL OR TRIM(${transactions.category}) = '' OR ${transactions.category} = 'REDACTED DATA' THEN ${transactions.amount} ELSE 0 END), 0)`,
+      blankCount: sql<number>`SUM(CASE WHEN ${transactions.category} IS NULL OR TRIM(${transactions.category}) = '' OR ${transactions.category} = 'REDACTED DATA' THEN 1 ELSE 0 END)`,
     }).from(transactions)
       .leftJoin(suppliers, eq(transactions.supplierId, suppliers.id))
-      .where(and(
-        where,
-        sql`(UPPER(TRIM(${suppliers.name})) LIKE 'REDACTED%' OR ${suppliers.name} IS NULL)`
-      )).get(),
-
-    db.select({
-      total: sql<number>`COALESCE(SUM(${transactions.amount}), 0)`,
-      count: sql<number>`COUNT(*)`,
-    }).from(transactions)
-      .where(and(
-        where,
-        sql`(${transactions.category} IS NULL OR ${transactions.category} = '' OR ${transactions.category} = 'REDACTED DATA')`
-      )).get(),
+      .where(where).get(),
 
     db.select({
       supplierName: suppliers.name,
@@ -354,10 +351,12 @@ export async function getFlags(councilId: number, fyId?: number) {
       .limit(50)
       .all(),
 
-    getTopSuppliers(councilId, fyId, 5),
+    suppliedTopSuppliers ? Promise.resolve(suppliedTopSuppliers.slice(0, 5)) : getTopSuppliers(councilId, fyId, 5),
   ]);
 
-  const grandTotal = totals?.total ?? 1;
+  const grandTotal = quality?.total ?? 1;
+  const redactedSpend = { total: quality?.redactedTotal ?? 0, count: quality?.redactedCount ?? 0 };
+  const blankCats = { total: quality?.blankTotal ?? 0, count: quality?.blankCount ?? 0 };
 
   if (redactedSpend && redactedSpend.total > 0) {
     const pct = grandTotal > 0 ? (redactedSpend.total / grandTotal) * 100 : 0;
@@ -426,24 +425,24 @@ export async function getFlags(councilId: number, fyId?: number) {
   return flags;
 }
 
-export async function getDirectoratesList(councilId: number) {
+export async function getDirectoratesList(councilId: number, fyId?: number) {
   const db = await getDb();
   const raw = await db
     .select({ directorate: transactions.directorate })
     .from(transactions)
-    .where(eq(transactions.councilId, councilId))
+    .where(and(eq(transactions.councilId, councilId), fyId ? eq(transactions.financialYearId, fyId) : undefined, validTransactionPeriod(fyId)))
     .groupBy(transactions.directorate)
     .orderBy(asc(transactions.directorate))
     .all();
   return raw.map((r) => r.directorate).filter(Boolean) as string[];
 }
 
-export async function getCategoriesList(councilId: number) {
+export async function getCategoriesList(councilId: number, fyId?: number) {
   const db = await getDb();
   const raw = await db
     .select({ category: transactions.category })
     .from(transactions)
-    .where(eq(transactions.councilId, councilId))
+    .where(and(eq(transactions.councilId, councilId), fyId ? eq(transactions.financialYearId, fyId) : undefined, validTransactionPeriod(fyId)))
     .groupBy(transactions.category)
     .orderBy(asc(transactions.category))
     .all();
@@ -452,7 +451,7 @@ export async function getCategoriesList(councilId: number) {
 
 export async function getCoverage(councilId: number, fyId?: number) {
  const db = await getDb();
- const conditions: SQL[] = [eq(transactions.councilId, councilId), validTransactionPeriod(), gte(transactions.month, fiscalWindow().start.slice(0,7)), lt(transactions.month, fiscalWindow().endExclusive.slice(0,7))];
+ const conditions: SQL[] = [eq(transactions.councilId, councilId), validTransactionPeriod(fyId)];
  if (fyId) conditions.push(eq(transactions.financialYearId, fyId));
  const result = await db.select({ months: sql<number>`COUNT(DISTINCT ${transactions.month})`, rows: sql<number>`COUNT(*)`, firstMonth:sql<string | null>`MIN(${transactions.month})`, lastMonth:sql<string | null>`MAX(${transactions.month})`, classified:sql<number>`COALESCE(SUM(CASE WHEN ${transactions.classificationMethod} = 'rule' AND ${transactions.classifierVersion} = ${CLASSIFIER_VERSION} THEN 1 ELSE 0 END),0)` }).from(transactions).where(and(...conditions)).get();
  return result!;

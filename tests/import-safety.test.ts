@@ -43,3 +43,9 @@ test('discovery resolves relative archives and excludes contract registers',asyn
   assert.deepEqual(files.map(f=>f.url).sort(),['https://example.gov.uk/spend/april.csv','https://example.gov.uk/spend/may.csv']);
  }finally{globalThis.fetch=original;}
 });
+
+test('payment-source filtering also rejects legacy tax and asset registers', async()=>{
+ const {isPaymentPublication}=await import('../scripts/lib/publication-type.mjs');
+ for(const filename of ['business-rates-as-of-jul-2026.xlsx','ContractRegisterJan2025.csv','non_domestic_rates.xlsx','asset-register.csv'])assert.equal(isPaymentPublication(filename),false,filename);
+ assert.equal(isPaymentPublication('payments-to-suppliers-2025-2026.xlsx'),true);
+});

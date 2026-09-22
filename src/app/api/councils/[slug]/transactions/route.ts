@@ -55,13 +55,15 @@ export async function GET(
   if (sp.get("format") === "csv") {
     const encoder = new TextEncoder();
     let page = 1;
+    let total: number | undefined;
     let done = false;
     const stream = new ReadableStream({
       start(controller) { controller.enqueue(encoder.encode(csvLine(["Supplier", "Amount GBP", "Date", "Directorate", "Service", "Publisher category", "Service classification", "Classification evidence", "Classifier version", "Description", "Source URL"]))); },
       async pull(controller) {
         if (done || request.signal.aborted) { controller.close(); return; }
         try {
-          const result = await getTransactions(council.id, { ...filters, page, pageSize: 500 });
+          const result = await getTransactions(council.id, { ...filters, page, pageSize: 500 }, total);
+          total ??= result.total;
           controller.enqueue(encoder.encode(result.rows.map(r => csvLine([r.supplierName,r.amount,r.date || r.month,r.directorate,r.service,r.category,r.serviceClassification,r.classificationEvidence,r.classifierVersion,r.description,r.sourceUrl])).join("")));
           done = page >= result.totalPages;
           page++;
