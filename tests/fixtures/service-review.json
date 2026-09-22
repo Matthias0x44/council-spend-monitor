@@ -1,0 +1,565 @@
+{
+  "scope": "80 common source-label combinations from four D1 councils; agent-reviewed diagnostic set, not an independent random accuracy benchmark",
+  "fixtures": [
+    {
+      "service": "",
+      "directorate": "",
+      "category": "",
+      "expected": "Unclassified",
+      "observedRows": 136985
+    },
+    {
+      "service": "Adult Social Care",
+      "directorate": "Services to People",
+      "category": "Social Care Services",
+      "expected": "Adult social care",
+      "observedRows": 87270
+    },
+    {
+      "service": "Services to People",
+      "directorate": "",
+      "category": "Social Care Services",
+      "expected": "Unclassified",
+      "observedRows": 79019
+    },
+    {
+      "service": "1000 E01",
+      "directorate": "",
+      "category": "Nursery Payments for 3 year olds",
+      "expected": "Education",
+      "observedRows": 57310
+    },
+    {
+      "service": "1000S01",
+      "directorate": "",
+      "category": "Social Care Direct Payments",
+      "expected": "Unclassified",
+      "observedRows": 52694
+    },
+    {
+      "service": "",
+      "directorate": "",
+      "category": "REDACTED DATA",
+      "expected": "Unclassified",
+      "observedRows": 45471
+    },
+    {
+      "service": "1000 E01",
+      "directorate": "",
+      "category": "Journal Welfare",
+      "expected": "Unclassified",
+      "observedRows": 24055
+    },
+    {
+      "service": "1000 E01",
+      "directorate": "",
+      "category": "Taxi Contracts",
+      "expected": "Unclassified",
+      "observedRows": 16900
+    },
+    {
+      "service": "Children's Services",
+      "directorate": "",
+      "category": "Nursery Payments for 3 year olds",
+      "expected": "Education",
+      "observedRows": 13749
+    },
+    {
+      "service": "1000 E01",
+      "directorate": "",
+      "category": "Adoption allowances",
+      "expected": "Children's social care",
+      "observedRows": 12398
+    },
+    {
+      "service": "Services to People",
+      "directorate": "",
+      "category": "Client/Customer (Non-Trade)",
+      "expected": "Unclassified",
+      "observedRows": 12200
+    },
+    {
+      "service": "1000S01",
+      "directorate": "",
+      "category": "Supported Living/Flexi Care",
+      "expected": "Unclassified",
+      "observedRows": 11490
+    },
+    {
+      "service": "1000S01",
+      "directorate": "",
+      "category": "Residential Homes - Long Stay",
+      "expected": "Unclassified",
+      "observedRows": 10682
+    },
+    {
+      "service": "Adult Social Care",
+      "directorate": "Services to People",
+      "category": "Client/Customer (Non-Trade)",
+      "expected": "Adult social care",
+      "observedRows": 10118
+    },
+    {
+      "service": "1000S01",
+      "directorate": "",
+      "category": "Client Contributions - Dir Pmt",
+      "expected": "Unclassified",
+      "observedRows": 8620
+    },
+    {
+      "service": "1000 E01",
+      "directorate": "",
+      "category": "Carer's Allowance",
+      "expected": "Unclassified",
+      "observedRows": 8615
+    },
+    {
+      "service": "Adult Care Services",
+      "directorate": "",
+      "category": "Social Care Direct Payments",
+      "expected": "Adult social care",
+      "observedRows": 8197
+    },
+    {
+      "service": "Bed and Breakfast",
+      "directorate": "",
+      "category": "REDACTED DATA",
+      "expected": "Unclassified",
+      "observedRows": 7821
+    },
+    {
+      "service": "1000X01",
+      "directorate": "",
+      "category": "Energy Cost - Electricity",
+      "expected": "Unclassified",
+      "observedRows": 7669
+    },
+    {
+      "service": "SPECIAL SCHOOL TRANS",
+      "directorate": "",
+      "category": "Taxi Services Home to School",
+      "expected": "Education",
+      "observedRows": 7605
+    },
+    {
+      "service": "1000 E01",
+      "directorate": "",
+      "category": "Carer's Fees",
+      "expected": "Unclassified",
+      "observedRows": 6264
+    },
+    {
+      "service": "Childrens & Educational Services",
+      "directorate": "Services to People",
+      "category": "Social Care Services",
+      "expected": "Unclassified",
+      "observedRows": 5886
+    },
+    {
+      "service": "1000 E01",
+      "directorate": "",
+      "category": "Semi-Independent",
+      "expected": "Unclassified",
+      "observedRows": 5617
+    },
+    {
+      "service": "Adult Social Care",
+      "directorate": "Services to People",
+      "category": "Disability Support",
+      "expected": "Adult social care",
+      "observedRows": 5384
+    },
+    {
+      "service": "Services to People",
+      "directorate": "",
+      "category": "Disability Support",
+      "expected": "Unclassified",
+      "observedRows": 5346
+    },
+    {
+      "service": "1000S01",
+      "directorate": "",
+      "category": "Private & Voluntary - Home Care",
+      "expected": "Unclassified",
+      "observedRows": 5253
+    },
+    {
+      "service": "1000X01",
+      "directorate": "",
+      "category": "Energy Cost - Gas",
+      "expected": "Unclassified",
+      "observedRows": 5148
+    },
+    {
+      "service": "Children's Services",
+      "directorate": "",
+      "category": "Journal Welfare",
+      "expected": "Unclassified",
+      "observedRows": 4826
+    },
+    {
+      "service": "1000 E01",
+      "directorate": "",
+      "category": "Social Care Direct Payments",
+      "expected": "Unclassified",
+      "observedRows": 4816
+    },
+    {
+      "service": "1000S01",
+      "directorate": "",
+      "category": "SC Carers Direct Payments",
+      "expected": "Unclassified",
+      "observedRows": 4705
+    },
+    {
+      "service": "1000W01",
+      "directorate": "",
+      "category": "Purchases - Materials",
+      "expected": "Unclassified",
+      "observedRows": 4648
+    },
+    {
+      "service": "1000 E01",
+      "directorate": "",
+      "category": "Nursery Payments for 4 year olds",
+      "expected": "Education",
+      "observedRows": 4608
+    },
+    {
+      "service": "1000 E01",
+      "directorate": "",
+      "category": "Client Travel To School",
+      "expected": "Education",
+      "observedRows": 4487
+    },
+    {
+      "service": "Continuing Services",
+      "directorate": "Services to People",
+      "category": "Social Care Services",
+      "expected": "Unclassified",
+      "observedRows": 4471
+    },
+    {
+      "service": "Childrens & Educational Services",
+      "directorate": "Services to People",
+      "category": "Client/Customer (Non-Trade)",
+      "expected": "Unclassified",
+      "observedRows": 4275
+    },
+    {
+      "service": "Flint Street Stores",
+      "directorate": "",
+      "category": "Highway Equipment & Materials",
+      "expected": "Highways and transport",
+      "observedRows": 4174
+    },
+    {
+      "service": "1000 E01",
+      "directorate": "",
+      "category": "IP Fostering",
+      "expected": "Children's social care",
+      "observedRows": 4155
+    },
+    {
+      "service": "1000S01",
+      "directorate": "",
+      "category": "Residential Homes - Extra Costs",
+      "expected": "Unclassified",
+      "observedRows": 4075
+    },
+    {
+      "service": "1000 E01",
+      "directorate": "",
+      "category": "Private & Voluntary - Home Care",
+      "expected": "Unclassified",
+      "observedRows": 3953
+    },
+    {
+      "service": "Childrens & Educational Services",
+      "directorate": "Services to People",
+      "category": "Childcare Provision",
+      "expected": "Unclassified",
+      "observedRows": 3716
+    },
+    {
+      "service": "1000 E01",
+      "directorate": "",
+      "category": "Special School",
+      "expected": "Education",
+      "observedRows": 3587
+    },
+    {
+      "service": "Children's Services",
+      "directorate": "",
+      "category": "Taxi Contracts",
+      "expected": "Unclassified",
+      "observedRows": 3554
+    },
+    {
+      "service": "Highways + Sewrs Wks",
+      "directorate": "",
+      "category": "Highway Equipment & Materials",
+      "expected": "Highways and transport",
+      "observedRows": 3543
+    },
+    {
+      "service": "Direct Payments/Agen",
+      "directorate": "",
+      "category": "REDACTED DATA",
+      "expected": "Unclassified",
+      "observedRows": 3152
+    },
+    {
+      "service": "Services to People",
+      "directorate": "",
+      "category": "Childcare Provision",
+      "expected": "Unclassified",
+      "observedRows": 2936
+    },
+    {
+      "service": "1000S01",
+      "directorate": "",
+      "category": "Nursing Homes - Long Stay",
+      "expected": "Unclassified",
+      "observedRows": 2917
+    },
+    {
+      "service": "Services to People",
+      "directorate": "",
+      "category": "Recruitment / Staffing",
+      "expected": "Unclassified",
+      "observedRows": 2903
+    },
+    {
+      "service": "1000 E01",
+      "directorate": "",
+      "category": "Residential Children's Home",
+      "expected": "Children's social care",
+      "observedRows": 2610
+    },
+    {
+      "service": "1000F01",
+      "directorate": "",
+      "category": "Grant Payments",
+      "expected": "Unclassified",
+      "observedRows": 2537
+    },
+    {
+      "service": "Childrens & Educational Services",
+      "directorate": "Services to People",
+      "category": "Education Services",
+      "expected": "Education",
+      "observedRows": 2440
+    },
+    {
+      "service": "Childrens & Educational Services",
+      "directorate": "Services to People",
+      "category": "Recruitment / Staffing",
+      "expected": "Unclassified",
+      "observedRows": 2434
+    },
+    {
+      "service": "LD Personal Budgets",
+      "directorate": "",
+      "category": "REDACTED DATA",
+      "expected": "Unclassified",
+      "observedRows": 2337
+    },
+    {
+      "service": "1000 E01",
+      "directorate": "",
+      "category": "Additional Support Costs",
+      "expected": "Unclassified",
+      "observedRows": 2121
+    },
+    {
+      "service": "1000W01",
+      "directorate": "",
+      "category": "Energy Cost - Electricity",
+      "expected": "Unclassified",
+      "observedRows": 2109
+    },
+    {
+      "service": "1000S01",
+      "directorate": "",
+      "category": "Taxi Contracts",
+      "expected": "Unclassified",
+      "observedRows": 2074
+    },
+    {
+      "service": "Children's Services",
+      "directorate": "",
+      "category": "Adoption allowances",
+      "expected": "Children's social care",
+      "observedRows": 2012
+    },
+    {
+      "service": "1000S01",
+      "directorate": "",
+      "category": "Equipment Furniture & Material",
+      "expected": "Unclassified",
+      "observedRows": 2010
+    },
+    {
+      "service": "Short Term Hires",
+      "directorate": "",
+      "category": "Vehicle Hire",
+      "expected": "Unclassified",
+      "observedRows": 1989
+    },
+    {
+      "service": "Services to Place",
+      "directorate": "",
+      "category": "Construction / Building Services",
+      "expected": "Unclassified",
+      "observedRows": 1968
+    },
+    {
+      "service": "Legal",
+      "directorate": "",
+      "category": "Legal General Support",
+      "expected": "Unclassified",
+      "observedRows": 1954
+    },
+    {
+      "service": "Adult Care Services",
+      "directorate": "",
+      "category": "Residential Homes - Long Stay",
+      "expected": "Adult social care",
+      "observedRows": 1870
+    },
+    {
+      "service": "Adult Care Services",
+      "directorate": "",
+      "category": "Supported Living/Flexi Care",
+      "expected": "Adult social care",
+      "observedRows": 1819
+    },
+    {
+      "service": "Services to People",
+      "directorate": "",
+      "category": "Education Services",
+      "expected": "Education",
+      "observedRows": 1797
+    },
+    {
+      "service": "1000S01",
+      "directorate": "",
+      "category": "Private & Voluntary - Day Care",
+      "expected": "Unclassified",
+      "observedRows": 1763
+    },
+    {
+      "service": "1000 E01",
+      "directorate": "",
+      "category": "Preventative Care",
+      "expected": "Unclassified",
+      "observedRows": 1695
+    },
+    {
+      "service": "Adult Social Care",
+      "directorate": "Services to People",
+      "category": "Recruitment / Staffing",
+      "expected": "Adult social care",
+      "observedRows": 1656
+    },
+    {
+      "service": "1000X01",
+      "directorate": "",
+      "category": "Payment to a Private Contractor",
+      "expected": "Unclassified",
+      "observedRows": 1629
+    },
+    {
+      "service": "1000S01",
+      "directorate": "",
+      "category": "Enablement Homecare",
+      "expected": "Unclassified",
+      "observedRows": 1601
+    },
+    {
+      "service": "1000 E01",
+      "directorate": "",
+      "category": "Therapy Fees",
+      "expected": "Unclassified",
+      "observedRows": 1539
+    },
+    {
+      "service": "Children's Services",
+      "directorate": "",
+      "category": "Carer's Allowance",
+      "expected": "Unclassified",
+      "observedRows": 1520
+    },
+    {
+      "service": "HQ",
+      "directorate": "",
+      "category": "B&OS Repair & Maintenance",
+      "expected": "Unclassified",
+      "observedRows": 1518
+    },
+    {
+      "service": "IS Home Care \u2013 Older",
+      "directorate": "",
+      "category": "REDACTED DATA",
+      "expected": "Unclassified",
+      "observedRows": 1490
+    },
+    {
+      "service": "1000 E01",
+      "directorate": "",
+      "category": "Expenditure on Clients, Education",
+      "expected": "Education",
+      "observedRows": 1442
+    },
+    {
+      "service": "Capital and Revenue Projects",
+      "directorate": "",
+      "category": "Energy Cost - Electricity",
+      "expected": "Unclassified",
+      "observedRows": 1414
+    },
+    {
+      "service": "Disabled Facilities",
+      "directorate": "",
+      "category": "",
+      "expected": "Unclassified",
+      "observedRows": 1374
+    },
+    {
+      "service": "Adaptations (4546)",
+      "directorate": "",
+      "category": "Highway Equipment & Materials",
+      "expected": "Highways and transport",
+      "observedRows": 1360
+    },
+    {
+      "service": "1000W01",
+      "directorate": "",
+      "category": "Library Materials",
+      "expected": "Cultural and leisure services",
+      "observedRows": 1343
+    },
+    {
+      "service": "Adult Care Services",
+      "directorate": "",
+      "category": "Client Contributions - Dir Pmt",
+      "expected": "Adult social care",
+      "observedRows": 1321
+    },
+    {
+      "service": "Independent School F",
+      "directorate": "",
+      "category": "Educational Placements",
+      "expected": "Education",
+      "observedRows": 1242
+    },
+    {
+      "service": "1000S01",
+      "directorate": "",
+      "category": "Residential Homes 3rd Party Top Up Inc",
+      "expected": "Unclassified",
+      "observedRows": 1234
+    }
+  ]
+}

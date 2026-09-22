@@ -8,16 +8,18 @@
  *   npx tsx scripts/pipeline.ts --status pending # process councils by status
  */
 
+import { fiscalWindow } from "../src/lib/fiscal";
+import { migrate } from "./lib/migrate";
 import Database from "better-sqlite3";
 import { drizzle } from "drizzle-orm/better-sqlite3";
-import { eq, and, sql } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import * as schema from "../src/db/schema";
 import * as path from "path";
 import * as fs from "fs";
 import { discoverFiles, downloadFile, type DiscoveredFile } from "./lib/discover";
 import { ingestFile, monthFromFilename } from "./lib/ingest";
 
-const DB_PATH = path.join(process.cwd(), "data", "council-spend.db");
+const DB_PATH = process.env.LOCAL_DB_PATH || path.join(process.cwd(), "data", "council-spend.db");
 const RAW_DIR = path.join(process.cwd(), "data", "raw");
 
 interface PipelineStats {
@@ -35,6 +37,7 @@ function parseArgs(): {
   status?: string;
   concurrency: number;
   since?: string;
+  force: boolean;
 } {
   const args = process.argv.slice(2);
   let slug: string | undefined;
@@ -42,6 +45,7 @@ function parseArgs(): {
   let status: string | undefined;
   let concurrency = 5;
   let since: string | undefined;
+  let force = false;
 
   for (let i = 0; i < args.length; i++) {
     if (args[i] === "--slug" && args[i + 1]) slug = args[++i];
@@ -50,16 +54,18 @@ function parseArgs(): {
     if (args[i] === "--status" && args[i + 1]) status = args[++i];
     if (args[i] === "--concurrency" && args[i + 1]) concurrency = parseInt(args[++i]);
     if (args[i] === "--since" && args[i + 1]) since = args[++i];
+    if (args[i] === "--force") force = true;
   }
 
-  return { slug, slugs, status, concurrency, since };
+  return { slug, slugs, status, concurrency, since, force };
 }
 
 async function processCouncil(
   councilRow: typeof schema.councils.$inferSelect,
   db: ReturnType<typeof drizzle>,
   sqlite: InstanceType<typeof Database>,
-  sinceMonth?: string
+  sinceMonth?: string,
+  force = false
 ): Promise<PipelineStats> {
   const stats: PipelineStats = {
     slug: councilRow.slug,
@@ -77,6 +83,8 @@ async function processCouncil(
   // Discover files
   let files: DiscoveredFile[];
   try {
+    const adapters = JSON.parse(fs.readFileSync("data/source-adapters.json", "utf8")) as Record<string, { packages?: string[] }>;
+    const packages = adapters[councilRow.slug]?.packages || [];
     files = await discoverFiles({
       slug: councilRow.slug,
       name: councilRow.name,
@@ -84,6 +92,11 @@ async function processCouncil(
       dataGovId: councilRow.dataGovId,
       filePattern: councilRow.filePattern,
     });
+    for (const packageId of packages.filter(p => p !== councilRow.dataGovId)) {
+      try { files.push(...await discoverFiles({ slug: councilRow.slug, name: councilRow.name, dataGovId: packageId })); }
+      catch (err) { stats.errors.push(`Dataset ${packageId}: ${err}`); }
+    }
+    files = [...new Map(files.map(f => [f.url, f])).values()];
   } catch (err) {
     const msg = `Discovery failed: ${err}`;
     console.error(`  ${msg}`);
@@ -92,36 +105,24 @@ async function processCouncil(
   }
 
   stats.filesDiscovered = files.length;
+  if (!files.length) stats.errors.push("No source files discovered; coverage is unknown");
   console.log(`  Found ${files.length} files`);
 
-  // File-level date cutoff: skip files whose filename clearly indicates a
-  // month before the cutoff. This avoids downloading years of history we're
-  // going to drop at ingest anyway. Files without a parseable month in the
-  // filename are kept and filtered row-by-row during ingest.
-  if (sinceMonth) {
-    const before = files.length;
-    files = files.filter((f) => {
-      const m = monthFromFilename(f.filename);
-      return !m || m >= sinceMonth;
-    });
-    if (files.length !== before) {
-      console.log(
-        `  Skipped ${before - files.length} file(s) dated before ${sinceMonth}`
-      );
-    }
-  }
-
-  // Filter to new files only (not already in source_documents)
+  files = files.filter(f => { const month = monthFromFilename(f.filename); return !month || month >= fiscalWindow().start.slice(0, 7); });
+  // No arbitrary file cap: monthly and quarterly histories must cover the window.
+  // --force refreshes each source atomically inside ingestFile.
   const existingUrls = new Set(
-    db
-      .select({ url: schema.sourceDocuments.url })
-      .from(schema.sourceDocuments)
-      .where(eq(schema.sourceDocuments.councilId, councilRow.id))
-      .all()
-      .map((r) => r.url)
+    force
+      ? []
+      : db
+          .select({ url: schema.sourceDocuments.url })
+          .from(schema.sourceDocuments)
+          .where(eq(schema.sourceDocuments.councilId, councilRow.id))
+          .all()
+          .map((r) => r.url)
   );
 
-  const newFiles = files.filter((f) => !existingUrls.has(f.url));
+  const newFiles = files.filter((f) => force || !existingUrls.has(f.url));
   stats.filesNew = newFiles.length;
 
   if (newFiles.length === 0) {
@@ -147,7 +148,7 @@ async function processCouncil(
   for (const file of newFiles) {
     try {
       console.log(`  Downloading ${file.filename}...`);
-      const localPath = await downloadFile(file.url, councilDir, file.filename);
+      const localPath = await downloadFile(file.url, councilDir, file.filename, force);
 
       console.log(`  Ingesting ${file.filename}...`);
       const result = ingestFile({
@@ -182,10 +183,15 @@ async function processCouncil(
 }
 
 async function main() {
-  const { slug, slugs, status, concurrency, since } = parseArgs();
-  const sinceMonth = since || process.env.SINCE_MONTH;
+  const { slug, slugs, status, concurrency, since, force } = parseArgs();
+  const sinceMonth = since || process.env.SINCE_MONTH || fiscalWindow().start.slice(0, 7);
+  if (!/^\d{4}-(0[1-9]|1[0-2])$/.test(sinceMonth)) throw new Error("--since must be YYYY-MM");
+  if (!Number.isInteger(concurrency) || concurrency < 1 || concurrency > 10) throw new Error("--concurrency must be 1–10");
   if (sinceMonth) {
     console.log(`Date cutoff: keeping transactions dated ${sinceMonth} or later`);
+  }
+  if (force) {
+    console.log(`Force mode: re-ingest even if source_documents already exist`);
   }
 
   fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
@@ -202,6 +208,7 @@ async function main() {
     "utf8"
   );
   sqlite.exec(schemaSql);
+  migrate(sqlite);
 
   // Migrate existing DBs that may be missing new columns
   const migrations = [
@@ -248,6 +255,8 @@ async function main() {
       console.error("None of the requested slugs exist in the registry");
       process.exit(1);
     }
+  } else if (status === "all") {
+    councils = db.select().from(schema.councils).all();
   } else {
     const targetStatus = status || "active";
     councils = db
@@ -265,7 +274,7 @@ async function main() {
   for (let i = 0; i < councils.length; i += concurrency) {
     const batch = councils.slice(i, i + concurrency);
     const batchResults = await Promise.all(
-      batch.map((c) => processCouncil(c, db, sqlite, sinceMonth))
+      batch.map((c) => processCouncil(c, db, sqlite, sinceMonth, force))
     );
     allStats.push(...batchResults);
 
@@ -304,7 +313,10 @@ async function main() {
   const totalErrors = allStats.reduce((s, r) => s + r.errors.length, 0);
   console.log(`\nTotal: ${totalInserted} rows inserted, ${totalErrors} errors`);
 
+  fs.mkdirSync("data/reports", { recursive: true });
+  fs.writeFileSync("data/reports/pipeline.json", JSON.stringify({ generatedAt: new Date().toISOString(), window: fiscalWindow(), councils: allStats }, null, 2));
   sqlite.close();
+  if (totalErrors > 0) process.exitCode = 2;
 }
 
 main().catch((err) => {

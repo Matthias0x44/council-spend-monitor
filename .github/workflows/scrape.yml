@@ -1,65 +1,82 @@
-name: Scrape Council Data
-
+name: Refresh council data in D1
 on:
   schedule:
-    # Weekly full scan — Sunday 3am UTC
     - cron: "0 3 * * 0"
   workflow_dispatch:
     inputs:
       slug:
-        description: "Process a specific council slug (leave empty for all active)"
+        description: Council slug (empty means all registered English councils)
         required: false
         type: string
-      status:
-        description: "Process councils with this status (default: active)"
-        required: false
-        default: "active"
-        type: string
-
+permissions:
+  contents: read
+concurrency:
+  group: council-d1-import
+  cancel-in-progress: false
 jobs:
-  scrape:
+  plan:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
-
+    outputs:
+      matrix: ${{ steps.plan.outputs.matrix }}
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
+      - id: plan
+        env:
+          COUNCIL_SLUG: ${{ inputs.slug }}
+        run: node scripts/workflow-matrix.mjs
+  import:
+    needs: plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    env:
+      CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID || secrets.CLOUDFLARE_ACCOUNT_ID }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      D1_DATABASE_ID: e1775f4f-2c8c-40c8-bc31-5b09ba536313
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
           cache: npm
-
       - run: npm ci
-
-      - name: Seed registry (discover new councils from data.gov.uk)
-        run: npx tsx scripts/seed-registry.ts
+      - run: npm test
+      - name: Refresh published sources directly in D1
         env:
-          NODE_ENV: production
-
-      - name: Run pipeline
-        run: |
-          ARGS=""
-          if [ -n "${{ inputs.slug }}" ]; then
-            ARGS="--slug ${{ inputs.slug }}"
-          elif [ -n "${{ inputs.status }}" ]; then
-            ARGS="--status ${{ inputs.status }}"
-          fi
-          npx tsx scripts/pipeline.ts $ARGS
-        env:
-          NODE_ENV: production
-
-      - name: Push data to Turso
-        run: |
-          npm install -g @libsql/client
-          npx tsx scripts/push-to-turso.ts
-        env:
-          TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
-          TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
-
-      - name: Upload raw data as artifact (for debugging)
+          COUNCIL_SLUGS: ${{ matrix.slugs }}
+        run: npm run pipeline:d1 -- --slugs "$COUNCIL_SLUGS"
+      - name: Retain import and recovery evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: council-data-${{ github.run_number }}
-          path: data/council-spend.db
-          retention-days: 7
+          name: council-d1-${{ matrix.id }}-${{ github.run_number }}
+          path: data/reports/
+          retention-days: 30
+  audit:
+    needs: import
+    if: always()
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID || secrets.CLOUDFLARE_ACCOUNT_ID }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/d1-quarantine.mjs --apply
+      - run: node scripts/d1-coverage.mjs
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: council-d1-coverage-${{ github.run_number }}
+          path: data/reports/
+          retention-days: 30
+# Bounded serial groups let every council run even when an earlier group fails.
+# Each file is validated before an atomic source replacement; no local DB copy.

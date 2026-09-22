@@ -12,8 +12,11 @@
     "ingest:budgets": "tsx scripts/ingest-budgets.ts",
     "seed": "tsx scripts/seed.ts",
     "seed:registry": "tsx scripts/seed-registry.ts",
+    "select:top": "tsx scripts/select-top-councils.ts",
+    "fill:100": "tsx scripts/fill-to-100.ts",
+    "fill:wayback": "tsx scripts/fill-from-wayback.ts",
     "pipeline": "tsx scripts/pipeline.ts",
-    "pipeline:all": "tsx scripts/pipeline.ts --status active",
+    "pipeline:all": "node --import tsx scripts/pipeline-d1.ts",
     "d1:migrate:local": "wrangler d1 execute council-spend --local --file=scripts/d1/schema.sql",
     "d1:migrate:remote": "wrangler d1 execute council-spend --remote --file=scripts/d1/schema.sql",
     "d1:push": "tsx scripts/push-to-d1.ts",
@@ -21,7 +24,15 @@
     "cf:build": "opennextjs-cloudflare build",
     "cf:preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "cf:deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
-    "cf:upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload"
+    "cf:upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
+    "test": "node --import tsx --test tests/*.test.ts",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.scripts.json --noEmit",
+    "data:audit": "tsx scripts/audit-data.ts",
+    "data:retain": "tsx scripts/retain-data.ts",
+    "registry:england": "tsx scripts/registry-england.ts",
+    "pipeline:d1": "node --import tsx scripts/pipeline-d1.ts",
+    "d1:audit": "node scripts/d1-audit.mjs",
+    "d1:coverage": "node scripts/d1-coverage.mjs"
   },
   "dependencies": {
     "@libsql/client": "^0.17.0",
@@ -34,18 +45,18 @@
     "cheerio": "^1.2.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "drizzle-orm": "^0.45.1",
+    "drizzle-orm": "^0.45.3",
     "lucide-react": "^0.577.0",
-    "next": "^15.5.20",
+    "next": "^15.5.25",
     "pdf-parse": "^1.1.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "recharts": "^3.8.0",
     "tailwind-merge": "^3.5.0",
-    "xlsx": "^0.18.5"
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20260702.1",
+    "@cloudflare/workers-types": "^5.20260921.1",
     "@tailwindcss/postcss": "^4",
     "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^20",
@@ -54,10 +65,14 @@
     "@types/react-dom": "^19",
     "drizzle-kit": "^0.31.9",
     "eslint": "^9",
-    "eslint-config-next": "^15.5.20",
+    "eslint-config-next": "^15.5.25",
     "tailwindcss": "^4",
     "tsx": "^4.21.0",
     "typescript": "^5",
-    "wrangler": "^4.0.0"
+    "wrangler": "^4.135.0"
+  },
+  "overrides": {
+    "esbuild": "^0.28.1",
+    "postcss": "^8.5.23"
   }
 }

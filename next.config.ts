@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  outputFileTracingRoot: process.cwd(),
   // better-sqlite3 is a native node module that we only require under
   // `next dev` / `next build` (not in the Cloudflare Workers runtime).
   // Telling Next not to bundle it keeps the Workers build smaller and

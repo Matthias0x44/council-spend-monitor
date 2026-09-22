@@ -1,0 +1,1260 @@
+{
+  "generatedAt": "2026-07-11T19:39:40.016Z",
+  "probed": 129,
+  "downloadable": 10,
+  "councils": [
+    {
+      "slug": "greenwich",
+      "name": "Greenwich Council",
+      "dataGovId": "f2b384b5-6d41-4367-bdcd-5bffbb61f850",
+      "good": 2,
+      "html": 0,
+      "err": 0,
+      "total": 44
+    },
+    {
+      "slug": "trafford",
+      "name": "Trafford Council",
+      "dataGovId": "4eb0bea9-f089-4b02-b324-103a4b5bbc11",
+      "good": 2,
+      "html": 0,
+      "err": 0,
+      "total": 2
+    },
+    {
+      "slug": "plymouth",
+      "name": "Plymouth City Council",
+      "dataGovId": "9e9b0128-9095-4bde-b24b-d04e60789016",
+      "good": 2,
+      "html": 0,
+      "err": 0,
+      "total": 4
+    },
+    {
+      "slug": "british",
+      "name": "British Council",
+      "dataGovId": "2d6c7585-c281-4285-ad35-44db26215c95",
+      "good": 2,
+      "html": 0,
+      "err": 0,
+      "total": 54
+    },
+    {
+      "slug": "rushmoor-borough",
+      "name": "Rushmoor Borough Council",
+      "dataGovId": "19e89a08-df99-4e26-be44-24e16a3ecf94",
+      "good": 2,
+      "html": 0,
+      "err": 0,
+      "total": 50
+    },
+    {
+      "slug": "leeds-city",
+      "name": "Leeds City Council",
+      "dataGovId": "80446967-46ef-4283-bf65-1014ecfc4fbc",
+      "good": 2,
+      "html": 0,
+      "err": 0,
+      "total": 126
+    },
+    {
+      "slug": "eden",
+      "name": "Eden District Council",
+      "dataGovId": "4039c4f0-235d-47f1-96ae-9d74cb97d833",
+      "good": 2,
+      "html": 0,
+      "err": 0,
+      "total": 68
+    },
+    {
+      "slug": "bristol-city",
+      "name": "Bristol City Council",
+      "dataGovId": "2dd91623-cbbc-4837-ba9f-1cfd1f38bb07",
+      "good": 2,
+      "html": 0,
+      "err": 0,
+      "total": 10
+    },
+    {
+      "slug": "south-lakeland",
+      "name": "South Lakeland District Council",
+      "dataGovId": "2e54a908-7530-406f-9b51-7224f8c3b5a6",
+      "good": 2,
+      "html": 0,
+      "err": 0,
+      "total": 70
+    },
+    {
+      "slug": "blaby",
+      "name": "Blaby District Council",
+      "dataGovId": "742deb95-3faa-499a-b4b7-1783660e060c",
+      "good": 2,
+      "html": 0,
+      "err": 0,
+      "total": 71
+    }
+  ],
+  "all": [
+    {
+      "slug": "manchester",
+      "name": "Manchester City Council",
+      "dataGovId": "b006dc83-ceb9-4e0b-a591-e274e69d6c29",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "hounslow",
+      "name": "Hounslow Council",
+      "dataGovId": "f713ba22-28ee-4be6-8a9a-3b15042a1f69",
+      "good": 0,
+      "html": 6,
+      "err": 0,
+      "total": 136
+    },
+    {
+      "slug": "greenwich",
+      "name": "Greenwich Council",
+      "dataGovId": "f2b384b5-6d41-4367-bdcd-5bffbb61f850",
+      "good": 2,
+      "html": 0,
+      "err": 0,
+      "total": 44
+    },
+    {
+      "slug": "kent",
+      "name": "Kent County Council",
+      "dataGovId": "b6ea9dc7-7be5-4f82-a8de-f52cf15fc7a5",
+      "good": 0,
+      "html": 3,
+      "err": 0,
+      "total": 3
+    },
+    {
+      "slug": "hampshire",
+      "name": "Hampshire County Council",
+      "dataGovId": "8786e72f-e3dd-4aae-a4e6-784eca291567",
+      "good": 0,
+      "html": 0,
+      "err": 6,
+      "total": 54
+    },
+    {
+      "slug": "surrey",
+      "name": "Surrey County Council",
+      "dataGovId": "6fa0d925-f752-4504-96cf-3ad62becbd6d",
+      "good": 0,
+      "html": 1,
+      "err": 0,
+      "total": 1
+    },
+    {
+      "slug": "norfolk",
+      "name": "Norfolk County Council",
+      "dataGovId": "fdae7bb8-4b75-4a9e-91fd-4dff8d881d7e",
+      "good": 0,
+      "html": 0,
+      "err": 6,
+      "total": 22
+    },
+    {
+      "slug": "hertfordshire",
+      "name": "Hertfordshire County Council",
+      "dataGovId": "897093bd-355b-4977-9092-f27810baa5a7",
+      "good": 0,
+      "html": 6,
+      "err": 0,
+      "total": 6
+    },
+    {
+      "slug": "calderdale",
+      "name": "Calderdale Council",
+      "dataGovId": "3c54adf4-26d7-4929-932f-626fb0e8edbb",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "trafford",
+      "name": "Trafford Council",
+      "dataGovId": "4eb0bea9-f089-4b02-b324-103a4b5bbc11",
+      "good": 2,
+      "html": 0,
+      "err": 0,
+      "total": 2
+    },
+    {
+      "slug": "plymouth",
+      "name": "Plymouth City Council",
+      "dataGovId": "9e9b0128-9095-4bde-b24b-d04e60789016",
+      "good": 2,
+      "html": 0,
+      "err": 0,
+      "total": 4
+    },
+    {
+      "slug": "london-hounslow",
+      "name": "London Borough of Hounslow",
+      "dataGovId": "f713ba22-28ee-4be6-8a9a-3b15042a1f69",
+      "good": 0,
+      "html": 6,
+      "err": 0,
+      "total": 136
+    },
+    {
+      "slug": "london-camden",
+      "name": "London Borough of Camden",
+      "dataGovId": "96d19af7-88fc-4c38-a9e8-04fa8679f1b4",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "british",
+      "name": "British Council",
+      "dataGovId": "2d6c7585-c281-4285-ad35-44db26215c95",
+      "good": 2,
+      "html": 0,
+      "err": 0,
+      "total": 54
+    },
+    {
+      "slug": "scarborough-borough",
+      "name": "Scarborough Borough Council",
+      "dataGovId": "5b1742f9-3192-472a-bbc2-c74802254e59",
+      "good": 0,
+      "html": 0,
+      "err": 6,
+      "total": 145
+    },
+    {
+      "slug": "oxford-city",
+      "name": "Oxford City Council",
+      "dataGovId": "3061d52e-23c8-45fc-8912-8d96f73b2158",
+      "good": 0,
+      "html": 0,
+      "err": 1,
+      "total": 1
+    },
+    {
+      "slug": "preston-city",
+      "name": "Preston City Council",
+      "dataGovId": "36d9cc3f-8caa-43c4-b0ba-10a95db26b9d",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "craven",
+      "name": "Craven District Council",
+      "dataGovId": "cc7ccd4c-0e20-4f95-8297-0d558e7d33be",
+      "good": 0,
+      "html": 0,
+      "err": 6,
+      "total": 100
+    },
+    {
+      "slug": "christchurch-borough",
+      "name": "Christchurch Borough Council",
+      "dataGovId": "f47bda4b-dbde-4f30-ac43-db3f61915e8b",
+      "good": 0,
+      "html": 6,
+      "err": 0,
+      "total": 16
+    },
+    {
+      "slug": "east-sussex",
+      "name": "East Sussex County Council",
+      "dataGovId": "36cf574e-c3ae-4aad-ab38-aa9cca1f9ebe",
+      "good": 0,
+      "html": 1,
+      "err": 0,
+      "total": 1
+    },
+    {
+      "slug": "gloucester-city",
+      "name": "Gloucester City Council",
+      "dataGovId": "b395a0d9-6891-440a-a423-b50efac39522",
+      "good": 0,
+      "html": 1,
+      "err": 0,
+      "total": 1
+    },
+    {
+      "slug": "barrow-borough",
+      "name": "Barrow Borough Council",
+      "dataGovId": "0892b31b-5ec5-4eee-9de1-86ce3469c657",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "rushmoor-borough",
+      "name": "Rushmoor Borough Council",
+      "dataGovId": "19e89a08-df99-4e26-be44-24e16a3ecf94",
+      "good": 2,
+      "html": 0,
+      "err": 0,
+      "total": 50
+    },
+    {
+      "slug": "leeds-city",
+      "name": "Leeds City Council",
+      "dataGovId": "80446967-46ef-4283-bf65-1014ecfc4fbc",
+      "good": 2,
+      "html": 0,
+      "err": 0,
+      "total": 126
+    },
+    {
+      "slug": "manchester-city",
+      "name": "Manchester City Council",
+      "dataGovId": "b006dc83-ceb9-4e0b-a591-e274e69d6c29",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "horsham",
+      "name": "Horsham District Council",
+      "dataGovId": "e7768134-8169-4bdc-9287-6bc0532ad93a",
+      "good": 0,
+      "html": 0,
+      "err": 6,
+      "total": 32
+    },
+    {
+      "slug": "newark-and-sherwood",
+      "name": "Newark and Sherwood District Council",
+      "dataGovId": "fdd1dba4-a12d-4809-80fa-38341a8de819",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "science-and-technology-facilities",
+      "name": "Science and Technology Facilities Council",
+      "dataGovId": "43f592b8-b5e1-4895-bd2c-8f13d7920381",
+      "good": 0,
+      "html": 6,
+      "err": 0,
+      "total": 53
+    },
+    {
+      "slug": "wyre-borough",
+      "name": "Wyre Borough Council",
+      "dataGovId": "aa26e625-4048-44d6-8151-cad0d6833830",
+      "good": 0,
+      "html": 0,
+      "err": 4,
+      "total": 4
+    },
+    {
+      "slug": "royal-kensington-and-chelsea",
+      "name": "Royal Borough of Kensington and Chelsea",
+      "dataGovId": "cb01d404-1bce-47e8-ba0b-e80dd9017a2a",
+      "good": 0,
+      "html": 1,
+      "err": 0,
+      "total": 1
+    },
+    {
+      "slug": "peterborough-city",
+      "name": "Peterborough City Council",
+      "dataGovId": "b5f46f62-872f-4d92-9cb7-f7f1570b914a",
+      "good": 0,
+      "html": 0,
+      "err": 1,
+      "total": 1
+    },
+    {
+      "slug": "warrington-borough",
+      "name": "Warrington Borough Council",
+      "dataGovId": "e0cd8e89-bcde-4d7c-b7f1-f11421440066",
+      "good": 0,
+      "html": 0,
+      "err": 6,
+      "total": 62
+    },
+    {
+      "slug": "eden",
+      "name": "Eden District Council",
+      "dataGovId": "4039c4f0-235d-47f1-96ae-9d74cb97d833",
+      "good": 2,
+      "html": 0,
+      "err": 0,
+      "total": 68
+    },
+    {
+      "slug": "north-yorkshire",
+      "name": "North Yorkshire County Council",
+      "dataGovId": "a413396b-fdf6-4478-9dd6-53ce80a3fa98",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "wycombe",
+      "name": "Wycombe District Council",
+      "dataGovId": "a6a9d2b7-67d0-4965-9c7c-7859c4d07791",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "walsall",
+      "name": "Walsall Council",
+      "dataGovId": "187d4bca-45ef-4218-83b1-df6c8d26d9d0",
+      "good": 0,
+      "html": 0,
+      "err": 1,
+      "total": 1
+    },
+    {
+      "slug": "harlow",
+      "name": "Harlow Council",
+      "dataGovId": "0f0f0327-d7ee-42e5-9b8f-f2f02e8c827a",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "chorley",
+      "name": "Chorley Council",
+      "dataGovId": "51fbf9c7-d82d-49aa-8840-3dae80d54e7d",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "broxbourne-borough",
+      "name": "Broxbourne Borough Council",
+      "dataGovId": "f996ee51-a0ff-4a1f-b59c-89fc61692972",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "fareham-borough",
+      "name": "Fareham Borough Council",
+      "dataGovId": "80a85f01-e0e9-4254-a8d6-94f36519d82f",
+      "good": 0,
+      "html": 3,
+      "err": 0,
+      "total": 3
+    },
+    {
+      "slug": "north-somerset",
+      "name": "North Somerset Council",
+      "dataGovId": "8d1aca9e-5eb9-4db5-a2c4-01ca92fc7a25",
+      "good": 0,
+      "html": 4,
+      "err": 0,
+      "total": 4
+    },
+    {
+      "slug": "tendring",
+      "name": "Tendring District Council",
+      "dataGovId": "6d2c18bd-6e24-456a-a5a6-619202efd763",
+      "good": 0,
+      "html": 1,
+      "err": 0,
+      "total": 1
+    },
+    {
+      "slug": "southampton-city",
+      "name": "Southampton City Council",
+      "dataGovId": "1d2ab054-8306-4b6f-aa83-8f5d3231197e",
+      "good": 0,
+      "html": 1,
+      "err": 0,
+      "total": 1
+    },
+    {
+      "slug": "darlington-borough",
+      "name": "Darlington Borough Council",
+      "dataGovId": "2ea818dc-8338-49ed-8ffe-812d92b71b5b",
+      "good": 0,
+      "html": 1,
+      "err": 0,
+      "total": 1
+    },
+    {
+      "slug": "babergh",
+      "name": "Babergh District Council",
+      "dataGovId": "74bd5bc6-18f2-4cfd-9393-8aa36349475b",
+      "good": 0,
+      "html": 3,
+      "err": 0,
+      "total": 3
+    },
+    {
+      "slug": "hartlepool-borough",
+      "name": "Hartlepool Borough Council",
+      "dataGovId": "45c67b70-64ad-4293-af50-2ba6d5b3387a",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "chichester",
+      "name": "Chichester District Council",
+      "dataGovId": "309f3671-317f-4ada-b9dc-af867bcf6b79",
+      "good": 0,
+      "html": 0,
+      "err": 2,
+      "total": 2
+    },
+    {
+      "slug": "lewes",
+      "name": "Lewes District Council",
+      "dataGovId": "075c2dae-d1ac-42f3-8b42-bcc04d8edd98",
+      "good": 0,
+      "html": 0,
+      "err": 1,
+      "total": 1
+    },
+    {
+      "slug": "corby-borough",
+      "name": "Corby Borough Council",
+      "dataGovId": "840dab54-b00d-4edc-ae01-176bce26a9e8",
+      "good": 0,
+      "html": 2,
+      "err": 0,
+      "total": 2
+    },
+    {
+      "slug": "stevenage-borough",
+      "name": "Stevenage Borough Council",
+      "dataGovId": "63909de7-2bab-419c-8f2d-08d75c7e5a3b",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "purbeck",
+      "name": "Purbeck District Council",
+      "dataGovId": "aebd2ca0-549d-4e38-bc35-cb9a1759f555",
+      "good": 0,
+      "html": 1,
+      "err": 0,
+      "total": 1
+    },
+    {
+      "slug": "south-staffordshire",
+      "name": "South Staffordshire Council",
+      "dataGovId": "4b05d922-41bd-4f4e-87d7-ef7451f7a940",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "mole-valley",
+      "name": "Mole Valley District Council",
+      "dataGovId": "326818d5-48bc-4f12-b618-3ec65319fc26",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "buckinghamshire",
+      "name": "Buckinghamshire County Council",
+      "dataGovId": "6dfb5f32-2cb6-499e-b9e7-f1eb023e0ca1",
+      "good": 0,
+      "html": 6,
+      "err": 0,
+      "total": 24
+    },
+    {
+      "slug": "hull-city",
+      "name": "Hull City Council",
+      "dataGovId": "b11d90c3-8352-4503-8256-50356dbfba27",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "torridge",
+      "name": "Torridge District Council",
+      "dataGovId": "77b3c1b3-8316-4923-b78a-1cd1f0eeae2d",
+      "good": 0,
+      "html": 0,
+      "err": 6,
+      "total": 7
+    },
+    {
+      "slug": "cherwell",
+      "name": "Cherwell District Council",
+      "dataGovId": "14161306-9bae-4d76-9e13-57f69e770b22",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "gedling-borough",
+      "name": "Gedling Borough Council",
+      "dataGovId": "14f48fb8-5852-4532-9574-a7e4fffc9740",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "london-lambeth",
+      "name": "London Borough of Lambeth",
+      "dataGovId": "eabc475e-3485-4e42-b318-931abed46b6b",
+      "good": 0,
+      "html": 1,
+      "err": 0,
+      "total": 1
+    },
+    {
+      "slug": "for-healthcare-regulatory-excellence",
+      "name": "Council for Healthcare Regulatory Excellence",
+      "dataGovId": "3d569fbc-9b74-4bed-acd0-e76d326759ce",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "biotechnology-and-biological-sciences-research",
+      "name": "Biotechnology and Biological Sciences Research Council",
+      "dataGovId": "f5216b04-809d-4f91-8066-dc6740f2ff6a",
+      "good": 0,
+      "html": 6,
+      "err": 0,
+      "total": 80
+    },
+    {
+      "slug": "cambridgeshire",
+      "name": "Cambridgeshire County Council",
+      "dataGovId": "4f404fb8-8741-47d7-8b38-a11d2d329afd",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "higher-education-funding-for-england",
+      "name": "Higher Education Funding Council for England",
+      "dataGovId": "7d615196-4941-42f4-b045-6a5d2e3dd7e8",
+      "good": 0,
+      "html": 6,
+      "err": 0,
+      "total": 74
+    },
+    {
+      "slug": "blackburn-with-darwen",
+      "name": "Blackburn with Darwen Council",
+      "dataGovId": "82d65f66-d3ad-4981-a55a-4dbb521fcc33",
+      "good": 0,
+      "html": 2,
+      "err": 0,
+      "total": 2
+    },
+    {
+      "slug": "wirral",
+      "name": "Wirral Metropolitan Borough Council",
+      "dataGovId": "143be6c8-b21e-47cd-9171-cafa6f117051",
+      "good": 0,
+      "html": 0,
+      "err": 6,
+      "total": 6
+    },
+    {
+      "slug": "westminster-city",
+      "name": "Westminster City Council",
+      "dataGovId": "7922f997-6517-4fdd-bd8b-cd3c49f98176",
+      "good": 0,
+      "html": 0,
+      "err": 2,
+      "total": 2
+    },
+    {
+      "slug": "london-barnet",
+      "name": "London Borough of Barnet",
+      "dataGovId": "feb8f754-6069-434a-acc6-1dd49c9a7f7e",
+      "good": 0,
+      "html": 2,
+      "err": 0,
+      "total": 2
+    },
+    {
+      "slug": "luton-borough",
+      "name": "Luton Borough Council",
+      "dataGovId": "eed3436e-c4a1-453e-8f6c-baa9b3fc9990",
+      "good": 0,
+      "html": 1,
+      "err": 0,
+      "total": 1
+    },
+    {
+      "slug": "london",
+      "name": "City of London",
+      "dataGovId": "8186520e-6c90-4859-9542-e16b53808861",
+      "good": 0,
+      "html": 0,
+      "err": 1,
+      "total": 1
+    },
+    {
+      "slug": "london-harrow",
+      "name": "London Borough of Harrow",
+      "dataGovId": "391721ae-eb4d-481e-ad58-d6aded72aca4",
+      "good": 0,
+      "html": 0,
+      "err": 1,
+      "total": 1
+    },
+    {
+      "slug": "east-staffordshire-borough",
+      "name": "East Staffordshire Borough Council",
+      "dataGovId": "7a3c46ca-6842-420a-ba3f-c396a1398bef",
+      "good": 0,
+      "html": 1,
+      "err": 0,
+      "total": 1
+    },
+    {
+      "slug": "west-dorset",
+      "name": "West Dorset District Council",
+      "dataGovId": "8e99769b-9eed-4248-a04f-e145a8b54373",
+      "good": 0,
+      "html": 1,
+      "err": 0,
+      "total": 1
+    },
+    {
+      "slug": "sandwell",
+      "name": "Sandwell Metropolitan Borough Council",
+      "dataGovId": "5b964eaf-e2d3-4e28-bac3-7ba44d92f67d",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "london-islington",
+      "name": "London Borough of Islington",
+      "dataGovId": "d50b4ff0-80da-4206-8a65-552f8bb4c853",
+      "good": 0,
+      "html": 6,
+      "err": 0,
+      "total": 7
+    },
+    {
+      "slug": "south-ribble-borough",
+      "name": "South Ribble Borough Council",
+      "dataGovId": "e7221656-1ed0-4302-af1c-8301da71b066",
+      "good": 0,
+      "html": 6,
+      "err": 0,
+      "total": 7
+    },
+    {
+      "slug": "forest-heath",
+      "name": "Forest Heath District Council",
+      "dataGovId": "6798f2f5-e0fc-4184-b833-6cb84dd3bc54",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "north-warwickshire-borough",
+      "name": "North Warwickshire Borough Council",
+      "dataGovId": "134fb142-6998-4fa5-b8ff-addc23cab022",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "rotherham-metropolitan",
+      "name": "Rotherham Metropolitan District Council",
+      "dataGovId": "a6b62903-8634-4585-a4f4-5e1f3837126d",
+      "good": 0,
+      "html": 1,
+      "err": 0,
+      "total": 1
+    },
+    {
+      "slug": "bristol-city",
+      "name": "Bristol City Council",
+      "dataGovId": "2dd91623-cbbc-4837-ba9f-1cfd1f38bb07",
+      "good": 2,
+      "html": 0,
+      "err": 0,
+      "total": 10
+    },
+    {
+      "slug": "east-dorset",
+      "name": "East Dorset District Council",
+      "dataGovId": "ce4938ea-02c0-41e3-b290-b5e436cdb245",
+      "good": 0,
+      "html": 6,
+      "err": 0,
+      "total": 12
+    },
+    {
+      "slug": "cheltenham-borough",
+      "name": "Cheltenham Borough Council",
+      "dataGovId": "206dbdb8-b950-4eee-ad2b-bc6eec18cd4d",
+      "good": 0,
+      "html": 0,
+      "err": 6,
+      "total": 12
+    },
+    {
+      "slug": "solihull",
+      "name": "Solihull Metropolitan Borough Council",
+      "dataGovId": "9f9a9555-56ad-412c-a812-aaf7328dd17c",
+      "good": 0,
+      "html": 1,
+      "err": 0,
+      "total": 1
+    },
+    {
+      "slug": "london-bromley",
+      "name": "London Borough of Bromley",
+      "dataGovId": "b350c975-0b16-4309-b8e9-03d81cf2d5cd",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "london-sutton",
+      "name": "London Borough of Sutton",
+      "dataGovId": "247e1f18-2e9a-4b37-a9c9-cba58ed05ca8",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "london-merton",
+      "name": "London Borough of Merton",
+      "dataGovId": "a47035bf-e1f0-4969-9df6-2fd10db4eed0",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "stockton-on-tees-borough",
+      "name": "Stockton-on-Tees Borough Council",
+      "dataGovId": "85b7ad53-a62b-4a7c-bafb-f1f4b2b9d423",
+      "good": 0,
+      "html": 0,
+      "err": 1,
+      "total": 1
+    },
+    {
+      "slug": "st-austell-town",
+      "name": "St Austell Town Council",
+      "dataGovId": "8cd1ae1d-f18e-4e17-8b77-950721bc5e7c",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "london-redbridge",
+      "name": "London Borough of Redbridge",
+      "dataGovId": "a2130843-8de0-4494-ae22-47262c3d6d06",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "london-hillingdon",
+      "name": "London Borough of Hillingdon",
+      "dataGovId": "f121b51c-0c60-40d6-86e6-c3080fa1878e",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "brighton-and-hove-city",
+      "name": "Brighton and Hove City Council",
+      "dataGovId": "d1a36dc8-b2e2-45ef-8551-2f820006a0cc",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "basingstoke-and-deane-borough",
+      "name": "Basingstoke and Deane Borough Council",
+      "dataGovId": "a7ebaf48-f180-41c8-b4d4-fcd1eb4d69cb",
+      "good": 0,
+      "html": 0,
+      "err": 6,
+      "total": 7
+    },
+    {
+      "slug": "cheshire-west-and-chester",
+      "name": "Cheshire West and Chester Council",
+      "dataGovId": "6b41a189-31ed-4fac-ae2b-06bc22792dce",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "derby-city",
+      "name": "Derby City Council",
+      "dataGovId": "bb986aec-9ddb-45cf-a861-3619db0dd098",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "east-lindsey",
+      "name": "East Lindsey District Council",
+      "dataGovId": "74afd70d-be3c-4120-be6c-16273b92170b",
+      "good": 0,
+      "html": 6,
+      "err": 0,
+      "total": 15
+    },
+    {
+      "slug": "south-holland",
+      "name": "South Holland District Council",
+      "dataGovId": "8b6f97d3-b0fd-42b0-9bc1-4af0ed053aaf",
+      "good": 0,
+      "html": 0,
+      "err": 6,
+      "total": 15
+    },
+    {
+      "slug": "harrogate-borough",
+      "name": "Harrogate Borough Council",
+      "dataGovId": "2632e9ba-c6cb-439f-abb9-eb5d66898dd6",
+      "good": 0,
+      "html": 1,
+      "err": 0,
+      "total": 1
+    },
+    {
+      "slug": "borough-of-king-s-lynn-and-west-norfolk",
+      "name": "Borough Council of King's Lynn and West Norfolk",
+      "dataGovId": "00b94514-4ff4-46ac-9564-1d9e3d90525e",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "st-albans-city-and",
+      "name": "St Albans City and District Council",
+      "dataGovId": "a8115902-f58c-4629-9006-ba25361c6dee",
+      "good": 0,
+      "html": 1,
+      "err": 0,
+      "total": 1
+    },
+    {
+      "slug": "southampton-city-primary-care-tust",
+      "name": "Southampton City Primary Care Tust",
+      "dataGovId": "702b57ec-d8ca-4289-ad15-84486f91f68a",
+      "good": 0,
+      "html": 5,
+      "err": 1,
+      "total": 34
+    },
+    {
+      "slug": "royal-kingston-upon-thames",
+      "name": "Royal Borough of Kingston upon Thames",
+      "dataGovId": "db140e39-afe3-4944-9355-c422b8401ad6",
+      "good": 0,
+      "html": 5,
+      "err": 0,
+      "total": 5
+    },
+    {
+      "slug": "tunbridge-wells-borough",
+      "name": "Tunbridge Wells Borough Council",
+      "dataGovId": "002445de-71a7-4517-b1dd-9893bacedea7",
+      "good": 0,
+      "html": 0,
+      "err": 1,
+      "total": 1
+    },
+    {
+      "slug": "children-s-workforce-development",
+      "name": "Children's Workforce Development Council",
+      "dataGovId": "824f0c4b-3ed7-4dfe-98e2-94875e8ac386",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "general-social-care",
+      "name": "General Social Care Council",
+      "dataGovId": "e6f5ebdf-102a-4ee7-938b-0f2f58ca2098",
+      "good": 0,
+      "html": 6,
+      "err": 0,
+      "total": 19
+    },
+    {
+      "slug": "lincolnshire",
+      "name": "Lincolnshire County Council",
+      "dataGovId": "01efa2a1-e63f-4387-aa4a-6f0f75f7bae0",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "natural-environment-research",
+      "name": "Natural Environment Research Council",
+      "dataGovId": "c3678eca-57c0-47fe-8e11-34a7adab31a7",
+      "good": 0,
+      "html": 6,
+      "err": 0,
+      "total": 9
+    },
+    {
+      "slug": "norwich-city",
+      "name": "Norwich City Council",
+      "dataGovId": "01d9974a-15f3-4d0d-a6d0-ecb08b4b4234",
+      "good": 0,
+      "html": 0,
+      "err": 6,
+      "total": 9
+    },
+    {
+      "slug": "tonbridge-and-malling-borough",
+      "name": "Tonbridge and Malling Borough Council",
+      "dataGovId": "7719a43a-ba5f-4a6d-970b-43ad4ccd1625",
+      "good": 0,
+      "html": 0,
+      "err": 6,
+      "total": 57
+    },
+    {
+      "slug": "pendle-borough",
+      "name": "Pendle Borough Council",
+      "dataGovId": "8102e12f-7988-4ab3-9c06-adb8c3b24e1f",
+      "good": 0,
+      "html": 0,
+      "err": 6,
+      "total": 71
+    },
+    {
+      "slug": "ryedale",
+      "name": "Ryedale District Council",
+      "dataGovId": "bc702e5b-ded1-4099-8a04-19056dd014b9",
+      "good": 0,
+      "html": 0,
+      "err": 6,
+      "total": 31
+    },
+    {
+      "slug": "east-cambridgeshire",
+      "name": "East Cambridgeshire District Council",
+      "dataGovId": "5e2b9d40-e8b1-48ea-8fc3-acb11b2a62b7",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "bodmin-town",
+      "name": "Bodmin Town Council",
+      "dataGovId": "df94093f-227d-4c8a-9f0c-a513a122c20a",
+      "good": 0,
+      "html": 0,
+      "err": 1,
+      "total": 1
+    },
+    {
+      "slug": "medical-research",
+      "name": "Medical Research Council",
+      "dataGovId": "7200634e-1994-4d37-bcc4-72d0afa1cdc8",
+      "good": 0,
+      "html": 6,
+      "err": 0,
+      "total": 78
+    },
+    {
+      "slug": "south-lakeland",
+      "name": "South Lakeland District Council",
+      "dataGovId": "2e54a908-7530-406f-9b51-7224f8c3b5a6",
+      "good": 2,
+      "html": 0,
+      "err": 0,
+      "total": 70
+    },
+    {
+      "slug": "mid-sussex",
+      "name": "Mid Sussex District Council",
+      "dataGovId": "e3be65c7-6c14-4f89-ae06-fe08439ff984",
+      "good": 0,
+      "html": 1,
+      "err": 0,
+      "total": 1
+    },
+    {
+      "slug": "bedford-borough",
+      "name": "Bedford Borough Council",
+      "dataGovId": "1cbb6058-e1b5-4a72-8e1c-cb68f4901de6",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "wiltshire",
+      "name": "Wiltshire Council",
+      "dataGovId": "e154cc09-c406-489b-add1-01d6f7f67b4e",
+      "good": 0,
+      "html": 0,
+      "err": 6,
+      "total": 12
+    },
+    {
+      "slug": "derbyshire-dales",
+      "name": "Derbyshire Dales District Council",
+      "dataGovId": "50b9b74e-513e-4101-81ad-fe46005df428",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "arts-england",
+      "name": "Arts Council England",
+      "dataGovId": "ac06b95c-460a-40fe-ae96-379490fe6dfa",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "arts-and-humanities-research",
+      "name": "Arts and Humanities Research Council",
+      "dataGovId": "2daed703-dd2b-4ce9-9326-378de5678a2b",
+      "good": 0,
+      "html": 6,
+      "err": 0,
+      "total": 83
+    },
+    {
+      "slug": "bassetlaw",
+      "name": "Bassetlaw District Council",
+      "dataGovId": "2b611e7b-1970-4e30-8dd7-231c1dd67472",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "sevenoaks",
+      "name": "Sevenoaks District Council",
+      "dataGovId": "5eaabeed-a27d-438e-abcf-a36d6353acae",
+      "good": 0,
+      "html": 0,
+      "err": 1,
+      "total": 1
+    },
+    {
+      "slug": "blaby",
+      "name": "Blaby District Council",
+      "dataGovId": "742deb95-3faa-499a-b4b7-1783660e060c",
+      "good": 2,
+      "html": 0,
+      "err": 0,
+      "total": 71
+    },
+    {
+      "slug": "bradford-metropolitan",
+      "name": "City of Bradford Metropolitan District Council",
+      "dataGovId": "83ad1a95-6500-4dba-b66e-021c4cf4359e",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "engineering-and-physical-sciences-research",
+      "name": "Engineering and Physical Sciences Research Council",
+      "dataGovId": "5dfd52d1-4fe2-4b75-b167-7e3bac9b98e1",
+      "good": 0,
+      "html": 6,
+      "err": 0,
+      "total": 116
+    },
+    {
+      "slug": "colchester-borough",
+      "name": "Colchester Borough Council",
+      "dataGovId": "e8498c01-2f7c-47c6-a8c8-2058b55daf9d",
+      "good": 0,
+      "html": 6,
+      "err": 0,
+      "total": 17
+    },
+    {
+      "slug": "north-lincolnshire",
+      "name": "North Lincolnshire Council",
+      "dataGovId": "cf725d50-6535-4f8b-bc98-5ab01aa866a7",
+      "good": 0,
+      "html": 0,
+      "err": 1,
+      "total": 1
+    },
+    {
+      "slug": "guildford-borough",
+      "name": "Guildford Borough Council",
+      "dataGovId": "9a611afe-c331-421b-9a1f-1c6bb51b1400",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    },
+    {
+      "slug": "economic-and-social-research",
+      "name": "Economic and Social Research Council",
+      "dataGovId": "75cc2d36-54da-452a-9ae8-b45682b956c0",
+      "good": 0,
+      "html": 6,
+      "err": 0,
+      "total": 11
+    },
+    {
+      "slug": "royal-windsor-and-maidenhead",
+      "name": "Royal Borough of Windsor and Maidenhead",
+      "dataGovId": "e5111741-c441-482d-8957-88b229ef19f5",
+      "good": 0,
+      "html": 0,
+      "err": 0,
+      "total": 0
+    }
+  ]
+}

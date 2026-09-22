@@ -1,10 +1,17 @@
+import { fiscalWindow } from "./fiscal";
+import { classifyService, CLASSIFIER_VERSION } from "./classifier";
 import { getDb } from "@/db";
 import { councils, financialYears, budgets, outturns, transactions, suppliers, sourceDocuments } from "@/db/schema";
-import { eq, and, desc, asc, sql, gte, SQL } from "drizzle-orm";
+import { eq, and, desc, asc, sql, gte, SQL, lt } from "drizzle-orm";
+
+
+function validTransactionPeriod(): SQL {
+  return sql`${transactions.month} GLOB '[0-9][0-9][0-9][0-9]-[0-1][0-9]' AND substr(${transactions.month},6,2) BETWEEN '01' AND '12' AND ${transactions.month} <= ${fiscalWindow().through.slice(0,7)} AND (${transactions.date} IS NULL OR ${transactions.date} = '' OR (${transactions.date} <= ${fiscalWindow().through} AND strftime('%Y-%m-%d',julianday(${transactions.date})) = ${transactions.date}))`;
+}
 
 export async function getCouncilBySlug(slug: string) {
   const db = await getDb();
-  return db.select().from(councils).where(eq(councils.slug, slug)).get();
+  return db.select().from(councils).where(and(eq(councils.slug, slug), sql`EXISTS (SELECT 1 FROM english_authorities WHERE council_id=${councils.id})`)).get();
 }
 
 export async function getFinancialYears(councilId: number) {
@@ -12,7 +19,7 @@ export async function getFinancialYears(councilId: number) {
   return db
     .select()
     .from(financialYears)
-    .where(eq(financialYears.councilId, councilId))
+    .where(and(eq(financialYears.councilId, councilId), gte(financialYears.startDate, fiscalWindow().start), lt(financialYears.startDate, fiscalWindow().endExclusive), sql`EXISTS (SELECT 1 FROM transactions INDEXED BY txn_fy_idx WHERE financial_year_id=${financialYears.id} AND council_id=${councilId} AND ${validTransactionPeriod()})`))
     .orderBy(desc(financialYears.label))
     .all();
 }
@@ -22,7 +29,7 @@ export async function getLatestFinancialYear(councilId: number) {
   return db
     .select()
     .from(financialYears)
-    .where(eq(financialYears.councilId, councilId))
+    .where(and(eq(financialYears.councilId, councilId), gte(financialYears.startDate, fiscalWindow().start), lt(financialYears.startDate, fiscalWindow().endExclusive), sql`EXISTS (SELECT 1 FROM transactions INDEXED BY txn_fy_idx WHERE financial_year_id=${financialYears.id} AND council_id=${councilId} AND ${validTransactionPeriod()})`))
     .orderBy(desc(financialYears.label))
     .limit(1)
     .get();
@@ -30,7 +37,7 @@ export async function getLatestFinancialYear(councilId: number) {
 
 export async function getOverview(councilId: number, fyId?: number) {
   const db = await getDb();
-  const spendConditions: SQL[] = [eq(transactions.councilId, councilId)];
+  const spendConditions: SQL[] = [eq(transactions.councilId, councilId), validTransactionPeriod(), gte(transactions.month, fiscalWindow().start.slice(0, 7)), lt(transactions.month, fiscalWindow().endExclusive.slice(0, 7))];
   if (fyId) spendConditions.push(eq(transactions.financialYearId, fyId));
 
   const [totalBudget, totalOutturn, totalSpend] = await Promise.all([
@@ -40,7 +47,7 @@ export async function getOverview(councilId: number, fyId?: number) {
         totalGross: sql<number>`COALESCE(SUM(${budgets.grossBudget}), 0)`,
       })
       .from(budgets)
-      .where(fyId ? eq(budgets.financialYearId, fyId) : sql`1=1`)
+      .where(and(sql`${budgets.financialYearId} IN (SELECT id FROM financial_years WHERE council_id = ${councilId} AND start_date >= ${fiscalWindow().start} AND start_date < ${fiscalWindow().endExclusive})`, fyId ? eq(budgets.financialYearId, fyId) : undefined))
       .get(),
     db
       .select({
@@ -48,7 +55,7 @@ export async function getOverview(councilId: number, fyId?: number) {
         totalVariance: sql<number>`COALESCE(SUM(${outturns.variance}), 0)`,
       })
       .from(outturns)
-      .where(fyId ? eq(outturns.financialYearId, fyId) : sql`1=1`)
+      .where(and(sql`${outturns.financialYearId} IN (SELECT id FROM financial_years WHERE council_id = ${councilId} AND start_date >= ${fiscalWindow().start} AND start_date < ${fiscalWindow().endExclusive})`, fyId ? eq(outturns.financialYearId, fyId) : undefined))
       .get(),
     db
       .select({
@@ -61,31 +68,9 @@ export async function getOverview(councilId: number, fyId?: number) {
       .get(),
   ]);
 
-  let yoyChange: number | null = null;
-  if (fyId) {
-    const fy = await db.select().from(financialYears).where(eq(financialYears.id, fyId)).get();
-    if (fy) {
-      const parts = fy.label.split("-");
-      const prevStartYear = parseInt(parts[0]) - 1;
-      const prevLabel = `${prevStartYear}-${parts[0].slice(-2)}`;
-      const prevFy = await db
-        .select()
-        .from(financialYears)
-        .where(and(eq(financialYears.councilId, councilId), eq(financialYears.label, prevLabel)))
-        .get();
-
-      if (prevFy) {
-        const prevSpend = await db
-          .select({ total: sql<number>`COALESCE(SUM(${transactions.amount}), 0)` })
-          .from(transactions)
-          .where(and(eq(transactions.councilId, councilId), eq(transactions.financialYearId, prevFy.id)))
-          .get();
-        if (prevSpend && prevSpend.total > 0) {
-          yoyChange = (((totalSpend?.total ?? 0) - prevSpend.total) / prevSpend.total) * 100;
-        }
-      }
-    }
-  }
+  // Month presence alone cannot certify a complete publication. Keep annual
+  // comparisons unavailable until source-level completeness has been reviewed.
+  const yoyChange: number | null = null;
 
   return {
     budget: {
@@ -123,22 +108,23 @@ export interface TransactionFilters {
 
 export async function getTransactions(councilId: number, filters: TransactionFilters) {
   const db = await getDb();
-  const page = filters.page || 1;
-  const pageSize = filters.pageSize || 50;
+  const page = Math.max(1, Math.min(100000, Math.trunc(filters.page || 1)));
+  const pageSize = Math.max(1, Math.min(500, Math.trunc(filters.pageSize || 50)));
   const offset = (page - 1) * pageSize;
 
-  const conditions: SQL[] = [eq(transactions.councilId, councilId)];
+  const conditions: SQL[] = [eq(transactions.councilId, councilId), validTransactionPeriod(), gte(transactions.month, fiscalWindow().start.slice(0, 7)), lt(transactions.month, fiscalWindow().endExclusive.slice(0, 7))];
 
   if (filters.fyId) conditions.push(eq(transactions.financialYearId, filters.fyId));
   if (filters.directorate) conditions.push(eq(transactions.directorate, filters.directorate));
   if (filters.category) conditions.push(eq(transactions.category, filters.category));
-  if (filters.minAmount) conditions.push(gte(transactions.amount, filters.minAmount));
-  if (filters.maxAmount) conditions.push(sql`${transactions.amount} <= ${filters.maxAmount}`);
+  if (filters.minAmount !== undefined) conditions.push(gte(transactions.amount, filters.minAmount));
+  if (filters.maxAmount !== undefined) conditions.push(sql`${transactions.amount} <= ${filters.maxAmount}`);
   if (filters.startDate) conditions.push(gte(transactions.date, filters.startDate));
   if (filters.endDate) conditions.push(sql`${transactions.date} <= ${filters.endDate}`);
+  if (filters.supplier) conditions.push(sql`${transactions.supplierId} IN (SELECT id FROM suppliers WHERE council_id = ${councilId} AND name LIKE ${"%" + filters.supplier + "%"})`);
   if (filters.search) {
     conditions.push(
-      sql`(${transactions.description} LIKE ${"%" + filters.search + "%"} OR ${transactions.service} LIKE ${"%" + filters.search + "%"})`
+      sql`(${transactions.description} LIKE ${"%" + filters.search + "%"} OR ${transactions.service} LIKE ${"%" + filters.search + "%"} OR ${transactions.supplierId} IN (SELECT id FROM suppliers WHERE council_id = ${councilId} AND name LIKE ${"%" + filters.search + "%"}))`
     );
   }
 
@@ -148,7 +134,7 @@ export async function getTransactions(councilId: number, filters: TransactionFil
     switch (filters.sortBy) {
       case "amount": return transactions.amount;
       case "date": return transactions.date;
-      case "supplier": return transactions.supplierId;
+      case "supplier": return suppliers.name;
       case "directorate": return transactions.directorate;
       default: return transactions.amount;
     }
@@ -167,12 +153,17 @@ export async function getTransactions(councilId: number, filters: TransactionFil
       category: transactions.category,
       description: transactions.description,
       sourceFile: sourceDocuments.filename,
+      sourceUrl: sourceDocuments.url,
+      serviceClassification: transactions.serviceClassification,
+      classificationMethod: transactions.classificationMethod,
+      classificationEvidence: transactions.classificationEvidence,
+      classifierVersion: transactions.classifierVersion,
     })
     .from(transactions)
     .leftJoin(suppliers, eq(transactions.supplierId, suppliers.id))
     .leftJoin(sourceDocuments, eq(transactions.sourceDocumentId, sourceDocuments.id))
     .where(where)
-    .orderBy(order)
+    .orderBy(order, asc(transactions.id))
     .limit(pageSize)
     .offset(offset)
     .all();
@@ -184,7 +175,10 @@ export async function getTransactions(councilId: number, filters: TransactionFil
     .get();
 
   return {
-    rows,
+    rows: rows.map(row => {
+      const classification = classifyService(row);
+      return { ...row, serviceClassification: classification.label, classificationMethod: classification.method, classificationEvidence: classification.evidence, classifierVersion: classification.version };
+    }),
     total: countResult?.count ?? 0,
     page,
     pageSize,
@@ -194,7 +188,7 @@ export async function getTransactions(councilId: number, filters: TransactionFil
 
 export async function getSpendByCategory(councilId: number, fyId?: number) {
   const db = await getDb();
-  const conditions: SQL[] = [eq(transactions.councilId, councilId)];
+  const conditions: SQL[] = [eq(transactions.councilId, councilId), validTransactionPeriod(), gte(transactions.month, fiscalWindow().start.slice(0, 7)), lt(transactions.month, fiscalWindow().endExclusive.slice(0, 7))];
   if (fyId) conditions.push(eq(transactions.financialYearId, fyId));
 
   const raw = await db
@@ -217,50 +211,21 @@ export async function getSpendByCategory(councilId: number, fyId?: number) {
 
 export async function getSpendByDirectorate(councilId: number, fyId?: number) {
   const db = await getDb();
-  const conditions: SQL[] = [eq(transactions.councilId, councilId)];
+  const conditions: SQL[] = [eq(transactions.councilId, councilId), validTransactionPeriod(), gte(transactions.month, fiscalWindow().start.slice(0, 7)), lt(transactions.month, fiscalWindow().endExclusive.slice(0, 7))];
   if (fyId) conditions.push(eq(transactions.financialYearId, fyId));
 
-  const serviceCol = transactions.service;
-  const dirCol = transactions.directorate;
-
-  const dirRaw = await db
-    .select({
-      directorate: dirCol,
-      total: sql<number>`SUM(${transactions.amount})`,
-      count: sql<number>`COUNT(*)`,
-    })
-    .from(transactions)
-    .where(and(...conditions))
-    .groupBy(dirCol)
-    .orderBy(desc(sql`SUM(${transactions.amount})`))
-    .limit(15)
-    .all();
-
-  const dirResult = dirRaw.filter((r) => r.directorate && r.directorate.trim() !== "");
-  if (dirResult.length > 0) return dirResult;
-
-  const raw = await db
-    .select({
-      directorate: serviceCol,
-      total: sql<number>`SUM(${transactions.amount})`,
-      count: sql<number>`COUNT(*)`,
-    })
-    .from(transactions)
-    .where(and(...conditions))
-    .groupBy(serviceCol)
-    .orderBy(desc(sql`SUM(${transactions.amount})`))
-    .limit(15)
-    .all();
-
-  return raw.map((r) => ({
-    ...r,
-    directorate: r.directorate && r.directorate.trim() !== "" ? r.directorate : "No Service Area",
-  }));
+  const label = sql<string>`COALESCE(NULLIF(TRIM(${transactions.directorate}), ''), NULLIF(TRIM(${transactions.service}), ''), 'No Service Area')`;
+  const raw = await db.select({ directorate: label, total: sql<number>`SUM(${transactions.amount})`, count: sql<number>`COUNT(*)` })
+    .from(transactions).where(and(...conditions)).groupBy(label)
+    .orderBy(desc(sql`SUM(${transactions.amount})`)).all();
+  // Keep all payments represented, including missing service labels and the tail.
+  if (raw.length <= 15) return raw;
+  return [...raw.slice(0, 14), { directorate: 'Other service areas', total: raw.slice(14).reduce((n,r)=>n+r.total,0), count: raw.slice(14).reduce((n,r)=>n+r.count,0) }];
 }
 
 export async function getTopSuppliers(councilId: number, fyId?: number, limit = 20) {
   const db = await getDb();
-  const conditions: SQL[] = [eq(transactions.councilId, councilId)];
+  const conditions: SQL[] = [eq(transactions.councilId, councilId), validTransactionPeriod(), gte(transactions.month, fiscalWindow().start.slice(0, 7)), lt(transactions.month, fiscalWindow().endExclusive.slice(0, 7))];
   if (fyId) conditions.push(eq(transactions.financialYearId, fyId));
   const where = and(...conditions)!;
 
@@ -290,7 +255,7 @@ export async function getTopSuppliers(councilId: number, fyId?: number, limit = 
 
 export async function getMonthlyTrend(councilId: number, fyId?: number) {
   const db = await getDb();
-  const conditions: SQL[] = [eq(transactions.councilId, councilId)];
+  const conditions: SQL[] = [eq(transactions.councilId, councilId), validTransactionPeriod(), gte(transactions.month, fiscalWindow().start.slice(0, 7)), lt(transactions.month, fiscalWindow().endExclusive.slice(0, 7))];
   if (fyId) conditions.push(eq(transactions.financialYearId, fyId));
 
   const raw = await db
@@ -305,7 +270,20 @@ export async function getMonthlyTrend(councilId: number, fyId?: number) {
     .orderBy(asc(transactions.month))
     .all();
 
-  return raw.filter((r) => r.month && r.month.trim() !== "");
+  const known = new Map(raw.filter(r => r.month).map(r => [r.month, r]));
+  let start = fiscalWindow().start.slice(0,7);
+  let end = fiscalWindow().through.slice(0,7);
+  if (fyId) {
+    const fy = await db.select().from(financialYears).where(and(eq(financialYears.id,fyId),eq(financialYears.councilId,councilId))).get();
+    if (fy) { start = fy.startDate.slice(0,7); end = fy.endDate.slice(0,7) < end ? fy.endDate.slice(0,7) : end; }
+  }
+  const months: { month: string; total: number | null; count: number }[] = [];
+  for (let month = start; month <= end;) {
+    const row = known.get(month);
+    months.push({ month, total: row?.total ?? null, count: row?.count ?? 0 });
+    const d = new Date(`${month}-01T00:00:00Z`); d.setUTCMonth(d.getUTCMonth()+1); month = d.toISOString().slice(0,7);
+  }
+  return months;
 }
 
 const REDACTED_NAMES = new Set([
@@ -334,7 +312,7 @@ export async function getFlags(councilId: number, fyId?: number) {
   const db = await getDb();
   const flags: { type: string; severity: "high" | "medium" | "low"; title: string; detail: string }[] = [];
 
-  const conditions: SQL[] = [eq(transactions.councilId, councilId)];
+  const conditions: SQL[] = [eq(transactions.councilId, councilId), validTransactionPeriod(), gte(transactions.month, fiscalWindow().start.slice(0, 7)), lt(transactions.month, fiscalWindow().endExclusive.slice(0, 7))];
   if (fyId) conditions.push(eq(transactions.financialYearId, fyId));
   const where = and(...conditions)!;
 
@@ -351,7 +329,7 @@ export async function getFlags(councilId: number, fyId?: number) {
       .leftJoin(suppliers, eq(transactions.supplierId, suppliers.id))
       .where(and(
         where,
-        sql`(${suppliers.name} IN ('REDACTED DATA','REDACTED PERSONAL DATA','Redacted','REDACTED','Redacted Personal Data','Redacted Commercial Confidentiality') OR ${suppliers.name} IS NULL)`
+        sql`(UPPER(TRIM(${suppliers.name})) LIKE 'REDACTED%' OR ${suppliers.name} IS NULL)`
       )).get(),
 
     db.select({
@@ -382,17 +360,17 @@ export async function getFlags(councilId: number, fyId?: number) {
   const grandTotal = totals?.total ?? 1;
 
   if (redactedSpend && redactedSpend.total > 0) {
-    const pct = (redactedSpend.total / grandTotal) * 100;
+    const pct = grandTotal > 0 ? (redactedSpend.total / grandTotal) * 100 : 0;
     flags.push({
       type: "redacted_spend",
       severity: pct > 30 ? "high" : pct > 15 ? "medium" : "low",
       title: `${fmtAmount(redactedSpend.total)} to redacted suppliers`,
-      detail: `${redactedSpend.count.toLocaleString()} payments (${pct.toFixed(0)}% of total spend) to undisclosed vendors`,
+      detail: `${redactedSpend.count.toLocaleString()} payments (${pct.toFixed(0)}% of published net payments). Redaction can protect personal or commercially sensitive information.`,
     });
   }
 
   if (blankCats && blankCats.count > 0) {
-    const pct = (blankCats.total / grandTotal) * 100;
+    const pct = grandTotal > 0 ? (blankCats.total / grandTotal) * 100 : 0;
     flags.push({
       type: "missing_data",
       severity: pct > 30 ? "high" : pct > 15 ? "medium" : "low",
@@ -433,71 +411,17 @@ export async function getFlags(councilId: number, fyId?: number) {
       type: "supplier_concentration",
       severity: "high",
       title: "High supplier concentration",
-      detail: `Top 5 suppliers account for ${top5Total.toFixed(1)}% of total spend`,
+      detail: `Top 5 suppliers account for ${top5Total.toFixed(1)}% of published net payments`,
     });
   } else if (top5Total > 25) {
     flags.push({
       type: "supplier_concentration",
       severity: "medium",
       title: "Moderate supplier concentration",
-      detail: `Top 5 suppliers account for ${top5Total.toFixed(1)}% of total spend`,
+      detail: `Top 5 suppliers account for ${top5Total.toFixed(1)}% of published net payments`,
     });
   }
 
-  if (fyId) {
-    const fy = await db
-      .select()
-      .from(financialYears)
-      .where(eq(financialYears.id, fyId))
-      .get();
-
-    if (fy) {
-      const parts = fy.label.split("-");
-      const prevStartYear = parseInt(parts[0]) - 1;
-      const prevLabel = `${prevStartYear}-${parts[0].slice(-2)}`;
-      const prevFy = await db
-        .select()
-        .from(financialYears)
-        .where(
-          and(
-            eq(financialYears.councilId, councilId),
-            eq(financialYears.label, prevLabel)
-          )
-        )
-        .get();
-
-      if (prevFy) {
-        const [currentCats, prevCats] = await Promise.all([
-          getSpendByCategory(councilId, fyId),
-          getSpendByCategory(councilId, prevFy.id),
-        ]);
-        const prevMap = new Map(prevCats.map((c) => [c.category, c.total]));
-
-        const risingCats: { category: string; change: number; total: number; absolute: number }[] = [];
-        for (const cat of currentCats) {
-          const prev = prevMap.get(cat.category);
-          if (prev && prev > 200_000 && cat.total > 200_000) {
-            const change = ((cat.total - prev) / prev) * 100;
-            const absolute = cat.total - prev;
-            if (change > 30 && absolute > 100_000) {
-              risingCats.push({ category: cat.category || "No Category", change, total: cat.total, absolute });
-            }
-          }
-        }
-        risingCats
-          .sort((a, b) => b.absolute - a.absolute)
-          .slice(0, 3)
-          .forEach((rc) => {
-            flags.push({
-              type: "rising_category",
-              severity: rc.change > 100 ? "high" : "medium",
-              title: `Rising: ${rc.category}`,
-              detail: `Up ${rc.change.toFixed(0)}% (${fmtAmount(rc.absolute)}) year-on-year`,
-            });
-          });
-      }
-    }
-  }
 
   return flags;
 }
@@ -524,4 +448,12 @@ export async function getCategoriesList(councilId: number) {
     .orderBy(asc(transactions.category))
     .all();
   return raw.map((r) => r.category).filter(Boolean) as string[];
+}
+
+export async function getCoverage(councilId: number, fyId?: number) {
+ const db = await getDb();
+ const conditions: SQL[] = [eq(transactions.councilId, councilId), validTransactionPeriod(), gte(transactions.month, fiscalWindow().start.slice(0,7)), lt(transactions.month, fiscalWindow().endExclusive.slice(0,7))];
+ if (fyId) conditions.push(eq(transactions.financialYearId, fyId));
+ const result = await db.select({ months: sql<number>`COUNT(DISTINCT ${transactions.month})`, rows: sql<number>`COUNT(*)`, firstMonth:sql<string | null>`MIN(${transactions.month})`, lastMonth:sql<string | null>`MAX(${transactions.month})`, classified:sql<number>`COALESCE(SUM(CASE WHEN ${transactions.classificationMethod} = 'rule' AND ${transactions.classifierVersion} = ${CLASSIFIER_VERSION} THEN 1 ELSE 0 END),0)` }).from(transactions).where(and(...conditions)).get();
+ return result!;
 }

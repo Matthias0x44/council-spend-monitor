@@ -127,7 +127,6 @@ function financialYearFromMonth(month: string): string {
 }
 
 function readSpreadsheet(filePath: string): Record<string, unknown>[] {
-  const ext = path.extname(filePath).toLowerCase();
   const buf = fs.readFileSync(filePath);
   const workbook = XLSX.read(buf, { type: "buffer" });
   const sheetName = workbook.SheetNames[0];

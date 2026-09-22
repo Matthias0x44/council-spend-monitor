@@ -1,21 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
   title: "Council Spend Monitor",
-  description: "Explore UK council public spending data — budgets, outturn, suppliers, and transactions.",
+  description: "Explore published English council payments with original sources and transparent coverage.",
 };
 
 export default function RootLayout({
@@ -25,7 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="light" style={{ colorScheme: "light" }}>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen`} style={{ background: "#ffffff", color: "#111111" }}>
+      <body className="antialiased min-h-screen" style={{ background: "#ffffff", color: "#111111" }}>
         <header className="sticky top-0 z-50 border-b bg-white/90 backdrop-blur-sm">
           <div className="mx-auto flex h-14 max-w-7xl items-center gap-6 px-4">
             <Link href="/" className="font-semibold" style={{ color: "#1d4ed8" }}>

@@ -1,0 +1,3388 @@
+{
+  "source": "https://raw.githubusercontent.com/digital-land/dluhc-datasets/main/data/registers/local-authority.csv",
+  "retrievedAt": "2026-09-21T18:20:13.622Z",
+  "window": {
+    "start": "2022-04-01",
+    "endExclusive": "2027-04-01",
+    "through": "2026-09-21",
+    "labels": [
+      "2026-27",
+      "2025-26",
+      "2024-25",
+      "2023-24",
+      "2022-23"
+    ]
+  },
+  "authorities": [
+    {
+      "slug": "adur",
+      "name": "Adur District Council",
+      "reference": "ADU",
+      "gssCode": "E07000223",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.adur-worthing.gov.uk"
+    },
+    {
+      "slug": "allerdale",
+      "name": "Allerdale Borough Council",
+      "reference": "ALL",
+      "gssCode": "E07000026",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "2023-03-31",
+      "website": "https://www.allerdale.gov.uk"
+    },
+    {
+      "slug": "amber-valley",
+      "name": "Amber Valley Borough Council",
+      "reference": "AMB",
+      "gssCode": "E07000032",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.ambervalley.gov.uk"
+    },
+    {
+      "slug": "arun",
+      "name": "Arun District Council",
+      "reference": "ARU",
+      "gssCode": "E07000224",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.arun.gov.uk"
+    },
+    {
+      "slug": "ashford",
+      "name": "Ashford Borough Council",
+      "reference": "ASF",
+      "gssCode": "E07000105",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.ashford.gov.uk"
+    },
+    {
+      "slug": "ashfield",
+      "name": "Ashfield District Council",
+      "reference": "ASH",
+      "gssCode": "E07000170",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.ashfield.gov.uk"
+    },
+    {
+      "slug": "babergh",
+      "name": "Babergh District Council",
+      "reference": "BAB",
+      "gssCode": "E07000200",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.babergh.gov.uk"
+    },
+    {
+      "slug": "bassetlaw",
+      "name": "Bassetlaw District Council",
+      "reference": "BAE",
+      "gssCode": "E07000171",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.bassetlaw.gov.uk"
+    },
+    {
+      "slug": "basildon",
+      "name": "Basildon Borough Council",
+      "reference": "BAI",
+      "gssCode": "E07000066",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.basildon.gov.uk"
+    },
+    {
+      "slug": "basingstoke-and-deane",
+      "name": "Basingstoke and Deane Borough Council",
+      "reference": "BAN",
+      "gssCode": "E07000084",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.basingstoke.gov.uk"
+    },
+    {
+      "slug": "barrow-in-furness",
+      "name": "Barrow-in-Furness Borough Council",
+      "reference": "BAR",
+      "gssCode": "E07000027",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "2023-03-31",
+      "website": "https://www.barrowbc.gov.uk"
+    },
+    {
+      "slug": "bath-and-north-east-somerset",
+      "name": "Bath and North East Somerset Council",
+      "reference": "BAS",
+      "gssCode": "E06000022",
+      "type": "UA",
+      "startDate": "1996-04-01",
+      "endDate": "",
+      "website": "https://www.bathnes.gov.uk"
+    },
+    {
+      "slug": "blackburn-with-darwen",
+      "name": "Blackburn with Darwen Borough Council",
+      "reference": "BBD",
+      "gssCode": "E06000008",
+      "type": "UA",
+      "startDate": "1998-04-01",
+      "endDate": "",
+      "website": "https://www.blackburn.gov.uk"
+    },
+    {
+      "slug": "bedford",
+      "name": "Bedford Borough Council",
+      "reference": "BDF",
+      "gssCode": "E06000055",
+      "type": "UA",
+      "startDate": "2009-04-01",
+      "endDate": "",
+      "website": "https://www.bedford.gov.uk"
+    },
+    {
+      "slug": "london-of-barking-and-dagenham",
+      "name": "London Borough of Barking and Dagenham",
+      "reference": "BDG",
+      "gssCode": "E09000002",
+      "type": "LBO",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.lbbd.gov.uk"
+    },
+    {
+      "slug": "london-of-brent",
+      "name": "London Borough of Brent",
+      "reference": "BEN",
+      "gssCode": "E09000005",
+      "type": "LBO",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.brent.gov.uk"
+    },
+    {
+      "slug": "london-of-bexley",
+      "name": "London Borough of Bexley",
+      "reference": "BEX",
+      "gssCode": "E09000004",
+      "type": "LBO",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.bexley.gov.uk"
+    },
+    {
+      "slug": "birmingham",
+      "name": "Birmingham City Council",
+      "reference": "BIR",
+      "gssCode": "E08000025",
+      "type": "MD",
+      "startDate": "1986-07-01",
+      "endDate": "",
+      "website": "https://www.birmingham.gov.uk"
+    },
+    {
+      "slug": "blaby",
+      "name": "Blaby District Council",
+      "reference": "BLA",
+      "gssCode": "E07000129",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.blaby.gov.uk"
+    },
+    {
+      "slug": "barnet",
+      "name": "London Borough of Barnet",
+      "reference": "BNE",
+      "gssCode": "E09000003",
+      "type": "LBO",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.barnet.gov.uk"
+    },
+    {
+      "slug": "brighton-and-hove-city",
+      "name": "Brighton and Hove City Council",
+      "reference": "BNH",
+      "gssCode": "E06000043",
+      "type": "UA",
+      "startDate": "1905-06-19",
+      "endDate": "",
+      "website": "https://www.brighton-hove.gov.uk"
+    },
+    {
+      "slug": "barnsley",
+      "name": "Barnsley Metropolitan Borough Council",
+      "reference": "BNS",
+      "gssCode": "E08000016",
+      "type": "MD",
+      "startDate": "1974-04-01",
+      "endDate": "",
+      "website": "https://www.barnsley.gov.uk"
+    },
+    {
+      "slug": "bolton",
+      "name": "Bolton Metropolitan Borough Council",
+      "reference": "BOL",
+      "gssCode": "E08000001",
+      "type": "MD",
+      "startDate": "1974-04-01",
+      "endDate": "",
+      "website": "https://www.bolton.gov.uk"
+    },
+    {
+      "slug": "bolsover",
+      "name": "Bolsover District Council",
+      "reference": "BOS",
+      "gssCode": "E07000033",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.bolsover.gov.uk"
+    },
+    {
+      "slug": "boston",
+      "name": "Boston Borough Council",
+      "reference": "BOT",
+      "gssCode": "E07000136",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.boston.gov.uk"
+    },
+    {
+      "slug": "bournemouth-christchurch-and-poole",
+      "name": "Bournemouth, Christchurch and Poole Council",
+      "reference": "BPC",
+      "gssCode": "E06000058",
+      "type": "UA",
+      "startDate": "2019-04-01",
+      "endDate": "",
+      "website": "https://www.bcpcouncil.gov.uk"
+    },
+    {
+      "slug": "blackpool",
+      "name": "Blackpool Borough Council",
+      "reference": "BPL",
+      "gssCode": "E06000009",
+      "type": "UA",
+      "startDate": "1905-06-20",
+      "endDate": "",
+      "website": "https://www.blackpool.gov.uk"
+    },
+    {
+      "slug": "braintree",
+      "name": "Braintree District Council",
+      "reference": "BRA",
+      "gssCode": "E07000067",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.braintree.gov.uk"
+    },
+    {
+      "slug": "bracknell-forest",
+      "name": "Bracknell Forest Council",
+      "reference": "BRC",
+      "gssCode": "E06000036",
+      "type": "UA",
+      "startDate": "1998-04-01",
+      "endDate": "",
+      "website": "https://www.bracknell-forest.gov.uk/"
+    },
+    {
+      "slug": "bradford",
+      "name": "City of Bradford Metropolitan District Council",
+      "reference": "BRD",
+      "gssCode": "E08000032",
+      "type": "MD",
+      "startDate": "1974-04-01",
+      "endDate": "",
+      "website": "https://www.bradford.gov.uk"
+    },
+    {
+      "slug": "breckland",
+      "name": "Breckland District Council",
+      "reference": "BRE",
+      "gssCode": "E07000143",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.breckland.gov.uk"
+    },
+    {
+      "slug": "bromsgrove",
+      "name": "Bromsgrove District Council",
+      "reference": "BRM",
+      "gssCode": "E07000234",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.bromsgrove.gov.uk"
+    },
+    {
+      "slug": "broadland",
+      "name": "Broadland District Council",
+      "reference": "BRO",
+      "gssCode": "E07000144",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.broadland.gov.uk"
+    },
+    {
+      "slug": "broxtowe",
+      "name": "Broxtowe Borough Council",
+      "reference": "BRT",
+      "gssCode": "E07000172",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.broxtowe.gov.uk"
+    },
+    {
+      "slug": "brentwood",
+      "name": "Brentwood Borough Council",
+      "reference": "BRW",
+      "gssCode": "E07000068",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.brentwood.gov.uk"
+    },
+    {
+      "slug": "broxbourne",
+      "name": "Broxbourne Borough Council",
+      "reference": "BRX",
+      "gssCode": "E07000095",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.broxbourne.gov.uk"
+    },
+    {
+      "slug": "london-of-bromley",
+      "name": "London Borough of Bromley",
+      "reference": "BRY",
+      "gssCode": "E09000006",
+      "type": "LBO",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.bromley.gov.uk"
+    },
+    {
+      "slug": "bristol",
+      "name": "Bristol City Council",
+      "reference": "BST",
+      "gssCode": "E06000023",
+      "type": "UA",
+      "startDate": "1905-06-18",
+      "endDate": "",
+      "website": "https://www.bristol.gov.uk"
+    },
+    {
+      "slug": "buckinghamshire",
+      "name": "Buckinghamshire Council",
+      "reference": "BUC",
+      "gssCode": "E06000060",
+      "type": "UA",
+      "startDate": "2020-04-01",
+      "endDate": "",
+      "website": "https://www.buckinghamshire.gov.uk/"
+    },
+    {
+      "slug": "burnley",
+      "name": "Burnley Borough Council",
+      "reference": "BUN",
+      "gssCode": "E07000117",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.burnley.gov.uk"
+    },
+    {
+      "slug": "bury",
+      "name": "Bury Metropolitan Borough Council",
+      "reference": "BUR",
+      "gssCode": "E08000002",
+      "type": "MD",
+      "startDate": "1974-04-01",
+      "endDate": "",
+      "website": "https://www.bury.gov.uk"
+    },
+    {
+      "slug": "cambridge-city",
+      "name": "Cambridge City Council",
+      "reference": "CAB",
+      "gssCode": "E07000008",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.cambridge.gov.uk"
+    },
+    {
+      "slug": "cambridgeshire",
+      "name": "Cambridgeshire County Council",
+      "reference": "CAM",
+      "gssCode": "E10000003",
+      "type": "CTY",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.cambridgeshire.gov.uk"
+    },
+    {
+      "slug": "cannock-chase",
+      "name": "Cannock Chase District Council",
+      "reference": "CAN",
+      "gssCode": "E07000192",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.cannockchasedc.gov.uk"
+    },
+    {
+      "slug": "carlisle-city",
+      "name": "Carlisle City Council",
+      "reference": "CAR",
+      "gssCode": "E07000028",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "2023-03-31",
+      "website": "https://www.carlisle.gov.uk"
+    },
+    {
+      "slug": "castle-point",
+      "name": "Castle Point Borough Council",
+      "reference": "CAS",
+      "gssCode": "E07000069",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.castlepoint.gov.uk"
+    },
+    {
+      "slug": "canterbury-city",
+      "name": "Canterbury City Council",
+      "reference": "CAT",
+      "gssCode": "E07000106",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.canterbury.gov.uk"
+    },
+    {
+      "slug": "central-bedfordshire",
+      "name": "Central Bedfordshire Council",
+      "reference": "CBF",
+      "gssCode": "E06000056",
+      "type": "UA",
+      "startDate": "2009-04-01",
+      "endDate": "",
+      "website": "https://www.centralbedfordshire.gov.uk"
+    },
+    {
+      "slug": "charnwood",
+      "name": "Charnwood Borough Council",
+      "reference": "CHA",
+      "gssCode": "E07000130",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.charnwood.gov.uk"
+    },
+    {
+      "slug": "cheshire-east",
+      "name": "Cheshire East Council",
+      "reference": "CHE",
+      "gssCode": "E06000049",
+      "type": "UA",
+      "startDate": "2009-04-01",
+      "endDate": "",
+      "website": "https://www.cheshireeast.gov.uk"
+    },
+    {
+      "slug": "chichester",
+      "name": "Chichester District Council",
+      "reference": "CHI",
+      "gssCode": "E07000225",
+      "type": "NMD",
+      "startDate": "1974-04-01",
+      "endDate": "",
+      "website": "https://www.chichester.gov.uk"
+    },
+    {
+      "slug": "chelmsford-city",
+      "name": "Chelmsford City Council",
+      "reference": "CHL",
+      "gssCode": "E07000070",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.chelmsford.gov.uk"
+    },
+    {
+      "slug": "chorley",
+      "name": "Chorley Borough Council",
+      "reference": "CHO",
+      "gssCode": "E07000118",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.chorley.gov.uk"
+    },
+    {
+      "slug": "cherwell",
+      "name": "Cherwell District Council",
+      "reference": "CHR",
+      "gssCode": "E07000177",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.cherwell-dc.gov.uk"
+    },
+    {
+      "slug": "chesterfield",
+      "name": "Chesterfield Borough Council",
+      "reference": "CHS",
+      "gssCode": "E07000034",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.chesterfield.gov.uk"
+    },
+    {
+      "slug": "cheltenham",
+      "name": "Cheltenham Borough Council",
+      "reference": "CHT",
+      "gssCode": "E07000078",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.cheltenham.gov.uk"
+    },
+    {
+      "slug": "cheshire-west-and-chester",
+      "name": "Cheshire West and Chester Council",
+      "reference": "CHW",
+      "gssCode": "E06000050",
+      "type": "UA",
+      "startDate": "2009-04-01",
+      "endDate": "",
+      "website": "https://www.cheshirewestandchester.gov.uk"
+    },
+    {
+      "slug": "calderdale",
+      "name": "Calderdale Metropolitan Borough Council",
+      "reference": "CLD",
+      "gssCode": "E08000033",
+      "type": "MD",
+      "startDate": "1974-04-01",
+      "endDate": "",
+      "website": "https://www.calderdale.gov.uk"
+    },
+    {
+      "slug": "cumbria",
+      "name": "Cumbria County Council",
+      "reference": "CMA",
+      "gssCode": "E10000006",
+      "type": "CTY",
+      "startDate": "",
+      "endDate": "2023-03-31",
+      "website": "https://www.cumbria.gov.uk"
+    },
+    {
+      "slug": "camden",
+      "name": "London Borough of Camden",
+      "reference": "CMD",
+      "gssCode": "E09000007",
+      "type": "LBO",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.camden.gov.uk"
+    },
+    {
+      "slug": "colchester",
+      "name": "Colchester Borough Council",
+      "reference": "COL",
+      "gssCode": "E07000071",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.colchester.gov.uk"
+    },
+    {
+      "slug": "cornwall",
+      "name": "Cornwall Council",
+      "reference": "CON",
+      "gssCode": "E06000052",
+      "type": "UA",
+      "startDate": "2009-04-01",
+      "endDate": "",
+      "website": "https://www.cornwall.gov.uk"
+    },
+    {
+      "slug": "copeland",
+      "name": "Copeland Borough Council",
+      "reference": "COP",
+      "gssCode": "E07000029",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "2023-03-31",
+      "website": "https://www.copeland.gov.uk"
+    },
+    {
+      "slug": "cotswold",
+      "name": "Cotswold District Council",
+      "reference": "COT",
+      "gssCode": "E07000079",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.cotswold.gov.uk"
+    },
+    {
+      "slug": "coventry",
+      "name": "Coventry City Council",
+      "reference": "COV",
+      "gssCode": "E08000026",
+      "type": "MD",
+      "startDate": "1974-04-01",
+      "endDate": "",
+      "website": "https://www.coventry.gov.uk"
+    },
+    {
+      "slug": "craven",
+      "name": "Craven District Council",
+      "reference": "CRA",
+      "gssCode": "E07000163",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "2023-03-31",
+      "website": "https://www.cravendc.gov.uk"
+    },
+    {
+      "slug": "crawley",
+      "name": "Crawley Borough Council",
+      "reference": "CRW",
+      "gssCode": "E07000226",
+      "type": "NMD",
+      "startDate": "1974-04-01",
+      "endDate": "",
+      "website": "https://www.crawley.gov.uk"
+    },
+    {
+      "slug": "croydon",
+      "name": "London Borough of Croydon",
+      "reference": "CRY",
+      "gssCode": "E09000008",
+      "type": "LBO",
+      "startDate": "1965-04-01",
+      "endDate": "",
+      "website": "https://www.croydon.gov.uk"
+    },
+    {
+      "slug": "cumberland-unitary-authority",
+      "name": "Cumberland Unitary Authority",
+      "reference": "CUA",
+      "gssCode": "E06000063",
+      "type": "UA",
+      "startDate": "2023-04-01",
+      "endDate": "",
+      "website": "https://www.cumberland.gov.uk/"
+    },
+    {
+      "slug": "dacorum",
+      "name": "Dacorum Borough Council",
+      "reference": "DAC",
+      "gssCode": "E07000096",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.dacorum.gov.uk"
+    },
+    {
+      "slug": "darlington",
+      "name": "Darlington Borough Council",
+      "reference": "DAL",
+      "gssCode": "E06000005",
+      "type": "UA",
+      "startDate": "1997-04-01",
+      "endDate": "",
+      "website": "https://www.darlington.gov.uk"
+    },
+    {
+      "slug": "dartford",
+      "name": "Dartford Borough Council",
+      "reference": "DAR",
+      "gssCode": "E07000107",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.dartford.gov.uk"
+    },
+    {
+      "slug": "derbyshire",
+      "name": "Derbyshire County Council",
+      "reference": "DBY",
+      "gssCode": "E10000007",
+      "type": "CTY",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.derbyshire.gov.uk"
+    },
+    {
+      "slug": "derbyshire-dales",
+      "name": "Derbyshire Dales District Council",
+      "reference": "DEB",
+      "gssCode": "E07000035",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.derbyshiredales.gov.uk"
+    },
+    {
+      "slug": "derby-city",
+      "name": "Derby City Council",
+      "reference": "DER",
+      "gssCode": "E06000015",
+      "type": "UA",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.derby.gov.uk"
+    },
+    {
+      "slug": "devon",
+      "name": "Devon County Council",
+      "reference": "DEV",
+      "gssCode": "E10000008",
+      "type": "CTY",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.devon.gov.uk"
+    },
+    {
+      "slug": "doncaster",
+      "name": "Doncaster Metropolitan Borough Council",
+      "reference": "DNC",
+      "gssCode": "E08000017",
+      "type": "MD",
+      "startDate": "1974-04-01",
+      "endDate": "",
+      "website": "https://www.doncaster.gov.uk"
+    },
+    {
+      "slug": "dover",
+      "name": "Dover District Council",
+      "reference": "DOV",
+      "gssCode": "E07000108",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.dover.gov.uk"
+    },
+    {
+      "slug": "dorset",
+      "name": "Dorset Council",
+      "reference": "DST",
+      "gssCode": "E06000059",
+      "type": "UA",
+      "startDate": "2019-04-01",
+      "endDate": "",
+      "website": "https://www.dorsetcouncil.gov.uk"
+    },
+    {
+      "slug": "dudley",
+      "name": "Dudley Metropolitan Borough Council",
+      "reference": "DUD",
+      "gssCode": "E08000027",
+      "type": "MD",
+      "startDate": "1974-04-01",
+      "endDate": "",
+      "website": "https://www.dudley.gov.uk"
+    },
+    {
+      "slug": "durham",
+      "name": "Durham County Council",
+      "reference": "DUR",
+      "gssCode": "E06000047",
+      "type": "UA",
+      "startDate": "2009-04-01",
+      "endDate": "",
+      "website": "https://www.durham.gov.uk"
+    },
+    {
+      "slug": "ealing",
+      "name": "London Borough of Ealing",
+      "reference": "EAL",
+      "gssCode": "E09000009",
+      "type": "LBO",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.ealing.gov.uk"
+    },
+    {
+      "slug": "eastbourne",
+      "name": "Eastbourne Borough Council",
+      "reference": "EAS",
+      "gssCode": "E07000061",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.eastbourne.gov.uk"
+    },
+    {
+      "slug": "eastleigh",
+      "name": "Eastleigh Borough Council",
+      "reference": "EAT",
+      "gssCode": "E07000086",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.eastleigh.gov.uk"
+    },
+    {
+      "slug": "east-cambridgeshire",
+      "name": "East Cambridgeshire District Council",
+      "reference": "ECA",
+      "gssCode": "E07000009",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.eastcambs.gov.uk"
+    },
+    {
+      "slug": "east-devon",
+      "name": "East Devon District Council",
+      "reference": "EDE",
+      "gssCode": "E07000040",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://eastdevon.gov.uk"
+    },
+    {
+      "slug": "eden",
+      "name": "Eden District Council",
+      "reference": "EDN",
+      "gssCode": "E07000030",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "2023-03-31",
+      "website": "https://www.eden.gov.uk"
+    },
+    {
+      "slug": "east-hampshire",
+      "name": "East Hampshire District Council",
+      "reference": "EHA",
+      "gssCode": "E07000085",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.easthants.gov.uk"
+    },
+    {
+      "slug": "east-hertfordshire",
+      "name": "East Hertfordshire District Council",
+      "reference": "EHE",
+      "gssCode": "E07000242",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.eastherts.gov.uk"
+    },
+    {
+      "slug": "east-lindsey",
+      "name": "East Lindsey District Council",
+      "reference": "ELI",
+      "gssCode": "E07000137",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.e-lindsey.gov.uk"
+    },
+    {
+      "slug": "elmbridge",
+      "name": "Elmbridge Borough Council",
+      "reference": "ELM",
+      "gssCode": "E07000207",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.elmbridge.gov.uk"
+    },
+    {
+      "slug": "london-of-enfield",
+      "name": "London Borough of Enfield",
+      "reference": "ENF",
+      "gssCode": "E09000010",
+      "type": "LBO",
+      "startDate": "1965-04-01",
+      "endDate": "",
+      "website": "https://www.enfield.gov.uk"
+    },
+    {
+      "slug": "epping-forest",
+      "name": "Epping Forest District Council",
+      "reference": "EPP",
+      "gssCode": "E07000072",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.eppingforestdc.gov.uk"
+    },
+    {
+      "slug": "epsom-and-ewell",
+      "name": "Epsom and Ewell Borough Council",
+      "reference": "EPS",
+      "gssCode": "E07000208",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.epsom-ewell.gov.uk"
+    },
+    {
+      "slug": "erewash",
+      "name": "Erewash Borough Council",
+      "reference": "ERE",
+      "gssCode": "E07000036",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.erewash.gov.uk"
+    },
+    {
+      "slug": "east-riding-of-yorkshire",
+      "name": "East Riding of Yorkshire Council",
+      "reference": "ERY",
+      "gssCode": "E06000011",
+      "type": "UA",
+      "startDate": "1996-04-01",
+      "endDate": "",
+      "website": "https://www.eastriding.gov.uk/"
+    },
+    {
+      "slug": "east-suffolk",
+      "name": "East Suffolk Council",
+      "reference": "ESK",
+      "gssCode": "E07000244",
+      "type": "NMD",
+      "startDate": "2019-04-01",
+      "endDate": "",
+      "website": "https://www.eastsuffolk.gov.uk"
+    },
+    {
+      "slug": "essex",
+      "name": "Essex County Council",
+      "reference": "ESS",
+      "gssCode": "E10000012",
+      "type": "CTY",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.essex.gov.uk/"
+    },
+    {
+      "slug": "east-staffordshire",
+      "name": "East Staffordshire Borough Council",
+      "reference": "EST",
+      "gssCode": "E07000193",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.eaststaffsbc.gov.uk"
+    },
+    {
+      "slug": "east-sussex",
+      "name": "East Sussex County Council",
+      "reference": "ESX",
+      "gssCode": "E10000011",
+      "type": "CTY",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.eastsussex.gov.uk"
+    },
+    {
+      "slug": "exeter-city",
+      "name": "Exeter City Council",
+      "reference": "EXE",
+      "gssCode": "E07000041",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.exeter.gov.uk"
+    },
+    {
+      "slug": "fareham",
+      "name": "Fareham Borough Council",
+      "reference": "FAR",
+      "gssCode": "E07000087",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.fareham.gov.uk"
+    },
+    {
+      "slug": "fenland",
+      "name": "Fenland District Council",
+      "reference": "FEN",
+      "gssCode": "E07000010",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.fenland.gov.uk"
+    },
+    {
+      "slug": "forest-of-dean",
+      "name": "Forest of Dean District Council",
+      "reference": "FOE",
+      "gssCode": "E07000080",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.fdean.gov.uk"
+    },
+    {
+      "slug": "fylde",
+      "name": "Fylde Borough Council",
+      "reference": "FYL",
+      "gssCode": "E07000119",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.fylde.gov.uk"
+    },
+    {
+      "slug": "gateshead",
+      "name": "Gateshead Metropolitan Borough Council",
+      "reference": "GAT",
+      "gssCode": "E08000037",
+      "type": "MD",
+      "startDate": "1974-04-01",
+      "endDate": "",
+      "website": "https://www.gateshead.gov.uk"
+    },
+    {
+      "slug": "gedling",
+      "name": "Gedling Borough Council",
+      "reference": "GED",
+      "gssCode": "E07000173",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.gedling.gov.uk"
+    },
+    {
+      "slug": "gloucester-city",
+      "name": "Gloucester City Council",
+      "reference": "GLO",
+      "gssCode": "E07000081",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.gloucester.gov.uk"
+    },
+    {
+      "slug": "gloucestershire",
+      "name": "Gloucestershire County Council",
+      "reference": "GLS",
+      "gssCode": "E10000013",
+      "type": "CTY",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.gloucestershire.gov.uk"
+    },
+    {
+      "slug": "gosport",
+      "name": "Gosport Borough Council",
+      "reference": "GOS",
+      "gssCode": "E07000088",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.gosport.gov.uk"
+    },
+    {
+      "slug": "gravesham",
+      "name": "Gravesham Borough Council",
+      "reference": "GRA",
+      "gssCode": "E07000109",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.gravesham.gov.uk"
+    },
+    {
+      "slug": "greenwich",
+      "name": "Royal Borough of Greenwich",
+      "reference": "GRE",
+      "gssCode": "E09000011",
+      "type": "LBO",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.royalgreenwich.gov.uk"
+    },
+    {
+      "slug": "guildford",
+      "name": "Guildford Borough Council",
+      "reference": "GRT",
+      "gssCode": "E07000209",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.guildford.gov.uk"
+    },
+    {
+      "slug": "great-yarmouth",
+      "name": "Great Yarmouth Borough Council",
+      "reference": "GRY",
+      "gssCode": "E07000145",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.great-yarmouth.gov.uk"
+    },
+    {
+      "slug": "havant",
+      "name": "Havant Borough Council",
+      "reference": "HAA",
+      "gssCode": "E07000090",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.havant.gov.uk"
+    },
+    {
+      "slug": "hambleton",
+      "name": "Hambleton District Council",
+      "reference": "HAE",
+      "gssCode": "E07000164",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "2023-03-31",
+      "website": "https://www.hambleton.gov.uk"
+    },
+    {
+      "slug": "harrogate",
+      "name": "Harrogate Borough Council",
+      "reference": "HAG",
+      "gssCode": "E07000165",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "2023-03-31",
+      "website": "https://www.harrogate.gov.uk"
+    },
+    {
+      "slug": "halton",
+      "name": "Halton Borough Council",
+      "reference": "HAL",
+      "gssCode": "E06000006",
+      "type": "UA",
+      "startDate": "1998-04-01",
+      "endDate": "",
+      "website": "https://www.halton.gov.uk"
+    },
+    {
+      "slug": "hampshire",
+      "name": "Hampshire County Council",
+      "reference": "HAM",
+      "gssCode": "E10000014",
+      "type": "CTY",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.hants.gov.uk"
+    },
+    {
+      "slug": "harborough",
+      "name": "Harborough District Council",
+      "reference": "HAO",
+      "gssCode": "E07000131",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.harborough.gov.uk"
+    },
+    {
+      "slug": "harlow",
+      "name": "Harlow District Council",
+      "reference": "HAR",
+      "gssCode": "E07000073",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.harlow.gov.uk"
+    },
+    {
+      "slug": "hastings",
+      "name": "Hastings Borough Council",
+      "reference": "HAS",
+      "gssCode": "E07000062",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.hastings.gov.uk"
+    },
+    {
+      "slug": "hart",
+      "name": "Hart District Council",
+      "reference": "HAT",
+      "gssCode": "E07000089",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.hart.gov.uk"
+    },
+    {
+      "slug": "london-of-havering",
+      "name": "London Borough of Havering",
+      "reference": "HAV",
+      "gssCode": "E09000016",
+      "type": "LBO",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.havering.gov.uk"
+    },
+    {
+      "slug": "hackney",
+      "name": "London Borough of Hackney",
+      "reference": "HCK",
+      "gssCode": "E09000012",
+      "type": "LBO",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.hackney.gov.uk"
+    },
+    {
+      "slug": "herefordshire",
+      "name": "Herefordshire Council",
+      "reference": "HEF",
+      "gssCode": "E06000019",
+      "type": "UA",
+      "startDate": "1998-04-01",
+      "endDate": "",
+      "website": "https://www.herefordshire.gov.uk"
+    },
+    {
+      "slug": "hertsmere",
+      "name": "Hertsmere Borough Council",
+      "reference": "HER",
+      "gssCode": "E07000098",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.hertsmere.gov.uk"
+    },
+    {
+      "slug": "high-peak",
+      "name": "High Peak Borough Council",
+      "reference": "HIG",
+      "gssCode": "E07000037",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.highpeak.gov.uk"
+    },
+    {
+      "slug": "london-of-hillingdon",
+      "name": "London Borough of Hillingdon",
+      "reference": "HIL",
+      "gssCode": "E09000017",
+      "type": "LBO",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.hillingdon.gov.uk"
+    },
+    {
+      "slug": "hinckley-and-bosworth",
+      "name": "Hinckley and Bosworth Borough Council",
+      "reference": "HIN",
+      "gssCode": "E07000132",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.hinckley-bosworth.gov.uk"
+    },
+    {
+      "slug": "london-of-hammersmith-fulham",
+      "name": "London Borough of Hammersmith & Fulham",
+      "reference": "HMF",
+      "gssCode": "E09000013",
+      "type": "LBO",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.lbhf.gov.uk/"
+    },
+    {
+      "slug": "hounslow",
+      "name": "London Borough of Hounslow",
+      "reference": "HNS",
+      "gssCode": "E09000018",
+      "type": "LBO",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.hounslow.gov.uk"
+    },
+    {
+      "slug": "horsham",
+      "name": "Horsham District Council",
+      "reference": "HOR",
+      "gssCode": "E07000227",
+      "type": "NMD",
+      "startDate": "1974-04-01",
+      "endDate": "",
+      "website": "https://www.horsham.gov.uk"
+    },
+    {
+      "slug": "hartlepool",
+      "name": "Hartlepool Borough Council",
+      "reference": "HPL",
+      "gssCode": "E06000001",
+      "type": "UA",
+      "startDate": "1905-06-18",
+      "endDate": "",
+      "website": "https://www.hartlepool.gov.uk"
+    },
+    {
+      "slug": "hertfordshire",
+      "name": "Hertfordshire County Council",
+      "reference": "HRT",
+      "gssCode": "E10000015",
+      "type": "CTY",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.hertsdirect.org/"
+    },
+    {
+      "slug": "london-of-harrow",
+      "name": "London Borough of Harrow",
+      "reference": "HRW",
+      "gssCode": "E09000015",
+      "type": "LBO",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.harrow.gov.uk"
+    },
+    {
+      "slug": "haringey",
+      "name": "London Borough of Haringey",
+      "reference": "HRY",
+      "gssCode": "E09000014",
+      "type": "LBO",
+      "startDate": "1965-04-01",
+      "endDate": "",
+      "website": "https://www.haringey.gov.uk"
+    },
+    {
+      "slug": "huntingdonshire",
+      "name": "Huntingdonshire District Council",
+      "reference": "HUN",
+      "gssCode": "E07000011",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.huntingdonshire.gov.uk"
+    },
+    {
+      "slug": "hyndburn",
+      "name": "Hyndburn Borough Council",
+      "reference": "HYN",
+      "gssCode": "E07000120",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.hyndburnbc.gov.uk"
+    },
+    {
+      "slug": "of-the-isles-of-scilly",
+      "name": "Council of the Isles of Scilly",
+      "reference": "IOS",
+      "gssCode": "E06000053",
+      "type": "UA",
+      "startDate": "1974-04-01",
+      "endDate": "",
+      "website": "https://www.scilly.gov.uk"
+    },
+    {
+      "slug": "isle-of-wight",
+      "name": "Isle of Wight Council",
+      "reference": "IOW",
+      "gssCode": "E06000046",
+      "type": "UA",
+      "startDate": "1905-06-17",
+      "endDate": "",
+      "website": "https://www.iow.gov.uk/"
+    },
+    {
+      "slug": "ipswich",
+      "name": "Ipswich Borough Council",
+      "reference": "IPS",
+      "gssCode": "E07000202",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.ipswich.gov.uk"
+    },
+    {
+      "slug": "islington",
+      "name": "London Borough of Islington",
+      "reference": "ISL",
+      "gssCode": "E09000019",
+      "type": "LBO",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.islington.gov.uk"
+    },
+    {
+      "slug": "royal-of-kensington-and-chelsea",
+      "name": "Royal Borough of Kensington and Chelsea",
+      "reference": "KEC",
+      "gssCode": "E09000020",
+      "type": "LBO",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.rbkc.gov.uk/"
+    },
+    {
+      "slug": "kent",
+      "name": "Kent County Council",
+      "reference": "KEN",
+      "gssCode": "E10000016",
+      "type": "CTY",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.kent.gov.uk"
+    },
+    {
+      "slug": "hull-city",
+      "name": "Hull City Council",
+      "reference": "KHL",
+      "gssCode": "E06000010",
+      "type": "UA",
+      "startDate": "1996-04-01",
+      "endDate": "",
+      "website": "https://www.hullcc.gov.uk"
+    },
+    {
+      "slug": "of-king-s-lynn-and-west-norfolk",
+      "name": "Borough Council of King's Lynn and West Norfolk",
+      "reference": "KIN",
+      "gssCode": "E07000146",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.west-norfolk.gov.uk"
+    },
+    {
+      "slug": "kirklees",
+      "name": "Kirklees Council",
+      "reference": "KIR",
+      "gssCode": "E08000034",
+      "type": "MD",
+      "startDate": "1974-04-01",
+      "endDate": "",
+      "website": "https://www.kirklees.gov.uk"
+    },
+    {
+      "slug": "royal-of-kingston-upon-thames",
+      "name": "Royal Borough of Kingston upon Thames",
+      "reference": "KTT",
+      "gssCode": "E09000021",
+      "type": "LBO",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.kingston.gov.uk"
+    },
+    {
+      "slug": "knowsley",
+      "name": "Knowsley Metropolitan Borough Council",
+      "reference": "KWL",
+      "gssCode": "E08000011",
+      "type": "MD",
+      "startDate": "1974-04-01",
+      "endDate": "",
+      "website": "https://www.knowsley.gov.uk"
+    },
+    {
+      "slug": "lancaster-city",
+      "name": "Lancaster City Council",
+      "reference": "LAC",
+      "gssCode": "E07000121",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.lancaster.gov.uk"
+    },
+    {
+      "slug": "lancashire",
+      "name": "Lancashire County Council",
+      "reference": "LAN",
+      "gssCode": "E10000017",
+      "type": "CTY",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.lancashire.gov.uk"
+    },
+    {
+      "slug": "lambeth",
+      "name": "London Borough of Lambeth",
+      "reference": "LBH",
+      "gssCode": "E09000022",
+      "type": "LBO",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.lambeth.gov.uk"
+    },
+    {
+      "slug": "leicester",
+      "name": "Leicester City Council",
+      "reference": "LCE",
+      "gssCode": "E06000016",
+      "type": "UA",
+      "startDate": "1905-06-19",
+      "endDate": "",
+      "website": "https://www.leicester.gov.uk"
+    },
+    {
+      "slug": "leeds",
+      "name": "Leeds City Council",
+      "reference": "LDS",
+      "gssCode": "E08000035",
+      "type": "MD",
+      "startDate": "1905-06-08",
+      "endDate": "",
+      "website": "https://www.leeds.gov.uk"
+    },
+    {
+      "slug": "leicestershire",
+      "name": "Leicestershire County Council",
+      "reference": "LEC",
+      "gssCode": "E10000018",
+      "type": "CTY",
+      "startDate": "1889-01-01",
+      "endDate": "",
+      "website": "https://www.leicestershire.gov.uk/"
+    },
+    {
+      "slug": "lewes",
+      "name": "Lewes District Council",
+      "reference": "LEE",
+      "gssCode": "E07000063",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.lewes-eastbourne.gov.uk"
+    },
+    {
+      "slug": "lewisham",
+      "name": "London Borough of Lewisham",
+      "reference": "LEW",
+      "gssCode": "E09000023",
+      "type": "LBO",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.lewisham.gov.uk"
+    },
+    {
+      "slug": "city-of-lincoln",
+      "name": "City of Lincoln Council",
+      "reference": "LIC",
+      "gssCode": "E07000138",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.lincoln.gov.uk"
+    },
+    {
+      "slug": "lichfield",
+      "name": "Lichfield District Council",
+      "reference": "LIF",
+      "gssCode": "E07000194",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.lichfielddc.gov.uk"
+    },
+    {
+      "slug": "lincolnshire",
+      "name": "Lincolnshire County Council",
+      "reference": "LIN",
+      "gssCode": "E10000019",
+      "type": "CTY",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.lincolnshire.gov.uk"
+    },
+    {
+      "slug": "liverpool",
+      "name": "Liverpool City Council",
+      "reference": "LIV",
+      "gssCode": "E08000012",
+      "type": "MD",
+      "startDate": "1905-06-08",
+      "endDate": "",
+      "website": "https://www.liverpool.gov.uk"
+    },
+    {
+      "slug": "city-of-london-corporation",
+      "name": "City of London Corporation",
+      "reference": "LND",
+      "gssCode": "E09000001",
+      "type": "CC",
+      "startDate": "1905-06-28",
+      "endDate": "",
+      "website": "https://www.cityoflondon.gov.uk/"
+    },
+    {
+      "slug": "luton",
+      "name": "Luton Borough Council",
+      "reference": "LUT",
+      "gssCode": "E06000032",
+      "type": "UA",
+      "startDate": "1905-06-19",
+      "endDate": "",
+      "website": "https://www.luton.gov.uk"
+    },
+    {
+      "slug": "maidstone",
+      "name": "Maidstone Borough Council",
+      "reference": "MAI",
+      "gssCode": "E07000110",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.maidstone.gov.uk"
+    },
+    {
+      "slug": "maldon",
+      "name": "Maldon District Council",
+      "reference": "MAL",
+      "gssCode": "E07000074",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.maldon.gov.uk"
+    },
+    {
+      "slug": "manchester",
+      "name": "Manchester City Council",
+      "reference": "MAN",
+      "gssCode": "E08000003",
+      "type": "MD",
+      "startDate": "1974-04-01",
+      "endDate": "",
+      "website": "https://www.manchester.gov.uk"
+    },
+    {
+      "slug": "mansfield",
+      "name": "Mansfield District Council",
+      "reference": "MAS",
+      "gssCode": "E07000174",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.mansfield.gov.uk"
+    },
+    {
+      "slug": "malvern-hills",
+      "name": "Malvern Hills District Council",
+      "reference": "MAV",
+      "gssCode": "E07000235",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.malvernhills.gov.uk"
+    },
+    {
+      "slug": "middlesbrough",
+      "name": "Middlesbrough Borough Council",
+      "reference": "MDB",
+      "gssCode": "E06000002",
+      "type": "UA",
+      "startDate": "1905-06-18",
+      "endDate": "",
+      "website": "https://www.middlesbrough.gov.uk"
+    },
+    {
+      "slug": "mid-devon",
+      "name": "Mid Devon District Council",
+      "reference": "MDE",
+      "gssCode": "E07000042",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.middevon.gov.uk"
+    },
+    {
+      "slug": "medway",
+      "name": "Medway Council",
+      "reference": "MDW",
+      "gssCode": "E06000035",
+      "type": "UA",
+      "startDate": "1998-04-01",
+      "endDate": "",
+      "website": "https://www.medway.gov.uk"
+    },
+    {
+      "slug": "melton",
+      "name": "Melton Borough Council",
+      "reference": "MEL",
+      "gssCode": "E07000133",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.melton.gov.uk"
+    },
+    {
+      "slug": "mendip",
+      "name": "Mendip District Council",
+      "reference": "MEN",
+      "gssCode": "E07000187",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "2023-03-31",
+      "website": "https://www.mendip.gov.uk"
+    },
+    {
+      "slug": "milton-keynes",
+      "name": "Milton Keynes City Council",
+      "reference": "MIK",
+      "gssCode": "E06000042",
+      "type": "UA",
+      "startDate": "1905-06-19",
+      "endDate": "",
+      "website": "https://www.milton-keynes.gov.uk/"
+    },
+    {
+      "slug": "mole-valley",
+      "name": "Mole Valley District Council",
+      "reference": "MOL",
+      "gssCode": "E07000210",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.molevalley.gov.uk"
+    },
+    {
+      "slug": "london-of-merton",
+      "name": "London Borough of Merton",
+      "reference": "MRT",
+      "gssCode": "E09000024",
+      "type": "LBO",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.merton.gov.uk"
+    },
+    {
+      "slug": "mid-sussex",
+      "name": "Mid Sussex District Council",
+      "reference": "MSS",
+      "gssCode": "E07000228",
+      "type": "NMD",
+      "startDate": "1974-04-01",
+      "endDate": "",
+      "website": "https://www.midsussex.gov.uk"
+    },
+    {
+      "slug": "mid-suffolk",
+      "name": "Mid Suffolk District Council",
+      "reference": "MSU",
+      "gssCode": "E07000203",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.midsuffolk.gov.uk"
+    },
+    {
+      "slug": "northumberland",
+      "name": "Northumberland County Council",
+      "reference": "NBL",
+      "gssCode": "E06000057",
+      "type": "UA",
+      "startDate": "2009-04-01",
+      "endDate": "",
+      "website": "https://www.northumberland.gov.uk"
+    },
+    {
+      "slug": "north-devon",
+      "name": "North Devon District Council",
+      "reference": "NDE",
+      "gssCode": "E07000043",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.northdevon.gov.uk"
+    },
+    {
+      "slug": "newark-and-sherwood",
+      "name": "Newark and Sherwood District Council",
+      "reference": "NEA",
+      "gssCode": "E07000175",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.newark-sherwooddc.gov.uk"
+    },
+    {
+      "slug": "newcastle-under-lyme",
+      "name": "Newcastle-under-Lyme Borough Council",
+      "reference": "NEC",
+      "gssCode": "E07000195",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.newcastle-staffs.gov.uk"
+    },
+    {
+      "slug": "north-east-derbyshire",
+      "name": "North East Derbyshire District Council",
+      "reference": "NED",
+      "gssCode": "E07000038",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.ne-derbyshire.gov.uk"
+    },
+    {
+      "slug": "north-east-lincolnshire",
+      "name": "North East Lincolnshire Council",
+      "reference": "NEL",
+      "gssCode": "E06000012",
+      "type": "UA",
+      "startDate": "1996-04-01",
+      "endDate": "",
+      "website": "https://www.nelincs.gov.uk"
+    },
+    {
+      "slug": "newcastle",
+      "name": "Newcastle City Council",
+      "reference": "NET",
+      "gssCode": "E08000021",
+      "type": "MD",
+      "startDate": "1974-04-01",
+      "endDate": "",
+      "website": "https://www.newcastle.gov.uk"
+    },
+    {
+      "slug": "new-forest",
+      "name": "New Forest District Council",
+      "reference": "NEW",
+      "gssCode": "E07000091",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.newforestdc.gov.uk"
+    },
+    {
+      "slug": "norfolk",
+      "name": "Norfolk County Council",
+      "reference": "NFK",
+      "gssCode": "E10000020",
+      "type": "CTY",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.norfolk.gov.uk"
+    },
+    {
+      "slug": "nottingham",
+      "name": "Nottingham City Council",
+      "reference": "NGM",
+      "gssCode": "E06000018",
+      "type": "UA",
+      "startDate": "1905-06-20",
+      "endDate": "",
+      "website": "https://www.nottinghamcity.gov.uk"
+    },
+    {
+      "slug": "north-hertfordshire",
+      "name": "North Hertfordshire District Council",
+      "reference": "NHE",
+      "gssCode": "E07000099",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.north-herts.gov.uk"
+    },
+    {
+      "slug": "north-kesteven",
+      "name": "North Kesteven District Council",
+      "reference": "NKE",
+      "gssCode": "E07000139",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.n-kesteven.gov.uk"
+    },
+    {
+      "slug": "north-lincolnshire",
+      "name": "North Lincolnshire Council",
+      "reference": "NLN",
+      "gssCode": "E06000013",
+      "type": "UA",
+      "startDate": "1996-04-01",
+      "endDate": "",
+      "website": "https://www.northlincs.gov.uk"
+    },
+    {
+      "slug": "north-norfolk",
+      "name": "North Norfolk District Council",
+      "reference": "NNO",
+      "gssCode": "E07000147",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.northnorfolk.org/"
+    },
+    {
+      "slug": "north-northamptonshire",
+      "name": "North Northamptonshire Council",
+      "reference": "NNUA",
+      "gssCode": "E06000061",
+      "type": "UA",
+      "startDate": "2020-04-01",
+      "endDate": "",
+      "website": "https://www.northnorthants.gov.uk/"
+    },
+    {
+      "slug": "norwich-city",
+      "name": "Norwich City Council",
+      "reference": "NOW",
+      "gssCode": "E07000148",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.norwich.gov.uk"
+    },
+    {
+      "slug": "north-somerset",
+      "name": "North Somerset Council",
+      "reference": "NSM",
+      "gssCode": "E06000024",
+      "type": "UA",
+      "startDate": "1996-04-01",
+      "endDate": "",
+      "website": "https://www.n-somerset.gov.uk"
+    },
+    {
+      "slug": "nottinghamshire",
+      "name": "Nottinghamshire County Council",
+      "reference": "NTT",
+      "gssCode": "E10000024",
+      "type": "CTY",
+      "startDate": "1937-01-01",
+      "endDate": "",
+      "website": "https://www.nottinghamshire.gov.uk/council-and-democracy"
+    },
+    {
+      "slug": "north-tyneside",
+      "name": "North Tyneside Council",
+      "reference": "NTY",
+      "gssCode": "E08000022",
+      "type": "MD",
+      "startDate": "1974-04-01",
+      "endDate": "",
+      "website": "https://www.northtyneside.gov.uk"
+    },
+    {
+      "slug": "nuneaton-and-bedworth",
+      "name": "Nuneaton and Bedworth Borough Council",
+      "reference": "NUN",
+      "gssCode": "E07000219",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.nuneatonandbedworth.gov.uk"
+    },
+    {
+      "slug": "north-warwickshire",
+      "name": "North Warwickshire Borough Council",
+      "reference": "NWA",
+      "gssCode": "E07000218",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.northwarks.gov.uk"
+    },
+    {
+      "slug": "north-west-leicestershire",
+      "name": "North West Leicestershire District Council",
+      "reference": "NWL",
+      "gssCode": "E07000134",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.nwleics.gov.uk"
+    },
+    {
+      "slug": "newham",
+      "name": "London Borough of Newham",
+      "reference": "NWM",
+      "gssCode": "E09000025",
+      "type": "LBO",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.newham.gov.uk"
+    },
+    {
+      "slug": "north-yorkshire-nyk",
+      "name": "North Yorkshire County Council",
+      "reference": "NYK",
+      "gssCode": "E10000023",
+      "type": "CTY",
+      "startDate": "",
+      "endDate": "2023-03-31",
+      "website": "https://www.northyorks.gov.uk"
+    },
+    {
+      "slug": "north-yorkshire",
+      "name": "North Yorkshire Council",
+      "reference": "NYUA",
+      "gssCode": "E06000065",
+      "type": "UA",
+      "startDate": "2023-04-01",
+      "endDate": "",
+      "website": "https://www.northyorks.gov.uk/"
+    },
+    {
+      "slug": "oadby-and-wigston",
+      "name": "Oadby and Wigston Borough Council",
+      "reference": "OAD",
+      "gssCode": "E07000135",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://oadby-wigston.gov.uk"
+    },
+    {
+      "slug": "oldham",
+      "name": "Oldham Metropolitan Borough Council",
+      "reference": "OLD",
+      "gssCode": "E08000004",
+      "type": "MD",
+      "startDate": "1905-06-07",
+      "endDate": "",
+      "website": "https://www.oldham.gov.uk"
+    },
+    {
+      "slug": "oxfordshire",
+      "name": "Oxfordshire County Council",
+      "reference": "OXF",
+      "gssCode": "E10000025",
+      "type": "CTY",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.oxfordshire.gov.uk"
+    },
+    {
+      "slug": "oxford-city",
+      "name": "Oxford City Council",
+      "reference": "OXO",
+      "gssCode": "E07000178",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.oxford.gov.uk"
+    },
+    {
+      "slug": "pendle",
+      "name": "Pendle Borough Council",
+      "reference": "PEN",
+      "gssCode": "E07000122",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.pendle.gov.uk"
+    },
+    {
+      "slug": "plymouth",
+      "name": "Plymouth City Council",
+      "reference": "PLY",
+      "gssCode": "E06000026",
+      "type": "UA",
+      "startDate": "1998-04-01",
+      "endDate": "",
+      "website": "https://www.plymouth.gov.uk"
+    },
+    {
+      "slug": "portsmouth-city",
+      "name": "Portsmouth City Council",
+      "reference": "POR",
+      "gssCode": "E06000044",
+      "type": "UA",
+      "startDate": "1905-06-20",
+      "endDate": "",
+      "website": "https://www.portsmouth.gov.uk"
+    },
+    {
+      "slug": "preston-city",
+      "name": "Preston City Council",
+      "reference": "PRE",
+      "gssCode": "E07000123",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.preston.gov.uk"
+    },
+    {
+      "slug": "peterborough-city",
+      "name": "Peterborough City Council",
+      "reference": "PTE",
+      "gssCode": "E06000031",
+      "type": "UA",
+      "startDate": "1905-06-20",
+      "endDate": "",
+      "website": "https://www.peterborough.gov.uk"
+    },
+    {
+      "slug": "redcar-and-cleveland",
+      "name": "Redcar and Cleveland Borough Council",
+      "reference": "RCC",
+      "gssCode": "E06000003",
+      "type": "UA",
+      "startDate": "1996-04-01",
+      "endDate": "",
+      "website": "https://www.redcar-cleveland.gov.uk"
+    },
+    {
+      "slug": "rochdale",
+      "name": "Rochdale Metropolitan Borough Council",
+      "reference": "RCH",
+      "gssCode": "E08000005",
+      "type": "MD",
+      "startDate": "1905-05-27",
+      "endDate": "",
+      "website": "https://www.rochdale.gov.uk"
+    },
+    {
+      "slug": "london-of-redbridge",
+      "name": "London Borough of Redbridge",
+      "reference": "RDB",
+      "gssCode": "E09000026",
+      "type": "LBO",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.redbridge.gov.uk"
+    },
+    {
+      "slug": "reading",
+      "name": "Reading Borough Council",
+      "reference": "RDG",
+      "gssCode": "E06000038",
+      "type": "UA",
+      "startDate": "1905-05-27",
+      "endDate": "",
+      "website": "http://www.reading.gov.uk"
+    },
+    {
+      "slug": "redditch",
+      "name": "Redditch Borough Council",
+      "reference": "RED",
+      "gssCode": "E07000236",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.redditchbc.gov.uk"
+    },
+    {
+      "slug": "reigate-and-banstead",
+      "name": "Reigate and Banstead Borough Council",
+      "reference": "REI",
+      "gssCode": "E07000211",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.reigate-banstead.gov.uk"
+    },
+    {
+      "slug": "ribble-valley",
+      "name": "Ribble Valley Borough Council",
+      "reference": "RIB",
+      "gssCode": "E07000124",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.ribblevalley.gov.uk"
+    },
+    {
+      "slug": "london-of-richmond-upon-thames",
+      "name": "London Borough of Richmond upon Thames",
+      "reference": "RIC",
+      "gssCode": "E09000027",
+      "type": "LBO",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.richmond.gov.uk"
+    },
+    {
+      "slug": "richmondshire",
+      "name": "Richmondshire District Council",
+      "reference": "RIH",
+      "gssCode": "E07000166",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "2023-03-31",
+      "website": "https://richmondshire.gov.uk"
+    },
+    {
+      "slug": "rochford",
+      "name": "Rochford District Council",
+      "reference": "ROC",
+      "gssCode": "E07000075",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.rochford.gov.uk"
+    },
+    {
+      "slug": "rother",
+      "name": "Rother District Council",
+      "reference": "ROH",
+      "gssCode": "E07000064",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.rother.gov.uk"
+    },
+    {
+      "slug": "rossendale",
+      "name": "Rossendale Borough Council",
+      "reference": "ROS",
+      "gssCode": "E07000125",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.rossendale.gov.uk"
+    },
+    {
+      "slug": "rotherham",
+      "name": "Rotherham Metropolitan Borough Council",
+      "reference": "ROT",
+      "gssCode": "E08000018",
+      "type": "MD",
+      "startDate": "1905-05-27",
+      "endDate": "",
+      "website": "https://www.rotherham.gov.uk"
+    },
+    {
+      "slug": "rugby",
+      "name": "Rugby Borough Council",
+      "reference": "RUG",
+      "gssCode": "E07000220",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.rugby.gov.uk"
+    },
+    {
+      "slug": "rushmoor",
+      "name": "Rushmoor Borough Council",
+      "reference": "RUH",
+      "gssCode": "E07000092",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.rushmoor.gov.uk"
+    },
+    {
+      "slug": "runnymede",
+      "name": "Runnymede Borough Council",
+      "reference": "RUN",
+      "gssCode": "E07000212",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.runnymede.gov.uk"
+    },
+    {
+      "slug": "rushcliffe",
+      "name": "Rushcliffe Borough Council",
+      "reference": "RUS",
+      "gssCode": "E07000176",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.rushcliffe.gov.uk"
+    },
+    {
+      "slug": "rutland",
+      "name": "Rutland County Council",
+      "reference": "RUT",
+      "gssCode": "E06000017",
+      "type": "UA",
+      "startDate": "1997-04-01",
+      "endDate": "",
+      "website": "https://www.rutland.gov.uk"
+    },
+    {
+      "slug": "ryedale",
+      "name": "Ryedale District Council",
+      "reference": "RYE",
+      "gssCode": "E07000167",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "2023-03-31",
+      "website": "https://www.ryedale.gov.uk"
+    },
+    {
+      "slug": "st-albans-city-and",
+      "name": "St Albans City and District Council",
+      "reference": "SAL",
+      "gssCode": "E07000240",
+      "type": "NMD",
+      "startDate": "1974-04-01",
+      "endDate": "",
+      "website": "https://www.stalbans.gov.uk"
+    },
+    {
+      "slug": "sandwell",
+      "name": "Sandwell Metropolitan Borough Council",
+      "reference": "SAW",
+      "gssCode": "E08000028",
+      "type": "MD",
+      "startDate": "1905-06-07",
+      "endDate": "",
+      "website": "https://www.sandwell.gov.uk"
+    },
+    {
+      "slug": "south-cambridgeshire",
+      "name": "South Cambridgeshire District Council",
+      "reference": "SCA",
+      "gssCode": "E07000012",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.scambs.gov.uk"
+    },
+    {
+      "slug": "scarborough",
+      "name": "Scarborough Borough Council",
+      "reference": "SCE",
+      "gssCode": "E07000168",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "2023-03-31",
+      "website": "https://www.scarborough.gov.uk"
+    },
+    {
+      "slug": "south-derbyshire",
+      "name": "South Derbyshire District Council",
+      "reference": "SDE",
+      "gssCode": "E07000039",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.southderbyshire.gov.uk/"
+    },
+    {
+      "slug": "sedgemoor",
+      "name": "Sedgemoor District Council",
+      "reference": "SEG",
+      "gssCode": "E07000188",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "2023-03-31",
+      "website": "https://www.sedgemoor.gov.uk"
+    },
+    {
+      "slug": "selby",
+      "name": "Selby District Council",
+      "reference": "SEL",
+      "gssCode": "E07000169",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "2023-03-31",
+      "website": "https://www.selby.gov.uk"
+    },
+    {
+      "slug": "sevenoaks",
+      "name": "Sevenoaks District Council",
+      "reference": "SEV",
+      "gssCode": "E07000111",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.sevenoaks.gov.uk"
+    },
+    {
+      "slug": "suffolk",
+      "name": "Suffolk County Council",
+      "reference": "SFK",
+      "gssCode": "E10000029",
+      "type": "CTY",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.suffolk.gov.uk"
+    },
+    {
+      "slug": "sefton",
+      "name": "Sefton Metropolitan Borough Council",
+      "reference": "SFT",
+      "gssCode": "E08000014",
+      "type": "MD",
+      "startDate": "1905-06-08",
+      "endDate": "",
+      "website": "https://www.sefton.gov.uk"
+    },
+    {
+      "slug": "south-gloucestershire",
+      "name": "South Gloucestershire Council",
+      "reference": "SGC",
+      "gssCode": "E06000025",
+      "type": "UA",
+      "startDate": "1905-06-18",
+      "endDate": "",
+      "website": "https://www.southglos.gov.uk"
+    },
+    {
+      "slug": "south-hams",
+      "name": "South Hams District Council",
+      "reference": "SHA",
+      "gssCode": "E07000044",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.southhams.gov.uk/"
+    },
+    {
+      "slug": "folkestone-and-hythe",
+      "name": "Folkestone and Hythe Council",
+      "reference": "SHE",
+      "gssCode": "E07000112",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.folkestone-hythe.gov.uk"
+    },
+    {
+      "slug": "sheffield",
+      "name": "Sheffield City Council",
+      "reference": "SHF",
+      "gssCode": "E08000019",
+      "type": "MD",
+      "startDate": "1905-06-08",
+      "endDate": "",
+      "website": "https://www.sheffield.gov.uk"
+    },
+    {
+      "slug": "st-helens",
+      "name": "St Helens Council",
+      "reference": "SHN",
+      "gssCode": "E08000013",
+      "type": "MD",
+      "startDate": "1905-06-08",
+      "endDate": "",
+      "website": "https://www.sthelens.gov.uk"
+    },
+    {
+      "slug": "south-holland",
+      "name": "South Holland District Council",
+      "reference": "SHO",
+      "gssCode": "E07000140",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.sholland.gov.uk"
+    },
+    {
+      "slug": "shropshire",
+      "name": "Shropshire Council",
+      "reference": "SHR",
+      "gssCode": "E06000051",
+      "type": "UA",
+      "startDate": "2009-04-01",
+      "endDate": "",
+      "website": "https://www.shropshire.gov.uk"
+    },
+    {
+      "slug": "south-kesteven",
+      "name": "South Kesteven District Council",
+      "reference": "SKE",
+      "gssCode": "E07000141",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.southkesteven.gov.uk"
+    },
+    {
+      "slug": "stockport",
+      "name": "Stockport Metropolitan Borough Council",
+      "reference": "SKP",
+      "gssCode": "E08000007",
+      "type": "MD",
+      "startDate": "1905-05-27",
+      "endDate": "",
+      "website": "https://www.stockport.gov.uk"
+    },
+    {
+      "slug": "south-lakeland",
+      "name": "South Lakeland District Council",
+      "reference": "SLA",
+      "gssCode": "E07000031",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "2023-03-31",
+      "website": "https://www.southlakeland.gov.uk"
+    },
+    {
+      "slug": "salford",
+      "name": "Salford City Council",
+      "reference": "SLF",
+      "gssCode": "E08000006",
+      "type": "MD",
+      "startDate": "1905-05-27",
+      "endDate": "",
+      "website": "https://www.salford.gov.uk"
+    },
+    {
+      "slug": "slough",
+      "name": "Slough Borough Council",
+      "reference": "SLG",
+      "gssCode": "E06000039",
+      "type": "UA",
+      "startDate": "1998-04-01",
+      "endDate": "",
+      "website": "https://www.slough.gov.uk"
+    },
+    {
+      "slug": "sunderland",
+      "name": "Sunderland City Council",
+      "reference": "SND",
+      "gssCode": "E08000024",
+      "type": "MD",
+      "startDate": "1905-05-27",
+      "endDate": "",
+      "website": "https://www.sunderland.gov.uk"
+    },
+    {
+      "slug": "south-norfolk",
+      "name": "South Norfolk District Council",
+      "reference": "SNO",
+      "gssCode": "E07000149",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.south-norfolk.gov.uk"
+    },
+    {
+      "slug": "solihull",
+      "name": "Solihull Metropolitan Borough Council",
+      "reference": "SOL",
+      "gssCode": "E08000029",
+      "type": "MD",
+      "startDate": "1905-05-27",
+      "endDate": "",
+      "website": "https://www.solihull.gov.uk"
+    },
+    {
+      "slug": "somerset-som",
+      "name": "Somerset County Council",
+      "reference": "SOM",
+      "gssCode": "E10000027",
+      "type": "CTY",
+      "startDate": "",
+      "endDate": "2023-03-31",
+      "website": "https://www.somerset.gov.uk"
+    },
+    {
+      "slug": "southend-on-sea",
+      "name": "Southend-on-Sea Borough Council",
+      "reference": "SOS",
+      "gssCode": "E06000033",
+      "type": "UA",
+      "startDate": "1905-06-20",
+      "endDate": "",
+      "website": "https://www.southend.gov.uk"
+    },
+    {
+      "slug": "south-oxfordshire",
+      "name": "South Oxfordshire District Council",
+      "reference": "SOX",
+      "gssCode": "E07000179",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.southoxon.gov.uk"
+    },
+    {
+      "slug": "spelthorne",
+      "name": "Spelthorne Borough Council",
+      "reference": "SPE",
+      "gssCode": "E07000213",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.spelthorne.gov.uk"
+    },
+    {
+      "slug": "south-ribble",
+      "name": "South Ribble Borough Council",
+      "reference": "SRI",
+      "gssCode": "E07000126",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.southribble.gov.uk"
+    },
+    {
+      "slug": "surrey",
+      "name": "Surrey County Council",
+      "reference": "SRY",
+      "gssCode": "E10000030",
+      "type": "CTY",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.surreycc.gov.uk"
+    },
+    {
+      "slug": "south-somerset",
+      "name": "South Somerset District Council",
+      "reference": "SSO",
+      "gssCode": "E07000189",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "2023-03-31",
+      "website": "https://www.southsomerset.gov.uk"
+    },
+    {
+      "slug": "south-staffordshire",
+      "name": "South Staffordshire Council",
+      "reference": "SST",
+      "gssCode": "E07000196",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.sstaffs.gov.uk"
+    },
+    {
+      "slug": "stafford",
+      "name": "Stafford Borough Council",
+      "reference": "STA",
+      "gssCode": "E07000197",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.staffordbc.gov.uk"
+    },
+    {
+      "slug": "stoke-on-trent-city",
+      "name": "Stoke-on-Trent City Council",
+      "reference": "STE",
+      "gssCode": "E06000021",
+      "type": "UA",
+      "startDate": "1905-06-20",
+      "endDate": "",
+      "website": "https://www.stoke.gov.uk"
+    },
+    {
+      "slug": "staffordshire-moorlands",
+      "name": "Staffordshire Moorlands District Council",
+      "reference": "STF",
+      "gssCode": "E07000198",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.staffsmoorlands.gov.uk"
+    },
+    {
+      "slug": "southampton-city",
+      "name": "Southampton City Council",
+      "reference": "STH",
+      "gssCode": "E06000045",
+      "type": "UA",
+      "startDate": "1905-06-19",
+      "endDate": "",
+      "website": "https://www.southampton.gov.uk/"
+    },
+    {
+      "slug": "london-of-sutton",
+      "name": "London Borough of Sutton",
+      "reference": "STN",
+      "gssCode": "E09000029",
+      "type": "LBO",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.sutton.gov.uk"
+    },
+    {
+      "slug": "stroud",
+      "name": "Stroud District Council",
+      "reference": "STO",
+      "gssCode": "E07000082",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.stroud.gov.uk"
+    },
+    {
+      "slug": "stratford-on-avon",
+      "name": "Stratford-on-Avon District Council",
+      "reference": "STR",
+      "gssCode": "E07000221",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.stratford.gov.uk"
+    },
+    {
+      "slug": "staffordshire",
+      "name": "Staffordshire County Council",
+      "reference": "STS",
+      "gssCode": "E10000028",
+      "type": "CTY",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.staffordshire.gov.uk"
+    },
+    {
+      "slug": "stockton-on-tees",
+      "name": "Stockton-on-Tees Borough Council",
+      "reference": "STT",
+      "gssCode": "E06000004",
+      "type": "UA",
+      "startDate": "1905-06-18",
+      "endDate": "",
+      "website": "https://www.stockton.gov.uk"
+    },
+    {
+      "slug": "stevenage",
+      "name": "Stevenage Borough Council",
+      "reference": "STV",
+      "gssCode": "E07000243",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.stevenage.gov.uk"
+    },
+    {
+      "slug": "south-tyneside",
+      "name": "South Tyneside Council",
+      "reference": "STY",
+      "gssCode": "E08000023",
+      "type": "MD",
+      "startDate": "1974-04-01",
+      "endDate": "",
+      "website": "https://www.southtyneside.info"
+    },
+    {
+      "slug": "somerset",
+      "name": "Somerset Council",
+      "reference": "SUA",
+      "gssCode": "E06000066",
+      "type": "UA",
+      "startDate": "2023-04-01",
+      "endDate": "",
+      "website": "https://www.somerset.gov.uk/"
+    },
+    {
+      "slug": "surrey-heath",
+      "name": "Surrey Heath Borough Council",
+      "reference": "SUR",
+      "gssCode": "E07000214",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.surreyheath.gov.uk"
+    },
+    {
+      "slug": "swindon",
+      "name": "Swindon Borough Council",
+      "reference": "SWD",
+      "gssCode": "E06000030",
+      "type": "UA",
+      "startDate": "1905-06-20",
+      "endDate": "",
+      "website": "https://www.swindon.gov.uk"
+    },
+    {
+      "slug": "southwark",
+      "name": "London Borough of Southwark",
+      "reference": "SWK",
+      "gssCode": "E09000028",
+      "type": "LBO",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.southwark.gov.uk"
+    },
+    {
+      "slug": "swale",
+      "name": "Swale Borough Council",
+      "reference": "SWL",
+      "gssCode": "E07000113",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.swale.gov.uk"
+    },
+    {
+      "slug": "somerset-west-and-taunton",
+      "name": "Somerset West and Taunton Council",
+      "reference": "SWT",
+      "gssCode": "E07000246",
+      "type": "NMD",
+      "startDate": "2019-04-01",
+      "endDate": "2023-03-31",
+      "website": "https://www.somersetwestandtaunton.gov.uk"
+    },
+    {
+      "slug": "tameside",
+      "name": "Tameside Metropolitan Borough Council",
+      "reference": "TAM",
+      "gssCode": "E08000008",
+      "type": "MD",
+      "startDate": "1974-04-01",
+      "endDate": "",
+      "website": "https://www.tameside.gov.uk"
+    },
+    {
+      "slug": "tandridge",
+      "name": "Tandridge District Council",
+      "reference": "TAN",
+      "gssCode": "E07000215",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.tandridge.gov.uk"
+    },
+    {
+      "slug": "tamworth",
+      "name": "Tamworth Borough Council",
+      "reference": "TAW",
+      "gssCode": "E07000199",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.tamworth.gov.uk"
+    },
+    {
+      "slug": "teignbridge",
+      "name": "Teignbridge District Council",
+      "reference": "TEI",
+      "gssCode": "E07000045",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.teignbridge.gov.uk"
+    },
+    {
+      "slug": "tendring",
+      "name": "Tendring District Council",
+      "reference": "TEN",
+      "gssCode": "E07000076",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.tendringdc.gov.uk"
+    },
+    {
+      "slug": "test-valley",
+      "name": "Test Valley Borough Council",
+      "reference": "TES",
+      "gssCode": "E07000093",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.testvalley.gov.uk"
+    },
+    {
+      "slug": "tewkesbury",
+      "name": "Tewkesbury Borough Council",
+      "reference": "TEW",
+      "gssCode": "E07000083",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://tewkesbury.gov.uk"
+    },
+    {
+      "slug": "telford-wrekin",
+      "name": "Telford & Wrekin Council",
+      "reference": "TFW",
+      "gssCode": "E06000020",
+      "type": "UA",
+      "startDate": "1905-06-20",
+      "endDate": "",
+      "website": "https://www.telford.gov.uk"
+    },
+    {
+      "slug": "thanet",
+      "name": "Thanet District Council",
+      "reference": "THA",
+      "gssCode": "E07000114",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://thanet.gov.uk"
+    },
+    {
+      "slug": "three-rivers",
+      "name": "Three Rivers District Council",
+      "reference": "THE",
+      "gssCode": "E07000102",
+      "type": "NMD",
+      "startDate": "1974-04-01",
+      "endDate": "",
+      "website": "https://www.threerivers.gov.uk"
+    },
+    {
+      "slug": "thurrock",
+      "name": "Thurrock Council",
+      "reference": "THR",
+      "gssCode": "E06000034",
+      "type": "UA",
+      "startDate": "1905-06-20",
+      "endDate": "",
+      "website": "https://www.thurrock.gov.uk"
+    },
+    {
+      "slug": "torbay",
+      "name": "Torbay Council",
+      "reference": "TOB",
+      "gssCode": "E06000027",
+      "type": "UA",
+      "startDate": "1905-06-20",
+      "endDate": "",
+      "website": "https://www.torbay.gov.uk"
+    },
+    {
+      "slug": "tonbridge-and-malling",
+      "name": "Tonbridge and Malling Borough Council",
+      "reference": "TON",
+      "gssCode": "E07000115",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.tmbc.gov.uk"
+    },
+    {
+      "slug": "torridge",
+      "name": "Torridge District Council",
+      "reference": "TOR",
+      "gssCode": "E07000046",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.torridge.gov.uk"
+    },
+    {
+      "slug": "trafford",
+      "name": "Trafford Metropolitan Borough Council",
+      "reference": "TRF",
+      "gssCode": "E08000009",
+      "type": "MD",
+      "startDate": "1974-04-01",
+      "endDate": "",
+      "website": "https://www.trafford.gov.uk"
+    },
+    {
+      "slug": "tunbridge-wells",
+      "name": "Tunbridge Wells Borough Council",
+      "reference": "TUN",
+      "gssCode": "E07000116",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.tunbridgewells.gov.uk"
+    },
+    {
+      "slug": "tower-hamlets",
+      "name": "London Borough of Tower Hamlets",
+      "reference": "TWH",
+      "gssCode": "E09000030",
+      "type": "LBO",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.towerhamlets.gov.uk"
+    },
+    {
+      "slug": "uttlesford",
+      "name": "Uttlesford District Council",
+      "reference": "UTT",
+      "gssCode": "E07000077",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.uttlesford.gov.uk"
+    },
+    {
+      "slug": "vale-of-white-horse",
+      "name": "Vale of White Horse District Council",
+      "reference": "VAL",
+      "gssCode": "E07000180",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.whitehorsedc.gov.uk"
+    },
+    {
+      "slug": "waverley",
+      "name": "Waverley Borough Council",
+      "reference": "WAE",
+      "gssCode": "E07000216",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.waverley.gov.uk/"
+    },
+    {
+      "slug": "warwickshire",
+      "name": "Warwickshire County Council",
+      "reference": "WAR",
+      "gssCode": "E10000031",
+      "type": "CTY",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.warwickshire.gov.uk"
+    },
+    {
+      "slug": "watford",
+      "name": "Watford Borough Council",
+      "reference": "WAT",
+      "gssCode": "E07000103",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.watford.gov.uk"
+    },
+    {
+      "slug": "warwick",
+      "name": "Warwick District Council",
+      "reference": "WAW",
+      "gssCode": "E07000222",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.warwickdc.gov.uk"
+    },
+    {
+      "slug": "west-berkshire",
+      "name": "West Berkshire Council",
+      "reference": "WBK",
+      "gssCode": "E06000037",
+      "type": "UA",
+      "startDate": "1905-06-20",
+      "endDate": "",
+      "website": "https://www.westberks.gov.uk"
+    },
+    {
+      "slug": "west-devon",
+      "name": "West Devon Borough Council",
+      "reference": "WDE",
+      "gssCode": "E07000047",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.westdevon.gov.uk"
+    },
+    {
+      "slug": "wealden",
+      "name": "Wealden District Council",
+      "reference": "WEA",
+      "gssCode": "E07000065",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.wealden.gov.uk"
+    },
+    {
+      "slug": "welwyn-hatfield",
+      "name": "Welwyn Hatfield Borough Council",
+      "reference": "WEW",
+      "gssCode": "E07000241",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.welhat.gov.uk"
+    },
+    {
+      "slug": "london-of-waltham-forest",
+      "name": "London Borough of Waltham Forest",
+      "reference": "WFT",
+      "gssCode": "E09000031",
+      "type": "LBO",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.walthamforest.gov.uk/"
+    },
+    {
+      "slug": "westmorland-and-furness",
+      "name": "Westmorland and Furness Council",
+      "reference": "WFUA",
+      "gssCode": "E06000064",
+      "type": "UA",
+      "startDate": "2023-04-01",
+      "endDate": "",
+      "website": "https://www.westmorlandandfurness.gov.uk/"
+    },
+    {
+      "slug": "wigan",
+      "name": "Wigan Metropolitan Borough Council",
+      "reference": "WGN",
+      "gssCode": "E08000010",
+      "type": "MD",
+      "startDate": "1974-04-01",
+      "endDate": "",
+      "website": "https://www.wigan.gov.uk"
+    },
+    {
+      "slug": "wiltshire",
+      "name": "Wiltshire Council",
+      "reference": "WIL",
+      "gssCode": "E06000054",
+      "type": "UA",
+      "startDate": "2009-04-01",
+      "endDate": "",
+      "website": "https://wiltshire.gov.uk"
+    },
+    {
+      "slug": "winchester-city",
+      "name": "Winchester City Council",
+      "reference": "WIN",
+      "gssCode": "E07000094",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.winchester.gov.uk"
+    },
+    {
+      "slug": "wakefield",
+      "name": "Wakefield Metropolitan District Council",
+      "reference": "WKF",
+      "gssCode": "E08000036",
+      "type": "MD",
+      "startDate": "1974-04-01",
+      "endDate": "",
+      "website": "https://www.wakefield.gov.uk"
+    },
+    {
+      "slug": "west-lancashire",
+      "name": "West Lancashire Borough Council",
+      "reference": "WLA",
+      "gssCode": "E07000127",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.westlancs.gov.uk"
+    },
+    {
+      "slug": "west-lindsey",
+      "name": "West Lindsey District Council",
+      "reference": "WLI",
+      "gssCode": "E07000142",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.west-lindsey.gov.uk"
+    },
+    {
+      "slug": "walsall",
+      "name": "Walsall Metropolitan Borough Council",
+      "reference": "WLL",
+      "gssCode": "E08000030",
+      "type": "MD",
+      "startDate": "1974-04-01",
+      "endDate": "",
+      "website": "https://www.walsall.gov.uk"
+    },
+    {
+      "slug": "city-of-wolverhampton",
+      "name": "City of Wolverhampton Council",
+      "reference": "WLV",
+      "gssCode": "E08000031",
+      "type": "MD",
+      "startDate": "1974-04-01",
+      "endDate": "",
+      "website": "https://www.wolverhampton.gov.uk"
+    },
+    {
+      "slug": "wandsworth",
+      "name": "London Borough of Wandsworth",
+      "reference": "WND",
+      "gssCode": "E09000032",
+      "type": "LBO",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.wandsworth.gov.uk"
+    },
+    {
+      "slug": "royal-of-windsor-and-maidenhead",
+      "name": "Royal Borough of Windsor and Maidenhead",
+      "reference": "WNM",
+      "gssCode": "E06000040",
+      "type": "UA",
+      "startDate": "1905-06-20",
+      "endDate": "",
+      "website": "https://www.rbwm.gov.uk/"
+    },
+    {
+      "slug": "west-northamptonshire",
+      "name": "West Northamptonshire Council",
+      "reference": "WNUA",
+      "gssCode": "E06000062",
+      "type": "UA",
+      "startDate": "2020-04-01",
+      "endDate": "",
+      "website": "https://www.westnorthants.gov.uk/"
+    },
+    {
+      "slug": "worcester-city",
+      "name": "Worcester City Council",
+      "reference": "WOC",
+      "gssCode": "E07000237",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.worcester.gov.uk"
+    },
+    {
+      "slug": "woking",
+      "name": "Woking Borough Council",
+      "reference": "WOI",
+      "gssCode": "E07000217",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.woking.gov.uk"
+    },
+    {
+      "slug": "wokingham",
+      "name": "Wokingham Borough Council",
+      "reference": "WOK",
+      "gssCode": "E06000041",
+      "type": "UA",
+      "startDate": "1905-06-20",
+      "endDate": "",
+      "website": "https://www.wokingham.gov.uk"
+    },
+    {
+      "slug": "worcestershire",
+      "name": "Worcestershire County Council",
+      "reference": "WOR",
+      "gssCode": "E10000034",
+      "type": "CTY",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.worcestershire.gov.uk"
+    },
+    {
+      "slug": "worthing",
+      "name": "Worthing Borough Council",
+      "reference": "WOT",
+      "gssCode": "E07000229",
+      "type": "NMD",
+      "startDate": "1905-06-25",
+      "endDate": "",
+      "website": "https://www.adur-worthing.gov.uk"
+    },
+    {
+      "slug": "west-oxfordshire",
+      "name": "West Oxfordshire District Council",
+      "reference": "WOX",
+      "gssCode": "E07000181",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.westoxon.gov.uk"
+    },
+    {
+      "slug": "wirral",
+      "name": "Wirral Borough Council",
+      "reference": "WRL",
+      "gssCode": "E08000015",
+      "type": "MD",
+      "startDate": "1974-04-01",
+      "endDate": "",
+      "website": "https://www.wirral.gov.uk"
+    },
+    {
+      "slug": "warrington",
+      "name": "Warrington Borough Council",
+      "reference": "WRT",
+      "gssCode": "E06000007",
+      "type": "UA",
+      "startDate": "1905-06-20",
+      "endDate": "",
+      "website": "https://www.warrington.gov.uk"
+    },
+    {
+      "slug": "west-suffolk",
+      "name": "West Suffolk Council",
+      "reference": "WSK",
+      "gssCode": "E07000245",
+      "type": "NMD",
+      "startDate": "2019-04-01",
+      "endDate": "",
+      "website": "https://www.westsuffolk.gov.uk"
+    },
+    {
+      "slug": "westminster",
+      "name": "City of Westminster",
+      "reference": "WSM",
+      "gssCode": "E09000033",
+      "type": "LBO",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.westminster.gov.uk"
+    },
+    {
+      "slug": "west-sussex",
+      "name": "West Sussex County Council",
+      "reference": "WSX",
+      "gssCode": "E10000032",
+      "type": "CTY",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.westsussex.gov.uk"
+    },
+    {
+      "slug": "wychavon",
+      "name": "Wychavon District Council",
+      "reference": "WYC",
+      "gssCode": "E07000238",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.wychavon.gov.uk"
+    },
+    {
+      "slug": "wyre-forest",
+      "name": "Wyre Forest District Council",
+      "reference": "WYE",
+      "gssCode": "E07000239",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.wyreforestdc.gov.uk"
+    },
+    {
+      "slug": "wyre",
+      "name": "Wyre Borough Council",
+      "reference": "WYR",
+      "gssCode": "E07000128",
+      "type": "NMD",
+      "startDate": "",
+      "endDate": "",
+      "website": "https://www.wyre.gov.uk"
+    },
+    {
+      "slug": "city-of-york",
+      "name": "City of York Council",
+      "reference": "YOR",
+      "gssCode": "E06000014",
+      "type": "UA",
+      "startDate": "1905-06-18",
+      "endDate": "",
+      "website": "https://www.york.gov.uk"
+    }
+  ]
+}

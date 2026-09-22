@@ -58,6 +58,8 @@ export const sourceDocuments = sqliteTable(
     url: text("url").notNull(),
     type: text("type").notNull(), // expenditure | budget | accounts | procurement_card
     downloadedAt: text("downloaded_at"),
+    semanticHash: text("semantic_hash"),
+    contentHash: text("content_hash"),
     columnMapping: text("column_mapping"), // JSON: detected header → canonical field mapping
   },
   (table) => [
@@ -116,6 +118,10 @@ export const transactions = sqliteTable(
     directorate: text("directorate"),
     category: text("category"),
     description: text("description"),
+    serviceClassification: text("service_classification").notNull().default("Unclassified"),
+    classificationMethod: text("classification_method").notNull().default("unresolved"),
+    classificationEvidence: text("classification_evidence"),
+    classifierVersion: text("classifier_version"),
     amount: real("amount").notNull(),
     date: text("date"), // ISO date
     month: text("month"), // YYYY-MM

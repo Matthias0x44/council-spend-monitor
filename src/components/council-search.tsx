@@ -21,14 +21,13 @@ export function CouncilSearch() {
 
   useEffect(() => {
     fetch("/api/councils")
-      .then((r) => r.json() as Promise<Council[]>)
+      .then((r) => { if (!r.ok) throw new Error("Council search unavailable"); return r.json() as Promise<Council[]>; })
       .then((data) => setCouncils(data))
       .catch(() => {});
   }, []);
 
   const filtered = councils.filter(
     (c) =>
-      c.scrapeStatus === "active" &&
       (c.name.toLowerCase().includes(query.toLowerCase()) ||
         c.region?.toLowerCase().includes(query.toLowerCase()))
   );
@@ -44,6 +43,7 @@ export function CouncilSearch() {
         />
         <input
           type="text"
+          aria-label="Search councils"
           placeholder="Search for a council..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -62,7 +62,7 @@ export function CouncilSearch() {
             <button
               key={c.slug}
               className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left transition-colors hover:bg-gray-50 first:rounded-t-xl last:rounded-b-xl"
-              onMouseDown={() => router.push(`/councils/${c.slug}`)}
+              onClick={() => router.push(`/councils/${c.slug}`)}
             >
               <div>
                 <div className="font-medium" style={{ color: "#111" }}>

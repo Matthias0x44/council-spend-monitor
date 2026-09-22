@@ -1,0 +1,62 @@
+{
+  "generatedAt": "2026-07-11T19:56:12.623Z",
+  "attachedCount": 8,
+  "attached": [
+    {
+      "slug": "sheffield",
+      "packageId": "datamill:emd0m",
+      "title": "Council spend over £250",
+      "org": "Sheffield City Council",
+      "sheetCount": 156
+    },
+    {
+      "slug": "wakefield",
+      "packageId": "datamill:e61m0",
+      "title": "Council spending",
+      "org": "Wakefield Metropolitan District Council",
+      "sheetCount": 59
+    },
+    {
+      "slug": "liverpool",
+      "packageId": "datamill:2w6d8",
+      "title": "Liverpool City Council spending",
+      "org": "Liverpool City Council",
+      "sheetCount": 6
+    },
+    {
+      "slug": "sheffield",
+      "packageId": "datamill:2wok8",
+      "title": "Regulation 113 Late Payments",
+      "org": "Sheffield City Council",
+      "sheetCount": 0
+    },
+    {
+      "slug": "bolton",
+      "packageId": "datamill:2914q",
+      "title": "Expenditure report",
+      "org": "Bolton Council",
+      "sheetCount": 1
+    },
+    {
+      "slug": "north-somerset",
+      "packageId": "datamill:2nq4m",
+      "title": "Council spend over £250",
+      "org": "North Tyneside Metropolitan Council",
+      "sheetCount": 25
+    },
+    {
+      "slug": "sunderland",
+      "packageId": "datamill:2y1z8",
+      "title": "Council spend over £500",
+      "org": "Sunderland City Council",
+      "sheetCount": 1
+    },
+    {
+      "slug": "newcastle",
+      "packageId": "datamill:vq6j7",
+      "title": "Payments over £250 made by Newcastle City Council",
+      "org": "Newcastle City Council",
+      "sheetCount": 81
+    }
+  ]
+}

@@ -13,8 +13,8 @@ export default function Home() {
           Council Spend Monitor
         </h1>
         <p className="max-w-md text-lg" style={{ color: "#6b7280" }}>
-          Explore UK council public spending data. Budgets, outturn, suppliers,
-          and every transaction over &pound;500.
+          Explore published spending by English councils, with searchable payments,
+          original sources, and clear coverage gaps.
         </p>
       </div>
 
@@ -23,23 +23,23 @@ export default function Home() {
       <div className="grid w-full max-w-3xl gap-4 sm:grid-cols-3">
         <div className="flex flex-col items-center gap-2 rounded-xl border p-6 text-center" style={{ background: "#fff", borderColor: "#e5e7eb" }}>
           <BarChart3 className="h-6 w-6" style={{ color: "#1d4ed8" }} />
-          <h3 className="font-semibold" style={{ color: "#111" }}>Budget &amp; Outturn</h3>
+          <h3 className="font-semibold" style={{ color: "#111" }}>Published Spending</h3>
           <p className="text-sm" style={{ color: "#6b7280" }}>
-            Approved budgets vs actual spend by directorate and service
+            Explore recorded payments by council, service and financial year
           </p>
         </div>
         <div className="flex flex-col items-center gap-2 rounded-xl border p-6 text-center" style={{ background: "#fff", borderColor: "#e5e7eb" }}>
           <FileText className="h-6 w-6" style={{ color: "#1d4ed8" }} />
           <h3 className="font-semibold" style={{ color: "#111" }}>Transaction Ledger</h3>
           <p className="text-sm" style={{ color: "#6b7280" }}>
-            Search every public payment by supplier, amount, and date
+            Search available payments by supplier, amount, and date
           </p>
         </div>
         <div className="flex flex-col items-center gap-2 rounded-xl border p-6 text-center" style={{ background: "#fff", borderColor: "#e5e7eb" }}>
           <AlertTriangle className="h-6 w-6" style={{ color: "#d97706" }} />
           <h3 className="font-semibold" style={{ color: "#111" }}>Spending Flags</h3>
           <p className="text-sm" style={{ color: "#6b7280" }}>
-            Unusual supplier concentration, rising costs, and big one-offs
+            Data-quality signals and large payments; flags are not evidence of wrongdoing
           </p>
         </div>
       </div>

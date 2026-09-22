@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import {
   getCouncilBySlug,
   getOverview,
+  getCoverage,
   getFinancialYears,
   getLatestFinancialYear,
   getSpendByCategory,
@@ -38,7 +39,10 @@ export default async function CouncilDashboard({ params, searchParams }: PagePro
     ? allFYs.find((fy) => fy.label === fyParam)
     : await getLatestFinancialYear(council.id);
 
-  const fyId = targetFY?.id;
+  if (fyParam && !targetFY) notFound();
+  if (!targetFY) return <div className="rounded-xl border bg-white p-6"><h1 className="text-2xl font-bold">{council.name}</h1><p className="mt-3">No verified transaction data is available in the five-year window. This does not mean the council spent nothing.</p></div>;
+  const fyId = targetFY.id;
+  const coverage = await getCoverage(council.id, fyId);
 
   const [overview, byCategory, byDirectorate, topSuppliers, monthlyTrend, flags, directorates, categories] =
     await Promise.all([
@@ -66,6 +70,11 @@ export default async function CouncilDashboard({ params, searchParams }: PagePro
         />
       </div>
 
+      <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950">
+        <strong>Partial published-payment data · {coverage.months} months observed in {targetFY.label}</strong>
+        <p className="mt-1">{coverage.firstMonth} to {coverage.lastMonth}. Missing months are unknown, not zero. Published payments exclude items such as payroll and are not the council’s total expenditure. Refunds reduce the net total.</p>
+        <p className="mt-1">Original categories are supplied by the council. Service labels are automated suggestions; ambiguous records remain unclassified. Accuracy has not yet been independently measured.</p>
+      </div>
       <OverviewCards overview={overview} />
 
       {flags.length > 0 && <FlagsPanel flags={flags} />}
