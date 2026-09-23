@@ -105,7 +105,7 @@ export async function discoverViaCkan(
 const NON_DATA_EXTENSIONS = /\.(pdf|html|htm|aspx|php|doc|docx|pptx|png|jpg|jpeg|gif|svg|zip)(\?|#|$)/i;
 
 function hasFileExtension(href: string): string | null {
-  const match = href.match(/\.(csv|xlsx|xlsm|xls)(\?|#|$)/i);
+  const match = href.match(/\.(csv|xlsx|xlsm|xls)([?&#]|$)/i);
   return match ? match[1].toLowerCase() : null;
 }
 
@@ -113,7 +113,7 @@ function looksLikeSpendFile(href: string, linkText: string): boolean {
   if (NON_DATA_EXTENSIONS.test(href)) return false;
   if (/gov\.uk\/government\/publications/i.test(href)) return false;
   const combined = `${href} ${linkText}`.toLowerCase();
-  return SPEND_KEYWORDS.test(combined) && MONTH_PATTERN.test(combined);
+  return SPEND_KEYWORDS.test(combined) && MONTH_PATTERN.test(combined) && /download|attachment|document|\bfile\b|csv|xlsx?/i.test(combined);
 }
 
 function looksLikeSubPage(href: string, linkText: string): boolean {
@@ -158,13 +158,18 @@ function extractFilesFromHtml(
     const fullUrl = resolveUrl(href, baseOrigin);
     if (!fullUrl || seen.has(fullUrl)) return;
     seen.add(fullUrl);
-    if (!isPaymentPublication(`${href} ${linkText}`)) return;
+    const publicationName = `${new URL(fullUrl).pathname.split("/").pop()} ${linkText}`;
+    if (!isPaymentPublication(publicationName)) return;
 
     // Check for direct file extension match
     const ext = hasFileExtension(href);
-    if (ext && (customRegex ? customRegex.test(`${href} ${linkText}`) : (SPEND_KEYWORDS.test(`${href} ${linkText}`) || (/spend|expenditure|payment|over.500|over.250/i.test(baseOrigin) && MONTH_PATTERN.test(linkText)))) && !/budget|outturn|statement.of.accounts|pay.multiple|senior.salar|contracts?.register|procurement.pipeline/i.test(`${href} ${linkText}`)) {
+    if (ext && customRegex && !customRegex.test(`${href} ${linkText}`)) return;
+    if (ext && (customRegex ? customRegex.test(`${href} ${linkText}`) : (SPEND_KEYWORDS.test(`${href} ${linkText}`) || (/spend|expenditure|payment|over.500|over.250/i.test(baseOrigin) && MONTH_PATTERN.test(linkText)))) && isPaymentPublication(publicationName)) {
       const rawFilename = fullUrl.split("/").pop()?.split("?")[0] || "";
-      const filename = decodeFilename(rawFilename).replace(/\s+/g, "-");
+      // Download handlers often hide the extension and period in their query.
+      // Keep the publication label so the parser can use its documented month.
+      const displayName = /\.(csv|xlsx|xlsm|xls)$/i.test(rawFilename) && !/^media[,_.-]/i.test(rawFilename) ? rawFilename : `${linkText.replace(/[^\p{L}\p{N}._-]+/gu, "-")}.${ext}`;
+      const filename = decodeFilename(displayName).replace(/\s+/g, "-");
       files.push({ url: fullUrl, filename, format: ext });
       return;
     }

@@ -49,3 +49,31 @@ test('payment-source filtering also rejects legacy tax and asset registers', asy
  for(const filename of ['business-rates-as-of-jul-2026.xlsx','ContractRegisterJan2025.csv','non_domestic_rates.xlsx','asset-register.csv'])assert.equal(isPaymentPublication(filename),false,filename);
  assert.equal(isPaymentPublication('payments-to-suppliers-2025-2026.xlsx'),true);
 });
+
+test('register slugs select historical database aliases without silently skipping councils',async()=>{
+ const {selectCouncils}=await import('../scripts/lib/council-selection');
+ const councils=[{slug:'bedford-borough',reference:'BDF'},{slug:'bexley',reference:'BEX'}];
+ const register=[{slug:'bedford',reference:'BDF'},{slug:'london-of-bexley',reference:'BEX'}];
+ assert.deepEqual(selectCouncils(councils,register,['bedford','london-of-bexley']),councils);
+ assert.deepEqual(selectCouncils(councils,register,['bedford-borough']),[councils[0]]);
+ assert.deepEqual(selectCouncils(councils,register,null,['bedford']),[councils[1]]);
+ assert.throws(()=>selectCouncils(councils,register,['bedford','missing']),/not mapped in D1/);
+});
+
+test('download-handler spreadsheets retain their type and a dated publication label',async()=>{
+ const original=globalThis.fetch;
+ globalThis.fetch=async()=>new Response('<a href="/download.cfm?doc=abc.xlsx&amp;ver=1">Council payments April 2026 XLSX</a><a href="/budgets/payments-may-2026.csv">May 2026 payments CSV</a><a href="/download.cfm?doc=tax.csv&amp;ver=2">Business rates April 2026</a><a href="/transparency/pay-gap-march-2025/">Pay gap March 2025</a>');
+ try{
+  const files=await discoverViaHtml('https://example.gov.uk/spending');
+  assert.equal(files.length,2);assert.equal(files[0].format,'xlsx');
+  assert.match(files[0].filename,/April-2026.*\.xlsx$/);
+  assert.equal(files[1].format,'csv');
+ }finally{globalThis.fetch=original;}
+});
+
+test('council-specific patterns cannot fall through and ingest another authority on a shared site',async()=>{
+ const original=globalThis.fetch;
+ globalThis.fetch=async()=>new Response('<a href="/1.csv">Adur DC Payments April 2026</a><a href="/2.csv">Worthing BC Payments April 2026</a><a href="/3.csv">Joint ADC and WBC Payments April 2026</a>');
+ try{const files=await discoverViaHtml('https://example.gov.uk/payments','^(?!.*Joint).*Adur DC');assert.deepEqual(files.map(f=>f.url),['https://example.gov.uk/1.csv']);}
+ finally{globalThis.fetch=original;}
+});

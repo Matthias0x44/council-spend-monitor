@@ -1,6 +1,6 @@
 # Production readiness evidence
 
-As of 22 September 2026. The code is being hardened against the existing D1 database. **The national dataset is incomplete and the new Worker has not been deployed.**
+As of 23 September 2026. The code is being hardened against the existing D1 database. **The national dataset is incomplete and the new Worker has not been deployed.**
 
 ## Scope and source receipts
 
@@ -13,9 +13,11 @@ As of 22 September 2026. The code is being hardened against the existing D1 data
 
 ## Cloud execution
 
-The branch passed GitHub application validation and a Nottingham D1 pilot (run 35780183220). The pilot checked five unchanged source files without adding duplicate rows, then completed the retention and coverage audit. A national run, 35780852687, is processing the 337 current/predecessor authorities in 23 serial groups; it is not evidence of completed national coverage. Imports write directly to D1 and retain small audit artifacts in GitHub. The old default-branch Turso schedule remains disabled until the replacement is merged.
+The branch passed GitHub application validation and a Nottingham D1 pilot (run 35780183220). The pilot checked five unchanged source files without adding duplicate rows, then completed the retention and coverage audit. The first national run, 35780852687, committed sources but was cancelled after its reports revealed 48 register slugs differed from legacy D1 slugs. Selection now resolves through the shared authority reference and fails visibly for unmapped requests; a read-only preflight resolves all 337 authorities. The replacement run processes them in 23 serial groups; inspect the latest GitHub Actions run for progress. A dispatched run is not evidence of completed national coverage. Imports write directly to D1 and retain small audit artifacts in GitHub. The old default-branch Turso schedule remains disabled until the replacement is merged.
 
 The pre-run coverage receipt on 22 September showed 10,719,665 retained English payment rows, 67 authorities with payments and 15,657 authority-month gaps. This preceded the additional 9,403-row business-rate cleanup and subsequent national imports; refer to the latest run artifact for an updated snapshot.
+
+Six newly configured sources passed a direct-D1 one-file pilot on 23 September: Adur (571 rows), Arun (417), Ashford (6,488), Ashfield (2,014), Bassetlaw (760), and Worthing (229). Source handlers retain spreadsheet type and dated labels, and shared-site patterns cannot fall through to another council's files. Adur/Worthing joint publications are deliberately not allocated to either council without evidence of an allocation. Ashfield's public page currently lists reports from January 2024 and says older reports must be requested; that remains a documented historical gap, not zero expenditure.
 
 ## Repairs
 
@@ -23,7 +25,7 @@ The importer applies strict dates and amounts, preserves credits and small publi
 
 The dashboard distinguishes missing months from zero, marks coverage as partial, retains source links and original categories, validates API parameters, scopes budgets to their council, exports all matching rows with spreadsheet-formula protection, and disables unsupported annual comparisons. Mobile overflow was found and corrected at a 390px viewport. Browser checks covered council search, a missing-data council, a populated dashboard and an empty transaction search.
 
-Production dependency audit: zero known vulnerabilities at the recorded audit time. Next.js and SheetJS were updated. The Next.js/OpenNext production Worker build passed. All 19 regression tests and both application/importer type checks pass. Lint has no errors and one pre-existing unused-variable warning in the legacy Turso helper. Automated regression coverage includes fiscal boundaries, invalid dates/amounts, refunds, repeated payment lines, idempotent imports, late headers, multiple sheets, equivalent formats, Coventry text/code selection, API validation, council budget isolation, supplier search, full CSV export, financial-year filter options, missing-vs-redacted suppliers, tax-register rejection, rate-limit delays and parser termination. CSV chunks reuse their initial total count instead of repeatedly counting the entire selection.
+Production dependency audit: zero known vulnerabilities at the recorded audit time. Next.js and SheetJS were updated. The Next.js/OpenNext production Worker build passed. All 22 regression tests and both application/importer type checks pass. Lint has no errors and one pre-existing unused-variable warning in the legacy Turso helper. Automated regression coverage includes fiscal boundaries, invalid dates/amounts, refunds, repeated payment lines, idempotent imports, late headers, multiple sheets, equivalent formats, Coventry text/code selection, API validation, council budget isolation, supplier search, full CSV export, financial-year filter options, missing-vs-redacted suppliers, tax-register rejection, rate-limit delays and parser termination. CSV chunks reuse their initial total count instead of repeatedly counting the entire selection.
 
 ## Classifier evidence
 
@@ -53,3 +55,6 @@ npm run d1:coverage
 ```
 
 Relevant primary sources: [government register](https://github.com/digital-land/dluhc-datasets/blob/main/data/registers/local-authority.csv), [Transparency Code](https://www.gov.uk/government/publications/local-government-transparency-code-2015/local-government-transparency-code-2015), [D1 limits](https://developers.cloudflare.com/d1/platform/limits/). Source-specific availability is documented by [Leeds](https://www.leeds.gov.uk/performance-and-spending/our-financial-plans/spending-over-%C2%A3500) and [Birmingham's dataset](https://www.cityobservatory.birmingham.gov.uk/explore/dataset/payments-to-suppliers-over-gbp500/); discovery must use the current publisher endpoints rather than assume old links remain valid.
+
+
+District source evidence: [Adur/Worthing, including separate and joint files](https://www.adur-worthing.gov.uk/about-the-councils/open-data/payments-to-suppliers/2026-payments-to-suppliers/), [Arun](https://www.arun.gov.uk/over-500), [Ashfield and its older-report policy](https://www.ashfield.gov.uk/your-council/procurement/payments-to-suppliers/), [Ashford](https://www.ashford.gov.uk/transparency/local-government-transparency-code/payments-over-250-and-credit-card-expenditure-supplier-spend/), [Bassetlaw](https://data.bassetlaw.gov.uk/payments-to-suppliers/).

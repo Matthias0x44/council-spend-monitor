@@ -5,6 +5,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { createHash } from "node:crypto";
+import { selectCouncils } from "./lib/council-selection";
 import { monthFingerprints } from "./lib/month-fingerprints";
 import { parseIsolated, type ParsedRow as Row } from "./lib/parse-isolated";
 import { discoverFiles, downloadFile, isPaymentPublication, type DiscoveredFile } from "./lib/discover";
@@ -18,7 +19,7 @@ const window=fiscalWindow();
 let stopping=false;
 process.on('SIGTERM',()=>{stopping=true;console.log('Finishing current source before stopping');});
 process.on('SIGINT',()=>{stopping=true;console.log('Finishing current source before stopping');});
-const adapters=JSON.parse(fs.readFileSync("data/source-adapters.json","utf8")) as Record<string,{transparencyUrl?:string;dataGovId?:string;packages?:string[]}>;
+const adapters=JSON.parse(fs.readFileSync("data/source-adapters.json","utf8")) as Record<string,{transparencyUrl?:string;dataGovId?:string;packages?:string[];filePattern?:string}>;
 const registry=JSON.parse(fs.readFileSync("data/england-registry.json","utf8")) as {authorities:{reference:string;slug:string}[]};
 async function upload(council:Council,file:DiscoveredFile,dir:string){
  const local=await downloadFile(file.url,dir,file.filename,true);
@@ -88,10 +89,10 @@ async function main(){
  const metadata=await d1Request('');if(metadata.file_size>8.5e9)throw new Error('D1 exceeds 8.5 GB operational limit; shard before further ingestion');
  await bookmark('d1-before-backfill');
  let councils=await rows('SELECT c.*,a.reference FROM councils c JOIN english_authorities a ON a.council_id=c.id') as Council[];
- if(args.includes('--slug'))councils=councils.filter(c=>c.slug===value('--slug'));
- const knownSlugs=args.includes('--slugs')?value('--slugs').split(','):null;
- if(knownSlugs)councils=councils.filter(c=>knownSlugs.includes(c.slug));
- if(args.includes('--exclude-slugs')){const excluded=value('--exclude-slugs').split(',');councils=councils.filter(c=>!excluded.includes(c.slug));}
+ const requested=args.includes('--slug')?[value('--slug')]:args.includes('--slugs')?value('--slugs').split(','):null;
+ const excluded=args.includes('--exclude-slugs')?value('--exclude-slugs').split(','):[];
+ councils=selectCouncils(councils,registry.authorities,requested,excluded);
+ console.log(`Selected ${councils.length} registered authorities`);
  if(!councils.length)throw new Error('No matching registered English authorities');
  const dir=fs.mkdtempSync(path.join(os.tmpdir(),'council-d1-'));
  const report:{council:string;url?:string;inserted?:number;status?:string;error?:string}[]=[];
@@ -106,10 +107,10 @@ async function main(){
    const currentMeta=await d1Request('');if(currentMeta.file_size>8.5e9)throw new Error('D1 storage guard reached; shard before continuing');
    const sources=await rows('SELECT url,filename FROM source_documents WHERE council_id=?',[council.id]) as {url:string;filename:string}[];
    let files:DiscoveredFile[]=sources.filter(s=>/^https?:/.test(s.url)).map(s=>({...s,format:path.extname(s.filename).slice(1)||'csv'}));
-   try{files.push(...await discoverFiles({slug:council.slug,name:council.name,transparencyUrl:adapter.transparencyUrl||council.transparency_url,dataGovId:adapter.dataGovId||council.data_gov_id,filePattern:council.file_pattern}));}
+   try{files.push(...await discoverFiles({slug:council.slug,name:council.name,transparencyUrl:adapter.transparencyUrl||council.transparency_url,dataGovId:adapter.dataGovId||council.data_gov_id,filePattern:adapter.filePattern||council.file_pattern}));}
    catch(error){report.push({council:council.slug,error:String(error)});}
    for(const pkg of adapter.packages||[])try{files.push(...await discoverFiles({slug:council.slug,name:council.name,dataGovId:pkg}));}catch(error){report.push({council:council.slug,error:String(error)});}
-   files=[...new Map(files.filter(f=>{if(!isPaymentPublication(`${f.filename} ${f.url}`))return false;const m=monthFromFilename(f.filename);return !m||m>=window.start.slice(0,7);}).map(f=>[f.url,f])).values()];
+   files=[...new Map(files.filter(f=>{if(!isPaymentPublication(f.filename))return false;const m=monthFromFilename(f.filename);return !m||m>=window.start.slice(0,7);}).map(f=>[f.url,f])).values()];
    if(!files.length)report.push({council:council.slug,error:'No published source files discovered'});
    if(args.includes('--max-files'))files=files.slice(0,Number(value('--max-files')));
    for(const file of files){
