@@ -55,6 +55,8 @@ test("UK dates, Excel dates and filename FY boundaries", () => {
  assert.equal(monthFromFilename("MAR 23-24.csv"),"2024-03");
  assert.equal(monthFromFilename("April 2023-24.csv"),"2023-04");
  assert.equal(monthFromFilename("2023-24.csv"),"");
+ assert.equal(monthFromFilename("spending-April-June-2025.xlsx"),"");
+ assert.equal(monthFromFilename("July-August-2025.csv"),"");
 });
 test("classification abstains on ambiguous evidence and avoids substring/supplier guesses", () => {
  for(const value of ["community services","adult and children services","educational equipment supplier","care invoice","SEND invoice".toLowerCase()]) {
@@ -107,4 +109,19 @@ test("six-line preambles, multiple worksheets and equivalent export formats", ()
   assert.equal(monthFromFilename('payments 100% May 2026.csv'),'2026-05');
   assert.equal(parseDate(202602),'');
  } finally {sqlite.close();fs.rmSync(dir,{recursive:true,force:true});}
+});
+
+test('blank first-row fields and different worksheet columns preserve later classification evidence',()=>{
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'council-sparse-'));const sqlite=new Database(':memory:');
+ try{
+  sqlite.exec(fs.readFileSync('scripts/d1/schema.sql','utf8'));sqlite.exec("INSERT INTO councils(id,name,slug) VALUES(1,'Example','example')");
+  const wb=XLSX.utils.book_new(),date=fiscalWindow().start;
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['Supplier','Amount','Date','Department','DepartmentSubsection'],['A',600,date,'',''],['B',700,date,'Place and Economy','Parks and Open Spaces']]),'First');
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['Supplier','Amount','Date','Category','Description'],['C',800,date,'Property','Maintenance']]),'Second');
+  const file=path.join(dir,'payments.xlsx');XLSX.writeFile(wb,file);
+  const result=ingestFile({councilId:1,councilSlug:'example',filePath:file,fileUrl:'https://example.gov.uk/payments.xlsx',scrapeProfile:{Department:'directorate',DepartmentSubsection:'service'},sqlite,db:drizzle(sqlite,{schema})});
+  assert.equal(result.inserted,3);
+  assert.deepEqual(sqlite.prepare('SELECT service,directorate,service_classification FROM transactions WHERE amount=700').get(),{service:'Parks and Open Spaces',directorate:'Place and Economy',service_classification:'Cultural and leisure services'});
+  assert.deepEqual(sqlite.prepare('SELECT category,description FROM transactions WHERE amount=800').get(),{category:'Property',description:'Maintenance'});
+ }finally{sqlite.close();fs.rmSync(dir,{recursive:true,force:true});}
 });

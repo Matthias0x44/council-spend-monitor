@@ -148,7 +148,9 @@ function readSpreadsheet(filePath: string, profile?: Record<string, string> | nu
     mapping = validateAmountColumn(mapping, rows, headers).mapping;
     mapping = validateServiceColumn(mapping, rows, headers).mapping;
     sourceMappings[name] = mapping;
-    return rows.map(row => applyMapping(row, mapping));
+    // Every sheet yields the same canonical schema. A blank first row must
+    // not hide service/category/date fields that are populated later.
+    return rows.map(row => ({ supplier: "", amount: "", date: "", service: "", directorate: "", category: "", description: "", ...applyMapping(row, mapping) }));
   });
 }
 

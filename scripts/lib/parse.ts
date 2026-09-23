@@ -1,6 +1,6 @@
 import * as XLSX from "xlsx";
 import { validDate } from "../../src/lib/fiscal";
-export const PARSER_VERSION = "payment-parser-4";
+export const PARSER_VERSION = "payment-parser-5";
 const months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
 export function parseAmount(value: unknown): number | null {
   if (typeof value === "number") return Number.isFinite(value) ? Math.round(value * 100) / 100 : null;
@@ -32,6 +32,9 @@ export function parseDate(value: unknown): string {
 export function monthFromFilename(filename: string): string {
   let s = filename.toLowerCase();
   try { s = decodeURIComponent(s); } catch { /* Literal percent signs occur in council filenames. */ }
+  // A multi-month publication does not identify the month of an undated row.
+  const namedMonths = new Set([...s.matchAll(/(?:^|[^a-z])(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*(?=[^a-z]|$)/g)].map(m => m[1]));
+  if (namedMonths.size > 1) return "";
   // A fiscal-year-only filename is a period, never evidence of an April payment.
   const nameFY = s.match(/(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[ _-]+(20\d{2}|\d{2})[-_](\d{2})(?!\d)/);
   if (nameFY) {

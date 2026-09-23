@@ -763,14 +763,27 @@
     "transparencyUrl": "https://www.ashford.gov.uk/transparency/local-government-transparency-code/payments-over-250-and-credit-card-expenditure-supplier-spend/"
   },
   "bassetlaw": {
-    "transparencyUrl": "https://data.bassetlaw.gov.uk/payments-to-suppliers/"
+    "transparencyUrl": "https://data.bassetlaw.gov.uk/payments-to-suppliers/",
+    "scrapeProfile": {
+      "5CCN - Level 5 Cost Centre Name": "service",
+      "9AN - Level 9 Account Name": "description",
+      "5AN - Level 5 Account Name": "category"
+    }
   },
   "adur": {
     "transparencyUrl": "https://www.adur-worthing.gov.uk/about-the-councils/open-data/payments-to-suppliers/",
-    "filePattern": "^(?!.*Joint).*Adur DC"
+    "filePattern": "^(?!.*Joint).*Adur DC",
+    "scrapeProfile": {
+      "Department": "directorate",
+      "DepartmentSubsection": "service"
+    }
   },
   "worthing": {
     "transparencyUrl": "https://www.adur-worthing.gov.uk/about-the-councils/open-data/payments-to-suppliers/",
-    "filePattern": "^(?!.*Joint).*Worthing BC"
+    "filePattern": "^(?!.*Joint).*Worthing BC",
+    "scrapeProfile": {
+      "Department": "directorate",
+      "DepartmentSubsection": "service"
+    }
   }
 }

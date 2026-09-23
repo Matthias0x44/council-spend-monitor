@@ -19,13 +19,14 @@ const window=fiscalWindow();
 let stopping=false;
 process.on('SIGTERM',()=>{stopping=true;console.log('Finishing current source before stopping');});
 process.on('SIGINT',()=>{stopping=true;console.log('Finishing current source before stopping');});
-const adapters=JSON.parse(fs.readFileSync("data/source-adapters.json","utf8")) as Record<string,{transparencyUrl?:string;dataGovId?:string;packages?:string[];filePattern?:string}>;
+const adapters=JSON.parse(fs.readFileSync("data/source-adapters.json","utf8")) as Record<string,{transparencyUrl?:string;dataGovId?:string;packages?:string[];filePattern?:string;scrapeProfile?:Record<string,string>}>;
 const registry=JSON.parse(fs.readFileSync("data/england-registry.json","utf8")) as {authorities:{reference:string;slug:string}[]};
 async function upload(council:Council,file:DiscoveredFile,dir:string){
  const local=await downloadFile(file.url,dir,file.filename,true);
  try{
  const bytes=fs.readFileSync(local),contentHash=createHash('sha256').update(bytes).digest('hex');
- const existing=await rows(`SELECT d.id FROM source_documents d WHERE council_id=? AND url=? AND content_hash=? AND substr(downloaded_at,1,10)=? AND json_extract(column_mapping,'$.parserVersion')=? AND NOT EXISTS(SELECT 1 FROM transactions t WHERE t.source_document_id=d.id AND COALESCE(t.classifier_version,'')<>?)`,[council.id,file.url,contentHash,window.through,PARSER_VERSION,CLASSIFIER_VERSION]);
+ const profileHash=createHash('sha256').update(council.scrape_profile||'').digest('hex');
+ const existing=await rows(`SELECT d.id FROM source_documents d WHERE council_id=? AND url=? AND content_hash=? AND substr(downloaded_at,1,10)=? AND json_extract(column_mapping,'$.parserVersion')=? AND json_extract(column_mapping,'$.profileHash')=? AND NOT EXISTS(SELECT 1 FROM transactions t WHERE t.source_document_id=d.id AND COALESCE(t.classifier_version,'')<>?)`,[council.id,file.url,contentHash,window.through,PARSER_VERSION,profileHash,CLASSIFIER_VERSION]);
  if(existing.length && !args.includes('--force'))return {inserted:0,status:'unchanged'};
   const result=await parseIsolated({name:council.name,slug:council.slug,filePath:local,fileUrl:file.url,profile:council.scrape_profile?JSON.parse(council.scrape_profile):null});
   const {parsed}=result;let data=result.data;
@@ -54,7 +55,7 @@ async function upload(council:Council,file:DiscoveredFile,dir:string){
    }
    semanticHash=createHash('sha256').update(data.map(r=>JSON.stringify([r.supplier_norm,r.fy_label,r.service,r.directorate,r.category,r.description,r.amount,r.date,r.month])).sort().join('\n')).digest('hex');
   }
-  const importId=createHash('sha256').update(`${council.id}:${file.url}:${contentHash}:${window.start}:${window.through}:${PARSER_VERSION}:${CLASSIFIER_VERSION}`).digest('hex');
+  const importId=createHash('sha256').update(`${council.id}:${file.url}:${contentHash}:${window.start}:${window.through}:${PARSER_VERSION}:${CLASSIFIER_VERSION}:${profileHash}`).digest('hex');
   if((await rows('SELECT import_id FROM ingest_receipts WHERE import_id=?',[importId])).length&&!args.includes('--force'))return {inserted:0,status:'already_committed'};
   await query('DELETE FROM ingest_staging WHERE import_id=?',[importId]);
   // json_each keeps SQL short and uses a bounded JSON parameter, avoiding one
@@ -73,7 +74,7 @@ async function upload(council:Council,file:DiscoveredFile,dir:string){
   for(const fy of new Set(data.map(r=>r.fy_label))){const y=Number(fy.slice(0,4));batch.push(`INSERT INTO financial_years(council_id,label,start_date,end_date) SELECT ${cid},${literal(fy)},'${y}-04-01','${y+1}-03-31' WHERE NOT EXISTS(SELECT 1 FROM financial_years WHERE council_id=${cid} AND label=${literal(fy)})`);}
   batch.push(`DELETE FROM transactions WHERE council_id=${cid} AND source_document_id IN(SELECT id FROM source_documents WHERE council_id=${cid} AND url=${url})`);
   batch.push(`DELETE FROM source_documents WHERE council_id=${cid} AND url=${url}`);
-  batch.push(`INSERT INTO source_documents(council_id,filename,url,type,downloaded_at,column_mapping,content_hash,semantic_hash) VALUES(${cid},${literal(file.filename)},${url},'expenditure',${literal(new Date().toISOString())},${literal(JSON.stringify({parserVersion:PARSER_VERSION,sheets:parsed.sourceMappings,columns:parsed.columnMapping}))},${literal(contentHash)},${literal(semanticHash)})`);
+  batch.push(`INSERT INTO source_documents(council_id,filename,url,type,downloaded_at,column_mapping,content_hash,semantic_hash) VALUES(${cid},${literal(file.filename)},${url},'expenditure',${literal(new Date().toISOString())},${literal(JSON.stringify({parserVersion:PARSER_VERSION,profileHash,sheets:parsed.sourceMappings,columns:parsed.columnMapping}))},${literal(contentHash)},${literal(semanticHash)})`);
   const fields=['service','directorate','category','description','amount','date','month','service_classification','classification_method','classification_evidence','classifier_version'];
   batch.push(`INSERT INTO transactions(council_id,financial_year_id,supplier_id,source_document_id,${fields.join(',')}) SELECT ${cid},(SELECT MIN(id) FROM financial_years WHERE council_id=${cid} AND label=${json('fy_label')}),(SELECT MIN(id) FROM suppliers WHERE council_id=${cid} AND normalised_name=${json('supplier_norm')}),(SELECT MAX(id) FROM source_documents WHERE council_id=${cid} AND url=${url}),${fields.map(json).join(',')} FROM ingest_staging WHERE import_id=${id}`);
   for(const period of periods.filter(p=>!duplicateMonths.has(p.month))){
@@ -104,6 +105,7 @@ async function main(){
    console.log(`Processing ${council.slug}`);
    const official=registry.authorities.find(a=>a.reference===council.reference);
    const adapter=adapters[official?.slug || council.slug] || {};
+   if(adapter.scrapeProfile)council.scrape_profile=JSON.stringify(adapter.scrapeProfile);
    const currentMeta=await d1Request('');if(currentMeta.file_size>8.5e9)throw new Error('D1 storage guard reached; shard before continuing');
    const sources=await rows('SELECT url,filename FROM source_documents WHERE council_id=?',[council.id]) as {url:string;filename:string}[];
    let files:DiscoveredFile[]=sources.filter(s=>/^https?:/.test(s.url)).map(s=>({...s,format:path.extname(s.filename).slice(1)||'csv'}));
