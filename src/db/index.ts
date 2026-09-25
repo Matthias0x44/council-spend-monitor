@@ -12,9 +12,9 @@ import type { D1Database } from "@cloudflare/workers-types";
  * The same `@/db` import works in three contexts:
  *
  *   - `next dev` and `next build` (Node):   better-sqlite3 against
- *     `data/council-spend.db` (or `LOCAL_DB_PATH` env override).
- *   - Cloudflare Workers (production):       drizzle-orm/d1 against the
- *     `DB` binding declared in wrangler.jsonc.
+ *     `data/demo.db` (or `LOCAL_DB_PATH` env override).
+ *   - Archived Cloudflare Worker path:       drizzle-orm/d1 against the
+ *     `DB` binding declared in wrangler.jsonc. No live database exists.
  *   - Local Workers preview (`opennextjs-cloudflare preview`):
  *     drizzle-orm/d1 against the local D1 simulator (also reached
  *     through `getCloudflareContext`).
@@ -52,14 +52,12 @@ async function getCloudflareDb(): Promise<Db | null> {
 
 async function getNodeDb(): Promise<Db> {
   if (cachedNodeDb) return cachedNodeDb;
-  const dbPath = process.env.LOCAL_DB_PATH || "./data/council-spend.db";
+  const dbPath = process.env.LOCAL_DB_PATH || "./data/demo.db";
   const { existsSync } = await import("node:fs");
   if (!existsSync(dbPath)) {
     throw new Error(
-      `Local database not found at ${dbPath}. ` +
-        "For local dev run `npm run seed` or `npm run pipeline`. " +
-        "On Cloudflare, deploy with `npm run cf:deploy` so the Worker uses the D1 binding at runtime — " +
-        "do not use plain `npm run build` as the deploy build command."
+      `Local database not found at ${dbPath}. For the portfolio demo run ` +
+        "`npm run demo:seed`."
     );
   }
   // better-sqlite3 is listed in next.config.ts `serverExternalPackages`

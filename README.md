@@ -1,77 +1,39 @@
 # Council Spend Monitor
 
-An interactive dashboard of **published payments by English local authorities**, built with Next.js 15, React 19, Drizzle and Cloudflare Workers/OpenNext. Production data lives in Cloudflare D1 `council-spend`.
+An interactive transparency dashboard for **payments published by English local authorities**. It shows the original source for each example payment, distinguishes missing data from zero expenditure, and explains or declines each suggested service classification.
 
-The retained window is **five UK financial years including the current year**: 1 April 2022–31 March 2027 as of September 2026, with future-dated transactions excluded. The window rolls forward each April. The verified authority register includes current councils and predecessors operating during that window; successors remain separate.
+**Portfolio status:** This repository is an offline demonstration. The hosted Worker and its D1 database were retired on 25 September 2026 after the national import proved too costly to operate. No scheduled scraper or hosted site remains. The demo runs locally with a small, committed fixture; it makes no claim of complete national coverage.
 
-## Data meaning and limitations
+![Coventry dashboard showing sample scope, partial coverage, payment summary and charts](docs/dashboard-demo.png)
 
-These are published payments, not audited total council expenditure. Publication thresholds, redactions, missing files, reversals and council reorganisations affect comparisons. A month with no imported payments is **unknown**, not zero. Even twelve populated months do not establish completeness. Annual growth comparisons are suppressed until completeness can be verified.
+## Run the demo
 
-Original council categories are preserved. Service classification is a separate, versioned, explainable rule result with evidence. Ambiguous entries remain `Unclassified`; supplier names are not used to guess service. The diagnostic fixtures check known source labels, but **do not establish national accuracy**. A stratified, independently reviewed sample is still needed before publishing an accuracy percentage.
-
-## Development and validation
-
-Requires Node.js 22 or later.
+Use Node.js 22 or later:
 
 ```sh
 npm ci
-npm test
-npm run lint
-npm run typecheck
-npm run build
-npm run cf:build
-```
-
-For a small local development dataset:
-
-```sh
-npm run registry:england
-npm run pipeline -- --slug kirklees
+npm run demo:seed
 npm run dev
 ```
 
-Local development uses `data/council-spend.db`. It is optional staging for development, not the source of production truth. Do not build a national SQLite copy to refresh D1.
+Open `http://localhost:3000`, then choose a council. `npm run demo:seed` builds `data/demo.db` locally from the committed [sample fixture](data/demo-payments.json); it makes no network requests or cloud writes. You can run it again to reset the demo. `npm test`, `npm run lint`, `npm run typecheck`, and `npm run build` are the validation commands.
 
-## Direct D1 imports
+The sample contains **272 selected payments from nine councils**, across the five financial years 2022–23 to 2026–27 and 37 source documents. Every selected row retains its publisher file URL. It is a small extract of public source files from the development database, frozen in September 2026. It is intentionally unsuitable for estimating annual totals, supplier concentration or coverage across England. In the dashboard, missing months remain unknown and unsupported annual comparisons are suppressed.
 
-Configure `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN` (D1 Edit) in `.env`, or as environment variables/GitHub Actions secrets. `D1_DATABASE_ID` can override the database ID in the project configuration. Never commit credentials.
+## What the project demonstrates
 
-For the existing production database, additive migrations and the English authority mapping are managed by `scripts/d1-migrate.mjs`. Read its prerequisite audit report before running it. The canonical DDL is `scripts/d1/schema.sql`; `CREATE TABLE IF NOT EXISTS` alone does not migrate existing columns.
+- A responsive Next.js dashboard with council search, financial-year selection, payment tables, source links, filters, charts and CSV export.
+- A source-aware ingestion pipeline that discovers council publications, parses CSV/XLS/XLSX files, validates payment dates and amounts, retains refunds, and tracks content and per-month fingerprints to detect repeated exports. Files were processed one at a time; failures and coverage gaps were recorded.
+- A versioned service classifier that considers the publisher's service, directorate and category text. It keeps the original category, exposes the rule and evidence behind a suggestion, and returns `Unclassified` when evidence is ambiguous. Supplier names are not used to infer a public service.
+- Defensive handling of partial data: the five-year window includes the current UK financial year, future or malformed dates are excluded, negative payments remain visible, and a populated month is not treated as proof of a complete publication.
+- A Cloudflare D1/Workers implementation retained in the source for architectural review. The default demo uses a local SQLite database and the repository has no cloud deployment credentials or import workflow.
 
-```sh
-npm run pipeline:d1                  # all registered English authorities
-npm run pipeline:d1 -- --slug leeds  # one authority
-npm run d1:coverage
-```
+The [data-quality case study](docs/case-study.md) explains the choices, validation and limits. The [historical readiness audit](docs/production-readiness.md) records what was verified before the hosted version was retired.
 
-The importer downloads one source at a time into temporary storage, parses it in memory, and stages rows remotely. It validates row counts before atomically replacing that source URL. Failed downloads or rejected files leave the previous published source intact. Content hashes make repeat imports idempotent; whole-file and per-month multiset hashes detect equivalent CSV/XLSX exports and annual/monthly copies without dropping repeated payment lines. Partly overlapping months still require source review. Parsing runs in a separate process with a one-minute deadline, and rate-limited hosts are deferred.
+## Data and interpretation
 
-Imports write source-level outcomes to `data/reports/d1-backfill.json`. `d1-coverage.json` lists every expected authority-month and its observed row count. Missing sources and failed files are explicit gaps. A successful import is not a claim of complete publication. The importer exits nonzero if any source fails.
+These records are **published supplier payments**, not audited total council expenditure. Councils use different reporting thresholds, redaction practices, formats and retention periods. The fixture was selected for a reproducible interface demo; its sums and rankings describe only those selected rows. An independent, representative review of classifier accuracy was not completed. The developer-reviewed label fixtures are regression diagnostics, not a national accuracy estimate.
 
-The scheduled GitHub Actions workflow writes directly to D1 and uploads reports, not a local database. Runs are split into bounded serial groups so an earlier failed group does not prevent later councils from running. D1 has a per-database storage limit; the importer stops at 8.5 GB to leave operational headroom. Further national growth may require sharding; never silently discard valid payments to meet that limit.
+Authority identities come from a [government register snapshot](data/english-authorities-source.csv). The [Local Government Transparency Code](https://www.gov.uk/government/publications/local-government-transparency-code-2015/local-government-transparency-code-2015) gives the publication context. Payment-level publisher URLs are in the fixture and local demo. Source availability can change after the snapshot date.
 
-## Retention and recovery
-
-`scripts/d1-quarantine.mjs` previews invalid/out-of-window rows; `--apply` moves them to a recovery table inside D1 before removing them from the public ledger. Recovery bookmarks are captured before mutation. D1 Time Travel has a finite recovery window; preserve receipts and use the quarantine for row-level recovery. Quarantine is excluded from public totals.
-
-The legacy `d1:push` replacement path is guarded by `--replace` and is not used by the scheduled workflow. Do not replace D1 with an incomplete local database.
-
-## Worker release
-
-`wrangler.jsonc` binds the Worker to the existing D1 database. Validate the migration, API behaviour and data-quality report first, then build and deploy:
-
-```sh
-npm run cf:deploy
-```
-
-This builds the OpenNext Worker bundle before deployment. `npm run build` alone is a Next.js validation build, not the Cloudflare artifact. `cf:preview` uses a local D1 simulator; it does not automatically contain production data.
-
-## Sources
-
-- [Government local-authority register](https://github.com/digital-land/dluhc-datasets/blob/main/data/registers/local-authority.csv): snapshot and derived retained-window register in `data/`.
-- [Local Government Transparency Code 2015](https://www.gov.uk/government/publications/local-government-transparency-code-2015/local-government-transparency-code-2015): publication context.
-- `data/source-adapters.json`: council publication pages and data.gov.uk package IDs. Individual transaction records retain the source URL.
-- [Cloudflare D1 limits](https://developers.cloudflare.com/d1/platform/limits/) and [Time Travel](https://developers.cloudflare.com/d1/reference/time-travel/).
-
-See `docs/production-readiness.md` for validation evidence and remaining release gates.
+The browser app uses Next.js 15, React 19, TypeScript, Drizzle ORM, SQLite and Recharts. The archived cloud path uses OpenNext, Workers and D1; running the portfolio demo does not use any Cloudflare resource.

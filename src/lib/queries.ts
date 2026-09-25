@@ -21,6 +21,21 @@ export async function getCouncilBySlug(slug: string) {
   return db.select().from(councils).where(and(eq(councils.slug, slug), sql`EXISTS (SELECT 1 FROM english_authorities WHERE council_id=${councils.id})`)).get();
 }
 
+export async function getCouncilDirectory() {
+  const db = await getDb();
+  // The directory needs presence, not an exact ledger count. EXISTS stops at
+  // the first valid payment instead of counting millions of rows per search.
+  return db.select({
+    id: councils.id,
+    name: councils.name,
+    slug: councils.slug,
+    region: councils.region,
+    hasPayments: sql<boolean>`EXISTS (SELECT 1 FROM transactions INDEXED BY txn_month_idx WHERE council_id="councils"."id" AND ${validTransactionPeriod()})`.mapWith({mapFromDriverValue: value => Number(value) === 1}),
+  }).from(councils)
+    .where(sql`EXISTS (SELECT 1 FROM english_authorities WHERE council_id=${councils.id})`)
+    .orderBy(councils.name).all();
+}
+
 export async function getFinancialYears(councilId: number) {
   const db = await getDb();
   return db
@@ -330,6 +345,7 @@ export async function getFlags(councilId: number, fyId?: number, suppliedTopSupp
   const [quality, bigPayments, top5Suppliers] = await Promise.all([
     db.select({
       total: sql<number>`COALESCE(SUM(${transactions.amount}), 0)`,
+      count: sql<number>`COUNT(*)`,
       redactedTotal: sql<number>`COALESCE(SUM(CASE WHEN UPPER(TRIM(${suppliers.name})) LIKE 'REDACTED%' THEN ${transactions.amount} ELSE 0 END), 0)`,
       redactedCount: sql<number>`SUM(CASE WHEN UPPER(TRIM(${suppliers.name})) LIKE 'REDACTED%' THEN 1 ELSE 0 END)`,
       blankTotal: sql<number>`COALESCE(SUM(CASE WHEN ${transactions.category} IS NULL OR TRIM(${transactions.category}) = '' OR ${transactions.category} = 'REDACTED DATA' THEN ${transactions.amount} ELSE 0 END), 0)`,
@@ -405,6 +421,9 @@ export async function getFlags(councilId: number, fyId?: number, suppliedTopSupp
   }
 
   const top5Total = top5Suppliers.reduce((sum, s) => sum + s.percentage, 0);
+  // A handful of portfolio/sample rows can make concentration appear extreme.
+  // The signal is only useful once there are enough published payments.
+  if ((quality?.count ?? 0) < 100) return flags;
   if (top5Total > 40) {
     flags.push({
       type: "supplier_concentration",

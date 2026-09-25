@@ -16,13 +16,15 @@
   "observability": {
     "enabled": true
   },
-  // D1 database that holds the council-spend data. The binding name "DB" is
-  // what src/db/index.ts looks for at runtime via getCloudflareContext().
+  // Historical Worker configuration for code review only. The hosted Worker
+  // and D1 database were deleted on 25 September 2026. This placeholder must
+  // be replaced with a new database ID for any future, separately budgeted
+  // deployment; the portfolio demo never uses this binding.
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "council-spend",
-      "database_id": "e1775f4f-2c8c-40c8-bc31-5b09ba536313"
+      "database_id": "00000000-0000-0000-0000-000000000000"
     }
   ]
 }

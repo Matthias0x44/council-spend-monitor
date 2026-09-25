@@ -1,0 +1,117 @@
+{
+  "scope": "14 developer-reviewed source-label combinations from six district/unitary pilots on 23 September 2026. Semantic diagnostics, not an independent or random national accuracy benchmark. Expected labels can remain unresolved by conservative rules.",
+  "fixtures": [
+    {
+      "council": "ashford",
+      "service": "Hra - Repairs - Responsive Repairs Team",
+      "directorate": "",
+      "category": "Agency Staff",
+      "expected": "Housing",
+      "rationale": "HRA repairs belong to housing; the employee cost category alone is not the service."
+    },
+    {
+      "council": "ashford",
+      "service": "Hra - Repairs - Jobbing",
+      "directorate": "",
+      "category": "Housing Repairs - Responsive",
+      "expected": "Housing",
+      "rationale": "The publisher explicitly identifies housing repairs."
+    },
+    {
+      "council": "ashford",
+      "service": "Director Of Place And Space - Cemeteries",
+      "directorate": "",
+      "category": "Water Supply",
+      "expected": "Environmental services",
+      "rationale": "Cemetery service takes precedence over the utility expense."
+    },
+    {
+      "council": "ashford",
+      "service": "Director Of Place And Space - Aspire",
+      "directorate": "",
+      "category": "Other Consumables & Mats",
+      "expected": "Unclassified",
+      "rationale": "A local programme name and generic supplies do not establish a service."
+    },
+    {
+      "council": "ashfield",
+      "service": "DLO Sub-Contractors",
+      "directorate": "Housing Revenue Account",
+      "category": "Contractor - Payments to External Contractors",
+      "expected": "Housing",
+      "rationale": "The housing revenue account supplies the service context."
+    },
+    {
+      "council": "ashfield",
+      "service": "Waste Collection and Management",
+      "directorate": "Operations",
+      "category": "Salary - Agency Staff",
+      "expected": "Environmental services",
+      "rationale": "Waste collection supplies the service context; agency staffing does not change it."
+    },
+    {
+      "council": "ashfield",
+      "service": "Environmental Services",
+      "directorate": "Operations",
+      "category": "Salary - Agency Staff",
+      "expected": "Environmental services",
+      "rationale": "The explicit service name identifies the group."
+    },
+    {
+      "council": "adur",
+      "service": "Repair & Maintanance",
+      "directorate": "Adur Homes Expense",
+      "category": "",
+      "expected": "Housing",
+      "rationale": "The housing department establishes the context for repairs."
+    },
+    {
+      "council": "adur",
+      "service": "Housing Needs",
+      "directorate": "Housing Homelessness & Prevention",
+      "category": "",
+      "expected": "Housing",
+      "rationale": "Both source service and department identify housing."
+    },
+    {
+      "council": "worthing",
+      "service": "Housing Needs",
+      "directorate": "Housing Homelessness & Prevention",
+      "category": "",
+      "expected": "Housing",
+      "rationale": "Both source service and department identify housing."
+    },
+    {
+      "council": "worthing",
+      "service": "Balance Sheet",
+      "directorate": "Finance",
+      "category": "",
+      "expected": "Unclassified",
+      "rationale": "A balance-sheet payment does not establish a functional service."
+    },
+    {
+      "council": "bassetlaw",
+      "service": "Housing General Fund",
+      "directorate": "",
+      "category": "Capital",
+      "expected": "Housing",
+      "rationale": "The functional service is housing; capital is an accounting category."
+    },
+    {
+      "council": "bassetlaw",
+      "service": "Hra",
+      "directorate": "",
+      "category": "Private Contractors",
+      "expected": "Housing",
+      "rationale": "Housing revenue account is the functional context, not the contractor type."
+    },
+    {
+      "council": "arun",
+      "service": "Health & Safety",
+      "directorate": "",
+      "category": "Direct Employee Expenses",
+      "expected": "Unclassified",
+      "rationale": "The broad health-and-safety heading is insufficient to infer public health or another functional service."
+    }
+  ]
+}

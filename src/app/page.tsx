@@ -13,7 +13,7 @@ export default function Home() {
           Council Spend Monitor
         </h1>
         <p className="max-w-md text-lg" style={{ color: "#6b7280" }}>
-          Explore published spending by English councils, with searchable payments,
+          Explore a small sample of published council payments, with searchable records,
           original sources, and clear coverage gaps.
         </p>
       </div>

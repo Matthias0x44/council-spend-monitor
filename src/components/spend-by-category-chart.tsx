@@ -14,7 +14,7 @@ export function SpendByCategoryChart({ data }: { data: DataItem[] }) {
     <YAxis type="category" dataKey="name" width={150} tick={{fontSize:11}} tickFormatter={(s:string)=>s.length>25?s.slice(0,24)+"…":s}/>
     <Tooltip formatter={(v)=>[formatCompact(Number(v)),"Net payments"]}/>
     <ReferenceLine x={0} stroke="#94a3b8"/>
-    <Bar dataKey="value" fill="#1d4ed8"/>
+    <Bar dataKey="value" fill="#1d4ed8" isAnimationActive={false}/>
    </BarChart>
   </ResponsiveContainer>}
   <p className="mt-2 text-xs text-gray-500">Credits and refunds remain negative. Categories reflect each council’s published labels.</p>

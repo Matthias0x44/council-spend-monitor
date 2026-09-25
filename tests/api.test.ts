@@ -25,6 +25,7 @@ db.prepare("INSERT INTO financial_years(id,council_id,label,start_date,end_date)
 for(const [supplier,amount] of [[null,250],[3,100]])db.prepare("INSERT INTO transactions(council_id,financial_year_id,supplier_id,amount,date,month,directorate,category) VALUES(2,2,?,?,?,?, 'Current service','Current category')").run(supplier,amount,day,day.slice(0,7));
 const olderDay=w.labels[1].slice(0,4)+"-04-01";
 db.prepare("INSERT INTO transactions(council_id,financial_year_id,amount,date,month,directorate,category) VALUES(2,3,100,?,?,'Old service','Old category')").run(olderDay,olderDay.slice(0,7));
+db.exec("INSERT INTO councils(id,name,slug) VALUES(3,'Stale','stale'),(4,'Invalid','invalid'),(5,'Outside England','outside'); INSERT INTO english_authorities(reference,council_id,name) VALUES('STA',3,'Stale'),('INV',4,'Invalid'); INSERT INTO transactions(council_id,amount,date,month) VALUES(3,100,'2010-01-01','2010-01'),(4,100,'2450-04-01','2450-04'),(5,100,'2026-04-01','2026-04')");
 db.close();
 test("CSV text is escaped and formulas neutralised; negative amounts stay numeric",()=>{
  assert.equal(csvCell('A, "B"'),'"A, ""B"""');assert.equal(csvCell('=1+1'),'"\'=1+1"');assert.equal(csvCell(-500),'"-500"');
@@ -55,4 +56,13 @@ test("dashboard filters follow the selected year and missing suppliers are not c
  const redacted=flags.find(f=>f.type==='redacted_spend');
  assert.equal(redacted?.title,'£100 to redacted suppliers');
  assert.match(redacted?.detail||'',/^1 payments/);
+});
+
+test("council directory reports valid retained payment presence and excludes unregistered councils",async()=>{
+ const {getCouncilDirectory}=await import('../src/lib/queries');
+ const rows=await getCouncilDirectory();
+ assert.deepEqual(Object.fromEntries(rows.map(row=>[row.slug,row.hasPayments])),{invalid:false,one:true,stale:false,two:true});
+ const {GET}=await import('../src/app/api/councils/route');
+ const response=await GET(new Request('http://localhost/api/councils?summary=1'));
+ assert.deepEqual(await response.json(),rows);
 });

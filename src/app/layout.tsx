@@ -29,6 +29,9 @@ export default function RootLayout({
             </Link>
           </div>
         </header>
+        <div className="border-b border-blue-100 bg-blue-50 px-4 py-2 text-center text-sm text-blue-950">
+          Portfolio sample · 272 selected payments from 9 councils · frozen September 2026 · no live updates
+        </div>
         <main className="mx-auto max-w-7xl px-4 py-6">
           {children}
         </main>

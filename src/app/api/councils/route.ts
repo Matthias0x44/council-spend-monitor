@@ -1,4 +1,5 @@
 import { fiscalWindow } from "@/lib/fiscal";
+import { getCouncilDirectory } from "@/lib/queries";
 import { NextResponse } from "next/server";
 import { getDb } from "@/db";
 import { councils, transactions } from "@/db/schema";
@@ -6,7 +7,10 @@ import { eq, sql, and } from "drizzle-orm";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(request: Request) {
+  if (new URL(request.url).searchParams.get("summary") === "1") {
+    return NextResponse.json(await getCouncilDirectory());
+  }
   const db = await getDb();
   const rows = await db
     .select({

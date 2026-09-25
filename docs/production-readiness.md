@@ -1,4 +1,6 @@
-# Production readiness evidence
+# Historical production-readiness audit
+
+**Archived 25 September 2026.** This document records prototype work before the hosted service was retired. The Worker and D1 database have been deleted, the import workflow and cloud credentials removed, and the GitHub repository now provides an offline portfolio demo. The release gates below remain unresolved historical findings, not an active deployment plan. See [README](../README.md) and the [case study](case-study.md) for the current state.
 
 As of 23 September 2026. The code is being hardened against the existing D1 database. **The national dataset is incomplete and the new Worker has not been deployed.**
 

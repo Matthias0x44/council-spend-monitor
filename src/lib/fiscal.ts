@@ -1,5 +1,5 @@
-/** UK financial years run from 1 April to 31 March. Keep five including current. */
-export function fiscalWindow(now = new Date()) {
+/** UK financial years run from 1 April to 31 March. The portfolio app uses a fixed snapshot date. */
+export function fiscalWindow(now = new Date(process.env.PORTFOLIO_AS_OF || Date.now())) {
   const currentStart = now.getUTCFullYear() - (now.getUTCMonth() < 3 ? 1 : 0);
   const firstStart = currentStart - 4;
   return {

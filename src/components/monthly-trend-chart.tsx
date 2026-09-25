@@ -46,6 +46,7 @@ export function MonthlyTrendChart({ data }: { data: DataItem[] }) {
             />
             <Line
               type="linear"
+              isAnimationActive={false}
               connectNulls={false}
               dataKey="total"
               stroke="#1e40af"
