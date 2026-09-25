@@ -41,7 +41,9 @@ CREATE TABLE IF NOT EXISTS source_documents (
   url TEXT NOT NULL,
   type TEXT NOT NULL,
   downloaded_at TEXT,
-  column_mapping TEXT
+  column_mapping TEXT,
+  semantic_hash TEXT,
+  content_hash TEXT
 );
 
 CREATE TABLE IF NOT EXISTS budgets (
@@ -75,7 +77,11 @@ CREATE TABLE IF NOT EXISTS transactions (
   amount REAL NOT NULL,
   date TEXT,
   month TEXT,
-  source_document_id INTEGER REFERENCES source_documents(id)
+  source_document_id INTEGER REFERENCES source_documents(id),
+  service_classification TEXT NOT NULL DEFAULT 'Unclassified',
+  classification_method TEXT NOT NULL DEFAULT 'unresolved',
+  classification_evidence TEXT,
+  classifier_version TEXT
 );
 
 CREATE INDEX IF NOT EXISTS fy_council_idx ON financial_years(council_id);
@@ -94,3 +100,21 @@ CREATE INDEX IF NOT EXISTS txn_fy_idx ON transactions(council_id, financial_year
 -- suppliers, or financial_years rows without scanning the whole transactions
 -- table for orphan references.
 CREATE INDEX IF NOT EXISTS txn_source_doc_idx ON transactions(source_document_id);
+CREATE TABLE IF NOT EXISTS english_authorities (
+  reference TEXT PRIMARY KEY,
+  council_id INTEGER NOT NULL UNIQUE REFERENCES councils(id),
+  name TEXT NOT NULL,
+  start_date TEXT,
+  end_date TEXT,
+  website TEXT
+);
+
+CREATE TABLE IF NOT EXISTS source_month_fingerprints (
+  council_id INTEGER NOT NULL,
+  source_document_id INTEGER NOT NULL REFERENCES source_documents(id) ON DELETE CASCADE,
+  month TEXT NOT NULL,
+  hash TEXT NOT NULL,
+  rows INTEGER NOT NULL,
+  PRIMARY KEY(source_document_id,month)
+);
+CREATE INDEX IF NOT EXISTS source_month_match_idx ON source_month_fingerprints(council_id,month,hash);

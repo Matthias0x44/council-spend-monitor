@@ -90,22 +90,24 @@ async function d1Execute(
   sql: string,
   params: unknown[] = []
 ): Promise<D1Response> {
-  const res = await fetch(D1_QUERY_URL, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${API_TOKEN}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ sql, params }),
+  return withRetries("query", async () => {
+    const res = await fetch(D1_QUERY_URL, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${API_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ sql, params }),
+    });
+    const json = (await res.json()) as D1Response;
+    if (!res.ok || !json.success) {
+      const msg =
+        json.errors?.map((e) => `${e.code}: ${e.message}`).join("; ") ||
+        `HTTP ${res.status}`;
+      throw new Error(`D1 query failed (${msg})\n  SQL: ${sql.slice(0, 200)}`);
+    }
+    return json;
   });
-  const json = (await res.json()) as D1Response;
-  if (!res.ok || !json.success) {
-    const msg =
-      json.errors?.map((e) => `${e.code}: ${e.message}`).join("; ") ||
-      `HTTP ${res.status}`;
-    throw new Error(`D1 query failed (${msg})\n  SQL: ${sql.slice(0, 200)}`);
-  }
-  return json;
 }
 
 /**
@@ -114,21 +116,50 @@ async function d1Execute(
  * than sending each statement individually.
  */
 async function d1RawExec(sqlBundle: string): Promise<void> {
-  const res = await fetch(D1_RAW_URL, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${API_TOKEN}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ sql: sqlBundle }),
+  await withRetries("raw", async () => {
+    const res = await fetch(D1_RAW_URL, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${API_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ sql: sqlBundle }),
+    });
+    const json = (await res.json()) as D1Response;
+    if (!res.ok || !json.success) {
+      const msg =
+        json.errors?.map((e) => `${e.code}: ${e.message}`).join("; ") ||
+        `HTTP ${res.status}`;
+      throw new Error(`D1 raw exec failed (${msg})`);
+    }
   });
-  const json = (await res.json()) as D1Response;
-  if (!res.ok || !json.success) {
-    const msg =
-      json.errors?.map((e) => `${e.code}: ${e.message}`).join("; ") ||
-      `HTTP ${res.status}`;
-    throw new Error(`D1 raw exec failed (${msg})`);
+}
+
+async function withRetries<T>(
+  label: string,
+  fn: () => Promise<T>,
+  attempts = 8
+): Promise<T> {
+  let lastErr: unknown;
+  for (let i = 1; i <= attempts; i++) {
+    try {
+      return await fn();
+    } catch (err) {
+      lastErr = err;
+      const msg = String(err);
+      const retryable =
+        /ETIMEDOUT|ECONNRESET|EAI_AGAIN|fetch failed|502|503|504|429|internal error/i.test(
+          msg
+        );
+      if (!retryable || i === attempts) break;
+      const delayMs = Math.min(30_000, 500 * 2 ** (i - 1));
+      console.warn(
+        `  D1 ${label} retry ${i}/${attempts} after ${delayMs}ms: ${msg.slice(0, 120)}`
+      );
+      await new Promise((r) => setTimeout(r, delayMs));
+    }
   }
+  throw lastErr;
 }
 
 function escapeLiteral(v: unknown): string {
@@ -180,6 +211,8 @@ const TABLES: TableSpec[] = [
       "type",
       "downloaded_at",
       "column_mapping",
+      "content_hash",
+      "semantic_hash",
     ],
   },
   {
@@ -220,11 +253,16 @@ const TABLES: TableSpec[] = [
       "date",
       "month",
       "source_document_id",
+      "service_classification", "classification_method", "classification_evidence", "classifier_version",
     ],
   },
 ];
 
-function parseArgs(): { mode: "replace" | "slug"; slugs?: string[] } {
+function parseArgs(): {
+  mode: "replace" | "slug" | "tables";
+  slugs?: string[];
+  tables?: string[];
+} {
   const args = process.argv.slice(2);
   for (let i = 0; i < args.length; i++) {
     if (args[i] === "--slug" && args[i + 1]) {
@@ -236,8 +274,15 @@ function parseArgs(): { mode: "replace" | "slug"; slugs?: string[] } {
         slugs: args[++i].split(",").map((s) => s.trim()).filter(Boolean),
       };
     }
+    if (args[i] === "--tables" && args[i + 1]) {
+      return {
+        mode: "tables",
+        tables: args[++i].split(",").map((s) => s.trim()).filter(Boolean),
+      };
+    }
     if (args[i] === "--replace") return { mode: "replace" };
   }
+  if (!args.includes("--replace")) throw new Error("Explicit --replace required: this erases remote data. Validate a candidate database and create a backup first.");
   return { mode: "replace" };
 }
 
@@ -252,11 +297,14 @@ async function ensureSchema(): Promise<void> {
 }
 
 async function clearAll(): Promise<void> {
-  console.log("Clearing all tables in D1...");
-  // Reverse dependency order so FK references stay valid.
+  console.log("Clearing all tables in D1 (batched)...");
+  // Reverse dependency order so FK references stay valid. Full-table DELETE
+  // times out on large DBs, so chunk by rowid.
   const order = [...TABLES].reverse();
-  const bundle = order.map((t) => `DELETE FROM ${t.name};`).join("\n");
-  await d1RawExec(bundle);
+  for (const t of order) {
+    const n = await deleteInBatches(t.name, "1=1", 25_000);
+    console.log(`  cleared ${t.name}: ${n.toLocaleString()} rows`);
+  }
   console.log("  Cleared");
 }
 
@@ -397,10 +445,11 @@ async function pushCouncilScoped(
 }
 
 async function main() {
-  const { mode, slugs } = parseArgs();
+  const { mode, slugs, tables } = parseArgs();
   console.log(
     `Pushing local SQLite → D1 (db=${DB_NAME}, mode=${mode}` +
-      `${slugs ? `, slugs=${slugs.join(",")}` : ""})`
+      `${slugs ? `, slugs=${slugs.join(",")}` : ""}` +
+      `${tables ? `, tables=${tables.join(",")}` : ""})`
   );
   console.log(`  Local DB: ${LOCAL_DB}`);
 
@@ -422,6 +471,26 @@ async function main() {
   console.log("D1 connection OK");
 
   await ensureSchema();
+
+  if (mode === "tables") {
+    const wanted = new Set(tables);
+    const selected = TABLES.filter((t) => wanted.has(t.name));
+    if (selected.length === 0) {
+      console.error(`No matching tables. Known: ${TABLES.map((t) => t.name).join(", ")}`);
+      process.exit(1);
+    }
+    for (const t of selected) {
+      console.log(`Clearing ${t.name}...`);
+      const n = await deleteInBatches(t.name, "1=1", 25_000);
+      console.log(`  cleared ${n.toLocaleString()} rows`);
+    }
+    let total = 0;
+    for (const t of selected) {
+      total += await pushTable(local, t);
+    }
+    console.log(`\nDone. ${total.toLocaleString()} rows pushed.`);
+    return;
+  }
 
   if (mode === "replace") {
     await clearAll();

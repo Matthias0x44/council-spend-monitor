@@ -19,6 +19,8 @@ export async function GET(
     ? allFYs.find((fy) => fy.label === fyLabel)
     : await getLatestFinancialYear(council.id);
 
+  if (fyLabel && !targetFY) return NextResponse.json({ error: "Financial year unavailable" }, { status: 404 });
+
   const overview = await getOverview(council.id, targetFY?.id);
 
   return NextResponse.json({

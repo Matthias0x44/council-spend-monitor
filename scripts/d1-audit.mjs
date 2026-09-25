@@ -1,0 +1,16 @@
+import fs from 'node:fs';
+import {rows,bookmark,d1Request} from './lib/d1-client.mjs';
+const now=new Date(),current=now.getUTCFullYear()-(now.getUTCMonth()<3?1:0),start=`${current-4}-04`,end=`${current+1}-04`,today=now.toISOString().slice(0,10);
+const report={generatedAt:now.toISOString(),window:{start,endExclusive:end,today},database:await d1Request(''),recovery:await bookmark('d1-before-production')};
+report.invalidPeriods=await rows(`SELECT c.slug,COUNT(*) rows,MIN(t.date) firstDate,MAX(t.date) lastDate FROM transactions t JOIN councils c ON c.id=t.council_id WHERE t.month < ? OR t.month >= ? OR t.month IS NULL OR t.month NOT GLOB '[0-9][0-9][0-9][0-9]-[0-1][0-9]' OR substr(t.month,6,2) NOT BETWEEN '01' AND '12' OR t.date > ? GROUP BY c.id`,[start,end,today]);
+report.sourceQuality=await rows(`SELECT COUNT(*) rows, SUM(source_document_id IS NULL) missingSource, SUM(financial_year_id IS NULL) missingFY, SUM(supplier_id IS NULL) missingSupplier FROM transactions`);
+report.sourceDuplicates=await rows(`SELECT council_id,url,COUNT(*) n FROM source_documents GROUP BY council_id,url HAVING COUNT(*)>1 ORDER BY n DESC LIMIT 50`);
+report.outsideEngland=[];
+const registry=JSON.parse(fs.readFileSync('data/england-registry.json','utf8'));
+const normalize=s=>s.toLowerCase().replace(/&/g,'and').replace(/city of|royal borough of|london borough of|metropolitan|borough|district|county|city|council/g,'').replace(/[^a-z0-9]/g,'');
+const councils=await rows(`SELECT c.*, (SELECT COUNT(*) FROM transactions t WHERE t.council_id=c.id) transaction_count FROM councils c`);
+report.registry=registry.authorities.map(a=>({...a,candidates:councils.filter(c=>c.slug===a.slug||normalize(c.name)===normalize(a.name)).map(c=>({id:c.id,slug:c.slug,name:c.name,rows:c.transaction_count}))}));
+const matched=new Set(report.registry.flatMap(a=>a.candidates.map(c=>c.id)));
+report.outsideEngland=councils.filter(c=>c.transaction_count>0&&!matched.has(c.id)).map(c=>({id:c.id,name:c.name,slug:c.slug,rows:c.transaction_count}));
+fs.writeFileSync('data/reports/d1-quality.json',JSON.stringify(report,null,2));
+console.log(JSON.stringify({...report,registry:`${report.registry.length} authority matches saved`},null,2));

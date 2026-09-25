@@ -1,0 +1,330 @@
+{
+  "generatedAt": "2026-07-11T20:40:09.678Z",
+  "goodCount": 1,
+  "badCount": 79,
+  "good": [
+    {
+      "slug": "staffordshire",
+      "name": "Staffordshire County Council",
+      "files": 13
+    }
+  ],
+  "bad": [
+    {
+      "slug": "birmingham",
+      "reason": "Error: HTTP 404 fetching https://www.birmingham.gov.uk/downloads/download/61/spend_over_500"
+    },
+    {
+      "slug": "manchester",
+      "reason": "Error: HTTP 403 fetching https://www.manchester.gov.uk/downloads/download/6686/council_expenditure_over_500"
+    },
+    {
+      "slug": "nottingham",
+      "reason": "Error: HTTP 404 fetching https://www.nottinghamcity.gov.uk/your-council/about-the-council/transparency-open-data/payment"
+    },
+    {
+      "slug": "leicester",
+      "reason": "Error: HTTP 404 fetching https://www.leicester.gov.uk/your-council/how-we-work/budgets-and-spending/expenditure-over-500"
+    },
+    {
+      "slug": "coventry",
+      "reason": "Error: HTTP 404 fetching https://www.coventry.gov.uk/downloads/download/557/expenditure_exceeding_500"
+    },
+    {
+      "slug": "westminster",
+      "reason": "Error: HTTP 404 fetching https://www.westminster.gov.uk/payments-over-500"
+    },
+    {
+      "slug": "tower-hamlets",
+      "reason": "Error: HTTP 404 fetching https://www.towerhamlets.gov.uk/lgnl/council_and_democracy/Transparency/Council_payments_over_5"
+    },
+    {
+      "slug": "hackney",
+      "reason": "Error: HTTP 404 fetching https://hackney.gov.uk/payments-to-suppliers"
+    },
+    {
+      "slug": "islington",
+      "reason": "Error: HTTP 404 fetching https://www.islington.gov.uk/about-the-council/transparency/council-spending"
+    },
+    {
+      "slug": "lambeth",
+      "reason": "Error: HTTP 404 fetching https://www.lambeth.gov.uk/better-fairer-lambeth/transparency/council-payments-over-500"
+    },
+    {
+      "slug": "southwark",
+      "reason": "Error: HTTP 404 fetching https://www.southwark.gov.uk/council-and-democracy/transparency/council-spending"
+    },
+    {
+      "slug": "newham",
+      "reason": "Error: HTTP 404 fetching https://www.newham.gov.uk/council/council-spending-finance/council-spending-500"
+    },
+    {
+      "slug": "barnet",
+      "reason": "0 files"
+    },
+    {
+      "slug": "croydon",
+      "reason": "Error: HTTP 404 fetching https://www.croydon.gov.uk/council-and-elections/budgets-and-spending/council-spending-over-500"
+    },
+    {
+      "slug": "ealing",
+      "reason": "Error: HTTP 404 fetching https://www.ealing.gov.uk/downloads/download/1286/council_expenditure_over_500"
+    },
+    {
+      "slug": "haringey",
+      "reason": "Error: HTTP 404 fetching https://www.haringey.gov.uk/local-democracy/transparency/council-spending"
+    },
+    {
+      "slug": "hounslow",
+      "reason": "Error: HTTP 404 fetching https://www.hounslow.gov.uk/downloads/download/87/payments_to_suppliers_over_500"
+    },
+    {
+      "slug": "lewisham",
+      "reason": "Error: HTTP 404 fetching https://lewisham.gov.uk/mayorandcouncil/aboutthecouncil/finances/council-spending-over-500"
+    },
+    {
+      "slug": "wandsworth",
+      "reason": "Error: HTTP 404 fetching https://www.wandsworth.gov.uk/about-the-council/transparency/payments-to-suppliers/"
+    },
+    {
+      "slug": "kent",
+      "reason": "Error: HTTP 403 fetching https://www.kent.gov.uk/about-the-council/finance-and-budget/spending"
+    },
+    {
+      "slug": "hampshire",
+      "reason": "Error: HTTP 403 fetching https://www.hants.gov.uk/aboutthecouncil/strategiesplansandpolicies/transparency/spenddata"
+    },
+    {
+      "slug": "surrey",
+      "reason": "Error: HTTP 404 fetching https://www.surreycc.gov.uk/council-and-democracy/finance-and-accounts/expenditure-exceeding-50"
+    },
+    {
+      "slug": "essex",
+      "reason": "Error: HTTP 404 fetching https://www.essex.gov.uk/spending-and-performance/council-spending"
+    },
+    {
+      "slug": "lancashire",
+      "reason": "Error: HTTP 404 fetching https://www.lancashire.gov.uk/council/performance-spending-reviews/spending/expenditure-exceedi"
+    },
+    {
+      "slug": "devon",
+      "reason": "Error: HTTP 404 fetching https://www.devon.gov.uk/open-data/dataset/?id=expenditure-over-500"
+    },
+    {
+      "slug": "norfolk",
+      "reason": "0 files"
+    },
+    {
+      "slug": "suffolk",
+      "reason": "Error: HTTP 404 fetching https://www.suffolk.gov.uk/council-and-democracy/council-budgets-and-spending/council-spending-"
+    },
+    {
+      "slug": "hertfordshire",
+      "reason": "Error: HTTP 404 fetching https://www.hertfordshire.gov.uk/about-the-council/freedom-of-information-and-council-data/open"
+    },
+    {
+      "slug": "bradford",
+      "reason": "Error: HTTP 404 fetching https://www.bradford.gov.uk/your-council/council-budgets-and-spending/council-spending-over-500"
+    },
+    {
+      "slug": "calderdale",
+      "reason": "Error: HTTP 404 fetching https://www.calderdale.gov.uk/v2/council/budgets-and-spending/council-spending"
+    },
+    {
+      "slug": "bolton",
+      "reason": "0 files"
+    },
+    {
+      "slug": "tameside",
+      "reason": "Error: HTTP 404 fetching https://www.tameside.gov.uk/transparency/expenditure"
+    },
+    {
+      "slug": "oldham",
+      "reason": "Error: HTTP 404 fetching https://www.oldham.gov.uk/downloads/download/789/council_expenditure_over_500"
+    },
+    {
+      "slug": "salford",
+      "reason": "Error: HTTP 404 fetching https://www.salford.gov.uk/your-council/council-and-decision-making/budgets-and-spending/counci"
+    },
+    {
+      "slug": "bury",
+      "reason": "Error: HTTP 404 fetching https://www.bury.gov.uk/council-and-democracy/budgets-and-spending/council-spending"
+    },
+    {
+      "slug": "gateshead",
+      "reason": "Error: HTTP 404 fetching https://www.gateshead.gov.uk/article/2940/Payments-to-suppliers"
+    },
+    {
+      "slug": "cornwall",
+      "reason": "Error: HTTP 404 fetching https://www.cornwall.gov.uk/council-and-democracy/transparency/council-spending/"
+    },
+    {
+      "slug": "milton-keynes",
+      "reason": "Error: HTTP 404 fetching https://www.milton-keynes.gov.uk/your-council-and-elections/council-information-and-meetings/bu"
+    },
+    {
+      "slug": "east-sussex",
+      "reason": "Error: HTTP 404 fetching https://www.eastsussex.gov.uk/yourcouncil/finance/transparencyexpenditure"
+    },
+    {
+      "slug": "north-yorkshire",
+      "reason": "Error: HTTP 404 fetching https://www.northyorks.gov.uk/council-and-democracy/transparency/council-spend-over-500"
+    },
+    {
+      "slug": "south-staffordshire",
+      "reason": "Error: HTTP 404 fetching https://www.staffordshire.gov.uk/Your-council/Open-data/Payments-to-suppliers.aspx"
+    },
+    {
+      "slug": "buckinghamshire",
+      "reason": "Error: HTTP 404 fetching https://www.buckinghamshire.gov.uk/your-council/transparency/payments-to-suppliers/"
+    },
+    {
+      "slug": "hull-city",
+      "reason": "Error: HTTP 404 fetching https://www.hull.gov.uk/council-and-democracy/transparency"
+    },
+    {
+      "slug": "west-dorset",
+      "reason": "Error: HTTP 404 fetching https://www.dorsetcouncil.gov.uk/your-council/transparency"
+    },
+    {
+      "slug": "london-bromley",
+      "reason": "Error: HTTP 404 fetching https://www.bromley.gov.uk/council/transparency"
+    },
+    {
+      "slug": "london-hillingdon",
+      "reason": "Error: HTTP 404 fetching https://www.hillingdon.gov.uk/transparency"
+    },
+    {
+      "slug": "brighton-and-hove-city",
+      "reason": "Error: HTTP 404 fetching https://www.brighton-hove.gov.uk/council-and-democracy/budgets-and-spending/council-spending-ov"
+    },
+    {
+      "slug": "cheshire-west-and-chester",
+      "reason": "Error: HTTP 404 fetching https://www.cheshirewestandchester.gov.uk/your-council/budgets-and-finance/council-spending"
+    },
+    {
+      "slug": "lincolnshire",
+      "reason": "Error: HTTP 404 fetching https://www.lincolnshire.gov.uk/council-business/council-spending"
+    },
+    {
+      "slug": "wiltshire",
+      "reason": "0 files"
+    },
+    {
+      "slug": "derbyshire-dales",
+      "reason": "Error: HTTP 404 fetching https://www.derbyshire.gov.uk/council/council-spending/council-spending.aspx"
+    },
+    {
+      "slug": "west-sussex",
+      "reason": "Error: HTTP 404 fetching https://www.westsussex.gov.uk/about-the-council/strategies-plans-and-policies/transparency/spen"
+    },
+    {
+      "slug": "nottinghamshire",
+      "reason": "Error: HTTP 404 fetching https://www.nottinghamshire.gov.uk/council/transparency/expenditure-over-500"
+    },
+    {
+      "slug": "oxfordshire",
+      "reason": "Error: HTTP 404 fetching https://www.oxfordshire.gov.uk/council/about-your-council/budgets-and-spending/expenditure-over"
+    },
+    {
+      "slug": "durham",
+      "reason": "Error: HTTP 404 fetching https://www.durham.gov.uk/article/2309/Payments-to-suppliers"
+    },
+    {
+      "slug": "leicestershire",
+      "reason": "Error: HTTP 404 fetching https://www.leicestershire.gov.uk/about-the-council/council-spending/spending-over-500"
+    },
+    {
+      "slug": "warwickshire",
+      "reason": "Error: HTTP 404 fetching https://www.warwickshire.gov.uk/budgetfinance/spend-500"
+    },
+    {
+      "slug": "worcestershire",
+      "reason": "Error: HTTP 404 fetching https://www.worcestershire.gov.uk/council/budgets-and-spending/expenditure-over-500"
+    },
+    {
+      "slug": "northumberland",
+      "reason": "Error: HTTP 404 fetching https://www.northumberland.gov.uk/About/Transparency/Payments-to-suppliers.aspx"
+    },
+    {
+      "slug": "east-riding-of-yorkshire",
+      "reason": "Error: HTTP 404 fetching https://www.eastriding.gov.uk/council/governance-and-spending/council-spending/"
+    },
+    {
+      "slug": "cheshire-east",
+      "reason": "Error: HTTP 404 fetching https://www.cheshireeast.gov.uk/council_and_democracy/transparency/payments_to_suppliers.aspx"
+    },
+    {
+      "slug": "bournemouth-christchurch-and-poole",
+      "reason": "Error: HTTP 404 fetching https://www.bcpcouncil.gov.uk/About-BCP-Council/Transparency/Pages/Payments-to-suppliers.aspx"
+    },
+    {
+      "slug": "north-northamptonshire",
+      "reason": "Error: HTTP 404 fetching https://www.northnorthants.gov.uk/council/budgets-and-spending/payments-over-500"
+    },
+    {
+      "slug": "sefton",
+      "reason": "Error: HTTP 404 fetching https://www.sefton.gov.uk/your-council/budgets-and-spending/council-spending/"
+    },
+    {
+      "slug": "doncaster",
+      "reason": "Error: HTTP 404 fetching https://www.doncaster.gov.uk/services/the-council-democracy/council-spending-over-500"
+    },
+    {
+      "slug": "shropshire",
+      "reason": "Error: HTTP 404 fetching https://www.shropshire.gov.uk/transparency/payments-to-suppliers/"
+    },
+    {
+      "slug": "enfield",
+      "reason": "Error: HTTP 403 fetching https://www.enfield.gov.uk/services/your-council/budgets-and-spending/council-spending"
+    },
+    {
+      "slug": "waltham-forest",
+      "reason": "Error: HTTP 404 fetching https://www.walthamforest.gov.uk/council-and-elections/budgets-and-spending/council-spending-ov"
+    },
+    {
+      "slug": "stoke-on-trent",
+      "reason": "Error: HTTP 404 fetching https://www.stoke.gov.uk/info/20006/finance_and_council_tax/105/expenditure_over_500"
+    },
+    {
+      "slug": "wolverhampton",
+      "reason": "Error: HTTP 404 fetching https://www.wolverhampton.gov.uk/your-council/budgets-and-spending/council-spending-over-500"
+    },
+    {
+      "slug": "dudley",
+      "reason": "Error: HTTP 404 fetching https://www.dudley.gov.uk/council-community/budgets-spending/council-spending-over-500/"
+    },
+    {
+      "slug": "medway",
+      "reason": "0 files"
+    },
+    {
+      "slug": "central-bedfordshire",
+      "reason": "0 files"
+    },
+    {
+      "slug": "havering",
+      "reason": "0 files"
+    },
+    {
+      "slug": "west-northamptonshire",
+      "reason": "Error: HTTP 404 fetching https://www.westnorthants.gov.uk/council/budgets-and-spending/council-spending-over-500"
+    },
+    {
+      "slug": "derbyshire",
+      "reason": "Error: HTTP 404 fetching https://www.derbyshire.gov.uk/council/finance-and-business/council-spending/council-spending.as"
+    },
+    {
+      "slug": "somerset",
+      "reason": "Error: HTTP 404 fetching https://www.somerset.gov.uk/council-and-democracy/budgets-and-finance/expenditure-exceeding-500"
+    },
+    {
+      "slug": "gloucestershire",
+      "reason": "Error: HTTP 404 fetching https://www.gloucestershire.gov.uk/council-and-democracy/spending-and-accounts/expenditure-exce"
+    },
+    {
+      "slug": "dorset",
+      "reason": "Error: HTTP 404 fetching https://www.dorsetcouncil.gov.uk/your-council/about-your-council/budgets-and-spending/payments-"
+    }
+  ]
+}

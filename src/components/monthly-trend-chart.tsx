@@ -13,7 +13,7 @@ import { formatCompact } from "@/lib/format";
 
 interface DataItem {
   month: string | null;
-  total: number;
+  total: number | null;
   count: number;
 }
 
@@ -28,7 +28,7 @@ export function MonthlyTrendChart({ data }: { data: DataItem[] }) {
   return (
     <div className="rounded-xl border p-5 shadow-sm" style={{ background: "#fff" }}>
       <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider" style={{ color: "#6b7280" }}>
-        Monthly Spend Trend
+        Monthly Published Payments
       </h3>
       {chartData.length === 0 ? (
         <p className="py-8 text-center" style={{ color: "#6b7280" }}>No data available</p>
@@ -45,7 +45,9 @@ export function MonthlyTrendChart({ data }: { data: DataItem[] }) {
               itemStyle={{ color: "#111" }}
             />
             <Line
-              type="monotone"
+              type="linear"
+              isAnimationActive={false}
+              connectNulls={false}
               dataKey="total"
               stroke="#1e40af"
               strokeWidth={2}

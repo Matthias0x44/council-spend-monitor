@@ -6,7 +6,6 @@ const RAW_DIR = path.join(process.cwd(), "data", "raw", "kirklees");
 
 const EXPENDITURE_URL =
   "https://www.kirklees.gov.uk/beta/information-and-data/expenditure-data.aspx";
-const BUDGET_URL = "https://www.kirklees.gov.uk/budget";
 
 const BUDGET_PDFS = [
   {

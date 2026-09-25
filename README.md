@@ -1,189 +1,39 @@
 # Council Spend Monitor
 
-A public-finance dashboard for UK council spending data. Built with Next.js
-on Cloudflare Workers (via `@opennextjs/cloudflare`) backed by Cloudflare D1.
-Local development uses `better-sqlite3` against a file in `data/`.
+An interactive transparency dashboard for **payments published by English local authorities**. It shows the original source for each example payment, distinguishes missing data from zero expenditure, and explains or declines each suggested service classification.
 
-## Features
+**Portfolio status:** This repository is an offline demonstration. The hosted Worker and its D1 database were retired on 25 September 2026 after the national import proved too costly to operate. No scheduled scraper or hosted site remains. The demo runs locally with a small, committed fixture; it makes no claim of complete national coverage.
 
-- **Overview cards** — total spend, avg transaction, year-on-year change, supplier count
-- **Transparency flags** — redacted supplier spend, missing category data, large payments
-- **Spend breakdowns** — by service area, category, and supplier
-- **Monthly trend** — line chart of spending over time
-- **Transaction table** — searchable, filterable, sortable, with CSV export and hover tooltips
-- **Financial year selector** — switch between years (2017–18 to 2025–26)
+![Coventry dashboard showing sample scope, partial coverage, payment summary and charts](docs/dashboard-demo.png)
 
-## Getting Started (Local)
+## Run the demo
 
-### 1. Install dependencies
+Use Node.js 22 or later:
 
-```bash
-npm install
-```
-
-### 2. Seed the database
-
-Downloads data from Kirklees Council's transparency page and ingests it into a local SQLite database:
-
-```bash
-npm run seed
-```
-
-### 3. Run the dev server
-
-```bash
+```sh
+npm ci
+npm run demo:seed
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). Locally, the app reads from `data/council-spend.db`.
+Open `http://localhost:3000`, then choose a council. `npm run demo:seed` builds `data/demo.db` locally from the committed [sample fixture](data/demo-payments.json); it makes no network requests or cloud writes. You can run it again to reset the demo. `npm test`, `npm run lint`, `npm run typecheck`, and `npm run build` are the validation commands.
 
-## Deploying to Cloudflare
+The sample contains **272 selected payments from nine councils**, across the five financial years 2022–23 to 2026–27 and 37 source documents. Every selected row retains its publisher file URL. It is a small extract of public source files from the development database, frozen in September 2026. It is intentionally unsuitable for estimating annual totals, supplier concentration or coverage across England. In the dashboard, missing months remain unknown and unsupported annual comparisons are suppressed.
 
-The app deploys as a single Cloudflare Worker built by
-[`@opennextjs/cloudflare`](https://opennext.js.org/cloudflare). The Worker
-serves the Next.js app and reads from the `DB` binding (Cloudflare D1).
+## What the project demonstrates
 
-### 1. Provision Cloudflare resources
+- A responsive Next.js dashboard with council search, financial-year selection, payment tables, source links, filters, charts and CSV export.
+- A source-aware ingestion pipeline that discovers council publications, parses CSV/XLS/XLSX files, validates payment dates and amounts, retains refunds, and tracks content and per-month fingerprints to detect repeated exports. Files were processed one at a time; failures and coverage gaps were recorded.
+- A versioned service classifier that considers the publisher's service, directorate and category text. It keeps the original category, exposes the rule and evidence behind a suggestion, and returns `Unclassified` when evidence is ambiguous. Supplier names are not used to infer a public service.
+- Defensive handling of partial data: the five-year window includes the current UK financial year, future or malformed dates are excluded, negative payments remain visible, and a populated month is not treated as proof of a complete publication.
+- A Cloudflare D1/Workers implementation retained in the source for architectural review. The default demo uses a local SQLite database and the repository has no cloud deployment credentials or import workflow.
 
-```bash
-npx wrangler login
-npx wrangler d1 create council-spend
-```
+The [data-quality case study](docs/case-study.md) explains the choices, validation and limits. The [historical readiness audit](docs/production-readiness.md) records what was verified before the hosted version was retired.
 
-Copy the `database_id` printed by the create command into `wrangler.jsonc`.
+## Data and interpretation
 
-### 2. Apply schema
+These records are **published supplier payments**, not audited total council expenditure. Councils use different reporting thresholds, redaction practices, formats and retention periods. The fixture was selected for a reproducible interface demo; its sums and rankings describe only those selected rows. An independent, representative review of classifier accuracy was not completed. The developer-reviewed label fixtures are regression diagnostics, not a national accuracy estimate.
 
-```bash
-npm run d1:migrate:remote
-```
+Authority identities come from a [government register snapshot](data/english-authorities-source.csv). The [Local Government Transparency Code](https://www.gov.uk/government/publications/local-government-transparency-code-2015/local-government-transparency-code-2015) gives the publication context. Payment-level publisher URLs are in the fixture and local demo. Source availability can change after the snapshot date.
 
-This runs `scripts/d1/schema.sql` against the remote D1 database.
-`scripts/d1/schema.sql` is the canonical DDL — local `pipeline.ts` and
-`seed-registry.ts` read from the same file.
-
-### 3. Set credentials
-
-Create an API token at
-[dash.cloudflare.com/profile/api-tokens](https://dash.cloudflare.com/profile/api-tokens)
-with these scopes:
-
-- `Account → D1 → Edit` — for `npm run d1:push`
-- `Account → Workers Scripts → Edit` — for `npm run cf:deploy`
-- `Account → Account Settings → Read` — needed by wrangler for some lookups
-
-Find your account id via `wrangler whoami` or any dashboard URL
-(`/accounts/<id>/...`).
-
-Add to `.env` for local pushes:
-
-```bash
-CLOUDFLARE_ACCOUNT_ID=...
-CLOUDFLARE_API_TOKEN=...
-D1_DATABASE_ID=...
-```
-
-And to GitHub Actions repo secrets, with the same names.
-
-### 4. Push local data to D1
-
-```bash
-npm run d1:push                # full replace
-npm run d1:push -- --slug bristol   # scoped to one council
-```
-
-The scoped form deletes only that council's rows in D1 before re-inserting,
-so you can re-scrape one council without affecting the others.
-
-### 5. Generate Worker type bindings
-
-```bash
-npm run cf:types
-```
-
-Writes `worker-configuration.d.ts` (gitignored) so TypeScript knows the
-`DB`, `ASSETS` and `Env` types. Re-run after editing `wrangler.jsonc`.
-
-### 6. Preview the Worker locally
-
-```bash
-npm run cf:build
-npm run cf:preview
-```
-
-`cf:preview` runs the bundled Worker through `wrangler dev`, using a local
-D1 simulator. Useful for catching workerd-only issues (e.g. node module
-incompatibilities) without deploying.
-
-### 7. Deploy
-
-**Do not edit `worker.js` in the Cloudflare dashboard.** The dashboard
-"Hello world" starter is a placeholder. The real Worker is generated by
-OpenNext into `.open-next/worker.js` and referenced from `wrangler.jsonc`.
-
-Deploy from your machine (recommended first time):
-
-```bash
-npm run cf:deploy
-```
-
-Or connect the GitHub repo in the dashboard (**Workers & Pages → Create → Worker → Connect to Git**) with:
-
-| Setting | Value |
-|---|---|
-| Build command | `npm run cf:build` |
-| Deploy command | `npm run cf:deploy` |
-
-**The deploy command must build too.** Workers Builds runs the build and
-deploy phases in separate containers that don't share a filesystem, so the
-`.open-next/` output from the build phase is gone by the time the deploy
-phase runs. The default deploy command `npx wrangler deploy` then delegates
-to `opennextjs-cloudflare deploy`, which fails with *"Could not find
-compiled Open Next config, did you run the build command?"*. Our
-`cf:deploy` script chains `opennextjs-cloudflare build && ... deploy` so the
-bundle is rebuilt in the deploy step. (The Build command above is then only
-useful as an early failure signal — the deploy phase rebuilds regardless.)
-
-**Not** `npm run build` — that runs plain Next.js, which tries to open
-`data/council-spend.db` during the build and produces output Workers
-cannot run.
-
-Workers runs Next 15 (`next@15.5.x`): `@opennextjs/cloudflare` cannot yet
-bundle Next 16.2.x output. See the top-level note in `package.json` history.
-
-The first deploy creates the Worker under the name in `wrangler.jsonc`
-(`council-spend-monitor`) at
-`https://council-spend-monitor.<your-subdomain>.workers.dev`. Add a custom
-domain via the Cloudflare dashboard under **Workers & Pages → council-spend-monitor → Settings → Domains & Routes**.
-
-## Tech Stack
-
-- **Next.js 16** (App Router, Server Components)
-- **Cloudflare Workers** via `@opennextjs/cloudflare` for hosting
-- **Cloudflare D1** (production) / **better-sqlite3** (dev) for storage
-- **Drizzle ORM** for type-safe queries
-- **Recharts** for data visualisation
-- **Tailwind CSS** for styling
-
-## Data Sources
-
-- Kirklees Council expenditure data (monthly XLSX/CSV files, >£500 transactions)
-- Budget summary PDFs and statement of accounts (heuristic parsing)
-
-## Scripts
-
-| Command | Description |
-|---|---|
-| `npm run dev` | Next.js dev server (local SQLite) |
-| `npm run build` | Next.js production build (Node) |
-| `npm run seed` | Full pipeline: scrape + ingest |
-| `npm run scrape` | Download raw files only |
-| `npm run ingest` | Parse spreadsheets into DB |
-| `npm run ingest:budgets` | Parse budget PDFs into DB |
-| `npm run pipeline` | Scrape + ingest for a council (`-- <slug>`) |
-| `npm run d1:migrate:remote` | Apply schema to remote D1 |
-| `npm run d1:push` | Sync local SQLite → remote D1 |
-| `npm run cf:types` | Regenerate Worker binding types |
-| `npm run cf:build` | Build the OpenNext Worker bundle |
-| `npm run cf:preview` | Run the Worker locally (workerd) |
-| `npm run cf:deploy` | Build + deploy to Cloudflare |
+The browser app uses Next.js 15, React 19, TypeScript, Drizzle ORM, SQLite and Recharts. The archived cloud path uses OpenNext, Workers and D1; running the portfolio demo does not use any Cloudflare resource.

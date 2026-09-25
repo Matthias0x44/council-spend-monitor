@@ -1,0 +1,6 @@
+{
+  "extends": "./tsconfig.json",
+  "include": ["scripts/pipeline-d1.ts", "scripts/lib/*.ts", "src/lib/fiscal.ts", "src/lib/classifier.ts", "src/db/schema.ts"],
+  "exclude": ["node_modules"],
+  "compilerOptions": { "incremental": false }
+}

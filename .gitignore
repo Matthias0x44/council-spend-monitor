@@ -58,3 +58,9 @@ next-env.d.ts
 
 # freshness probe output
 /data/fresh-councils.json
+/data/mhclg/
+!/data/top-100-councils.json
+
+/data/recovery/
+/data/reports/
+/data/downloads/

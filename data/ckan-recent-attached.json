@@ -1,0 +1,90 @@
+{
+  "generatedAt": "2026-07-11T20:53:51.506Z",
+  "attachedCount": 12,
+  "attached": [
+    {
+      "id": "6202e6b0-a8cd-4803-8af7-d7bef0f76b5c",
+      "title": "Tunbridge Wells Open Data - Spend Over £250 - Financial Year 2016 to 2017",
+      "org": "Tunbridge Wells Borough Council",
+      "modified": "2026-07-08T15:01:55.871324",
+      "slug": "tunbridge-wells-borough"
+    },
+    {
+      "id": "3cda6b5d-719d-4a81-8fc3-8c19cabc72aa",
+      "title": "Tunbridge Wells Open Data - Spend Over £250 - Financial Year 2018 to 2019",
+      "org": "Tunbridge Wells Borough Council",
+      "modified": "2026-07-08T15:01:55.192244",
+      "slug": "tunbridge-wells-borough"
+    },
+    {
+      "id": "4f504efc-be38-4b03-a4b8-2cb72804a085",
+      "title": "Tunbridge Wells Open Data - Spend Over £250 - Financial Year 2015 to 2016",
+      "org": "Tunbridge Wells Borough Council",
+      "modified": "2026-07-08T15:01:51.495004",
+      "slug": "tunbridge-wells-borough"
+    },
+    {
+      "id": "8d776129-552b-4a74-98a7-30f424fc3376",
+      "title": "Tunbridge Wells Open Data - Spend Over £250 - Financial Year 2014 to 2015",
+      "org": "Tunbridge Wells Borough Council",
+      "modified": "2026-07-08T15:01:51.147991",
+      "slug": "tunbridge-wells-borough"
+    },
+    {
+      "id": "4039c4f0-235d-47f1-96ae-9d74cb97d833",
+      "title": "Payments to suppliers with a value over £500",
+      "org": "Eden District Council",
+      "modified": "2026-07-08T13:32:36.858812",
+      "slug": "eden-district"
+    },
+    {
+      "id": "c72d7b5c-196c-45e0-9ddd-c1998395de76",
+      "title": "Payments to suppliers with a value over £500 from Sandwell Metropolitan Borough Council",
+      "org": "Sandwell Metropolitan Borough Council",
+      "modified": "2026-07-08T13:32:34.475477",
+      "slug": "sandwell"
+    },
+    {
+      "id": "ad098feb-8d3b-48cc-841d-2bc19c188695",
+      "title": "Cambridgeshire County Council Expenditure over £500",
+      "org": "Cambridgeshire Insight",
+      "modified": "2026-07-03T10:02:18.566558",
+      "slug": "cambridgeshire-insight"
+    },
+    {
+      "id": "e32c1ade-5608-4952-b36c-58e5b73eba2a",
+      "title": "Expenditure exceeding 500 GBP (Supplier Spend)",
+      "org": "Trafford Council",
+      "modified": "2026-06-30T12:54:03.132354",
+      "slug": "trafford"
+    },
+    {
+      "id": "12f8706f-fe31-4c26-910c-392a172b50e7",
+      "title": "Tunbridge Wells Open Data - Spend Over 250 - Financial Year 2024 to 2025",
+      "org": "Tunbridge Wells Borough Council",
+      "modified": "2025-12-04T12:00:16.699652",
+      "slug": "tunbridge-wells-borough"
+    },
+    {
+      "id": "9bb13da4-bedf-4701-8677-1b75adc0f0e4",
+      "title": "Tunbridge Wells Open Data - Spend Over 250 - Financial Year 2019 to 2020",
+      "org": "Tunbridge Wells Borough Council",
+      "modified": "2024-11-22T10:00:47.044805",
+      "slug": "tunbridge-wells-borough"
+    },
+    {
+      "id": "5685de3e-20e5-41a5-9224-7cd592940c7a",
+      "title": "Tunbridge Wells Open Data - Spend Over 250 - Financial Year 2021 to 2022",
+      "org": "Tunbridge Wells Borough Council",
+      "modified": "2024-11-20T08:01:00.279198",
+      "slug": "tunbridge-wells-borough"
+    },
+    {
+      "id": "ba746270-485e-4c39-88dc-53ceb0e5df2f",
+      "title": "Tunbridge Wells Open Data - Spend Over 250 - Financial Year 2022 to 2023",
+      "org": "Tunbridge Wells Borough Council",
+      "modified": "2024-11-20T08:00:59.363818",
+      "slug": "tunbridge-wells-borough"
+    }
+  ]
+}

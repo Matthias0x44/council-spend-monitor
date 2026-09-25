@@ -1,15 +1,17 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Keep the archived sample's five-year window reproducible in future years.
+  env: { PORTFOLIO_AS_OF: "2026-09-25T12:00:00Z" },
+  outputFileTracingRoot: process.cwd(),
   // better-sqlite3 is a native node module that we only require under
   // `next dev` / `next build` (not in the Cloudflare Workers runtime).
   // Telling Next not to bundle it keeps the Workers build smaller and
   // avoids webpack trying to resolve its native bindings.
   serverExternalPackages: ["better-sqlite3"],
-  // Keep the local dev data out of the traced server bundle. The deployed
-  // Worker reads from the D1 binding, never the local SQLite file or the
-  // scraped CSVs, so tracing `data/` (2.8 GB) into `.open-next` just fills
-  // the disk and blows the Worker size limit. Scope this to `data/` only —
+  // Keep local sample and archived source data out of the traced server
+  // bundle. A Worker would read from its D1 binding; including the SQLite
+  // file and CSVs in `.open-next` would waste space. Scope this to `data/` —
   // excluding `.next/**` would strip the webpack/turbopack runtime chunks
   // that copyTracedFiles must copy, breaking the esbuild bundle.
   outputFileTracingExcludes: {
@@ -29,11 +31,7 @@ export default nextConfig;
 
 // Optionally initialize the Cloudflare context for `next dev`, so server
 // components can call `getCloudflareContext()` and hit a local D1
-// simulator. Off by default — `next dev` uses better-sqlite3 against
-// `data/council-spend.db`. Set USE_CF_DEV=1 to opt in, in which case you
-// also need `npm run d1:migrate:local` and a local D1 data load.
-// For end-to-end Workers testing, prefer `npm run cf:preview` (wrangler
-// dev against the bundled Worker).
+// simulator. The portfolio demo leaves this off and uses data/demo.db.
 if (process.env.USE_CF_DEV === "1") {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { initOpenNextCloudflareForDev } = require("@opennextjs/cloudflare");

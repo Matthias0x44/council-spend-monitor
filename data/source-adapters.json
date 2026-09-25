@@ -1,0 +1,789 @@
+{
+  "birmingham": {
+    "transparencyUrl": "https://www.cityobservatory.birmingham.gov.uk/api/explore/v2.1/catalog/datasets/payments-to-suppliers-over-gbp500/exports/csv?delimiter=%2C"
+  },
+  "manchester": {
+    "transparencyUrl": "https://www.manchester.gov.uk/info/200110/budgets_and_spending/5022/publication_of_supplier_transactions_over_500"
+  },
+  "sheffield": {
+    "transparencyUrl": "https://datamillnorth.org/dataset/council-spend-over-250-emd0m"
+  },
+  "liverpool": {
+    "transparencyUrl": "https://liverpool.gov.uk/council/spending-and-performance/transparency-in-local-government/"
+  },
+  "bristol": {
+    "transparencyUrl": "https://www.bristol.gov.uk/council/council-spending-and-performance/spending-over-500",
+    "packages": [
+      "2dd91623-cbbc-4837-ba9f-1cfd1f38bb07"
+    ]
+  },
+  "kirklees": {
+    "transparencyUrl": "https://www.kirklees.gov.uk/beta/information-and-data/expenditure-data.aspx"
+  },
+  "newcastle": {
+    "transparencyUrl": "https://www.newcastle.gov.uk/local-government/transparency-and-open-data/payments-over-500"
+  },
+  "nottingham": {
+    "transparencyUrl": "https://www.nottinghamcity.gov.uk/your-council/about-the-council/access-to-information/nottingham-data-hub"
+  },
+  "leicester": {
+    "transparencyUrl": "https://data.leicester.gov.uk/explore/dataset/expenditure-exceeding-ps500-2022/information/"
+  },
+  "coventry": {
+    "transparencyUrl": "https://www.coventry.gov.uk/downloads/download/818/spending_over_500"
+  },
+  "westminster": {
+    "transparencyUrl": "https://www.westminster.gov.uk/about-council/transparency/spending-procurement-and-data-transparency"
+  },
+  "camden": {
+    "transparencyUrl": "https://opendata.camden.gov.uk/browse?category=Finance",
+    "packages": [
+      "4e016e5d-f97b-4f3c-a14d-7a75e412c0bb"
+    ]
+  },
+  "tower-hamlets": {
+    "transparencyUrl": "https://www.towerhamlets.gov.uk/lgnl/council_and_democracy/Transparency/payments_to_suppliers.aspx"
+  },
+  "hackney": {
+    "transparencyUrl": "https://hackney.gov.uk/budget-supplier-payments"
+  },
+  "islington": {
+    "transparencyUrl": "https://www.islington.gov.uk/about-the-council/information-governance/freedom-of-information/popular-data/council-spending",
+    "packages": [
+      "d50b4ff0-80da-4206-8a65-552f8bb4c853"
+    ]
+  },
+  "lambeth": {
+    "transparencyUrl": "https://www.lambeth.gov.uk/about-council/transparency-open-data/financial-information/expenditure-over-ps500",
+    "packages": [
+      "eabc475e-3485-4e42-b318-931abed46b6b"
+    ]
+  },
+  "southwark": {
+    "transparencyUrl": "https://www.southwark.gov.uk/council-and-democracy/open-data?chapter=2"
+  },
+  "newham": {
+    "transparencyUrl": "https://www.newham.gov.uk/council/council-spending"
+  },
+  "barnet": {
+    "transparencyUrl": "https://www.barnet.gov.uk/your-council/finance-funding-and-pensions/barnet-council-expenditure",
+    "packages": [
+      "feb8f754-6069-434a-acc6-1dd49c9a7f7e",
+      "6a7aea92-8b4f-4bd2-bc09-f82bdf581f4a"
+    ]
+  },
+  "croydon": {
+    "transparencyUrl": "https://www.croydon.gov.uk/council-and-elections/budgets-and-spending/accounts-and-payments/payments-over-ps500"
+  },
+  "ealing": {
+    "transparencyUrl": "https://www.ealing.gov.uk/info/201041/council_budgets_and_spending/864/council_spending_over_250"
+  },
+  "haringey": {
+    "transparencyUrl": "https://www.haringey.gov.uk/business/selling-council/council-expenditure"
+  },
+  "hounslow": {
+    "transparencyUrl": "https://data.hounslow.gov.uk/dataset/council-spending-over-f500",
+    "packages": [
+      "f713ba22-28ee-4be6-8a9a-3b15042a1f69"
+    ]
+  },
+  "greenwich": {
+    "transparencyUrl": "https://www.royalgreenwich.gov.uk/info/200210/transparency",
+    "dataGovId": "f2b384b5-6d41-4367-bdcd-5bffbb61f850",
+    "packages": [
+      "f2b384b5-6d41-4367-bdcd-5bffbb61f850",
+      "77af265f-80d0-436b-806a-c48e3385f1ff"
+    ]
+  },
+  "lewisham": {
+    "transparencyUrl": "https://lewisham.gov.uk/mayorandcouncil/aboutthecouncil/finances/council-spending-over-250"
+  },
+  "wandsworth": {
+    "transparencyUrl": "https://www.wandsworth.gov.uk/the-council/how-the-council-works/council-finances/council-expenditure/"
+  },
+  "kent": {
+    "transparencyUrl": "https://www.kent.gov.uk/about-the-council/finance-and-budget/spending/invoices-over-250",
+    "packages": [
+      "b6ea9dc7-7be5-4f82-a8de-f52cf15fc7a5"
+    ]
+  },
+  "hampshire": {
+    "transparencyUrl": "https://www.hants.gov.uk/aboutthecouncil/informationandstats/opendata/opendatasearch/supplierpayments",
+    "packages": [
+      "8786e72f-e3dd-4aae-a4e6-784eca291567",
+      "1232ef66-60a4-463c-b99a-c3b0edc536e3"
+    ]
+  },
+  "surrey": {
+    "transparencyUrl": "https://www.surreyi.gov.uk/dataset/e6rgn/council-spending",
+    "packages": [
+      "6fa0d925-f752-4504-96cf-3ad62becbd6d"
+    ]
+  },
+  "essex": {
+    "transparencyUrl": "https://www.essex.gov.uk/spending-and-council-tax/finance-and-spending-breakdowns"
+  },
+  "lancashire": {
+    "transparencyUrl": "https://www.lancashire.gov.uk/council/transparency/check-council-spending/"
+  },
+  "devon": {
+    "transparencyUrl": "https://www.devon.gov.uk/factsandfigures/dataset/spending-over-500/"
+  },
+  "norfolk": {
+    "transparencyUrl": "https://www.norfolk.gov.uk/what-we-do-and-how-we-work/open-data-fois-and-data-protection/open-data/payments-to-suppliers",
+    "packages": [
+      "fdae7bb8-4b75-4a9e-91fd-4dff8d881d7e"
+    ]
+  },
+  "suffolk": {
+    "transparencyUrl": "https://www.suffolk.gov.uk/council-and-democracy/open-data-suffolk/council-data-and-transparency/council-expenditure-and-contracts"
+  },
+  "hertfordshire": {
+    "transparencyUrl": "https://www.hertfordshire.gov.uk/about-the-council/freedom-of-information-and-council-data/open-data-statistics-about-hertfordshire/what-we-spend-and-how-we-spend-it/what-we-spend-and-how-we-spend-it.aspx",
+    "packages": [
+      "897093bd-355b-4977-9092-f27810baa5a7"
+    ]
+  },
+  "bradford": {
+    "transparencyUrl": "https://www.bradford.gov.uk/open-data/our-datasets/expenditure-greater-than-500-in-value/"
+  },
+  "calderdale": {
+    "transparencyUrl": "https://dataworks.calderdale.gov.uk/dataset/2wqx8/payments-to-suppliers"
+  },
+  "wakefield": {
+    "transparencyUrl": "https://www.wakefield.gov.uk/about-the-council/transparency/"
+  },
+  "bolton": {
+    "transparencyUrl": "https://www.bolton.gov.uk/downloads/download/196/expenditure_reports"
+  },
+  "tameside": {
+    "transparencyUrl": "https://www.tameside.gov.uk/Legal/Transparency-in-Local-Government"
+  },
+  "oldham": {
+    "transparencyUrl": "https://www.oldham.gov.uk/downloads/download/789/council_expenditure_over_500"
+  },
+  "trafford": {
+    "transparencyUrl": "https://www.trafford.gov.uk/about-your-council/budgets-and-transparency",
+    "dataGovId": "e32c1ade-5608-4952-b36c-58e5b73eba2a",
+    "packages": [
+      "e32c1ade-5608-4952-b36c-58e5b73eba2a"
+    ]
+  },
+  "salford": {
+    "transparencyUrl": "https://www.salford.gov.uk/your-council/finance/council-expenditure-over-500/"
+  },
+  "bury": {
+    "transparencyUrl": "https://www.bury.gov.uk/council-and-democracy/budgets-and-spending/payments-to-suppliers"
+  },
+  "sunderland": {
+    "transparencyUrl": "https://sunderland.gov.uk/over500"
+  },
+  "gateshead": {
+    "transparencyUrl": "https://www.gateshead.gov.uk/article/3456/Expenditure-over-500"
+  },
+  "cornwall": {
+    "transparencyUrl": "https://www.cornwall.gov.uk/the-council-and-democracy/council-spending-and-finance/payments-to-suppliers-where-the-invoiced-payments-are-greater-than-or-equal-to-500/"
+  },
+  "plymouth": {
+    "transparencyUrl": "https://www.plymouth.gov.uk/transparency-and-open-data",
+    "dataGovId": "9e9b0128-9095-4bde-b24b-d04e60789016",
+    "packages": [
+      "9e9b0128-9095-4bde-b24b-d04e60789016"
+    ]
+  },
+  "milton-keynes": {
+    "transparencyUrl": "https://www.milton-keynes.gov.uk/your_council-and-elections/council-information-and-accounts/data-performance-and-spending/milton"
+  },
+  "west-sussex": {
+    "transparencyUrl": "https://www.westsussex.gov.uk/about-the-council/information-and-data/data-store/local-government-transparency-code-data/"
+  },
+  "nottinghamshire": {
+    "transparencyUrl": "https://www.nottinghamshire.gov.uk/council-and-democracy/finance-and-budget/council-funding-spending/council-spending-information"
+  },
+  "derbyshire": {
+    "transparencyUrl": "https://www.derbyshire.gov.uk/council/finance-and-business/council-spending/council-spending.aspx"
+  },
+  "staffordshire": {
+    "transparencyUrl": "https://www.staffordshire.gov.uk/council-and-democracy/transparency/expenditure-exceeding-ps500/20242025"
+  },
+  "oxfordshire": {
+    "transparencyUrl": "https://www.oxfordshire.gov.uk/council/about-your-council/council-tax-and-finance/financial-transparency"
+  },
+  "somerset": {
+    "transparencyUrl": "https://www.somerset.gov.uk/council-and-democracy/find-council-spend-over-500-directory/"
+  },
+  "durham": {
+    "transparencyUrl": "https://www.durham.gov.uk/article/2309/Payments-to-suppliers"
+  },
+  "leicestershire": {
+    "transparencyUrl": "https://www.leicestershire.gov.uk/about-the-council/council-spending/spending-over-500"
+  },
+  "warwickshire": {
+    "transparencyUrl": "https://www.warwickshire.gov.uk/directory/42/warwickshire-open-data/category/290"
+  },
+  "worcestershire": {
+    "transparencyUrl": "https://www.worcestershire.gov.uk/council-finance/payments-commercial-suppliers-over-ps500-and-government-procurement-card"
+  },
+  "gloucestershire": {
+    "transparencyUrl": "https://www.gloucestershire.gov.uk/council-and-democracy/spending-and-accounts/expenditure-exceeding-500/"
+  },
+  "dorset": {
+    "transparencyUrl": "https://www.dorsetcouncil.gov.uk/your-council/about-your-council/budgets-and-spending/open-data-and-transparency/payments-to-suppliers-over-500"
+  },
+  "northumberland": {
+    "transparencyUrl": "https://www.northumberland.gov.uk/About/Transparency.aspx"
+  },
+  "cheshire-east": {
+    "transparencyUrl": "https://opendata-cheshireeast.opendata.arcgis.com/search?tags=expenditure%20exceeding%20%C2%A3500"
+  },
+  "east-riding-of-yorkshire": {
+    "transparencyUrl": "https://www.eastriding.gov.uk/council/governance-and-spending/budgets-and-spending/council-spending-and-salaries/"
+  },
+  "brighton-and-hove": {
+    "transparencyUrl": "https://www.brighton-hove.gov.uk/council-and-democracy/council-data-and-finance/payments-over-ps250"
+  },
+  "stoke-on-trent": {
+    "transparencyUrl": "https://www.stoke.gov.uk/directory/27/data_directory"
+  },
+  "kingston-upon-hull": {
+    "transparencyUrl": "https://www.hull.gov.uk/council-and-democracy/spending-and-performance"
+  },
+  "hull": {
+    "transparencyUrl": "https://www.hull.gov.uk/council-and-democracy/spending-and-performance"
+  },
+  "medway": {
+    "transparencyUrl": "https://www.medway.gov.uk/info/200216/finances/348/council_finances/2"
+  },
+  "shropshire": {
+    "transparencyUrl": "https://www.shropshire.gov.uk/open-data/datasets/supplier-payments-over-500/"
+  },
+  "central-bedfordshire": {
+    "transparencyUrl": "https://www.centralbedfordshire.gov.uk/info/28/transparency/285/council_spending"
+  },
+  "west-northamptonshire": {
+    "transparencyUrl": "https://www.westnorthants.gov.uk/your-council/expenditure"
+  },
+  "north-northamptonshire": {
+    "transparencyUrl": "https://www.northnorthants.gov.uk/finance/expenditure"
+  },
+  "bournemouth-christchurch-and-poole": {
+    "transparencyUrl": "https://www.bcpcouncil.gov.uk/About-the-council/Budgets-and-finance/Payments-to-suppliers.aspx"
+  },
+  "doncaster": {
+    "transparencyUrl": "https://www.doncaster.gov.uk/services/the-council-democracy/local-transparency-payments-to-suppliers"
+  },
+  "sefton": {
+    "transparencyUrl": "https://www.sefton.gov.uk/transparency/transparency/council-spend-other-key-documents/council-spend-over-500/"
+  },
+  "brent": {
+    "transparencyUrl": "https://data.brent.gov.uk/dataset/vq756/what-we-spend"
+  },
+  "enfield": {
+    "transparencyUrl": "https://www.enfield.gov.uk/services/business-and-licensing/transparency-reports/monthly-report-for-transactions-over-250"
+  },
+  "waltham-forest": {
+    "transparencyUrl": "https://www.walthamforest.gov.uk/council-and-elections/about-us/council-budgets-and-spending"
+  },
+  "bromley": {
+    "transparencyUrl": "https://www.bromley.gov.uk/council-budgets-spending/council-spending"
+  },
+  "london-bromley": {
+    "transparencyUrl": "https://www.bromley.gov.uk/council/transparency"
+  },
+  "hillingdon": {
+    "transparencyUrl": "https://www.hillingdon.gov.uk/article/9044/Council-spending-over-500"
+  },
+  "london-hillingdon": {
+    "transparencyUrl": "https://www.hillingdon.gov.uk/transparency"
+  },
+  "redbridge": {
+    "transparencyUrl": "https://data.redbridge.gov.uk/View/finance"
+  },
+  "london-redbridge": {
+    "transparencyUrl": "https://www.redbridge.gov.uk/about-the-council/transparency/"
+  },
+  "havering": {
+    "transparencyUrl": "https://www.havering.gov.uk/info/20044/finance_pensions_and_data/226/spend_over_500"
+  },
+  "wolverhampton": {
+    "transparencyUrl": "https://www.wolverhampton.gov.uk/your-council/corporate-finance/transparency-and-accountability-payments-suppliers"
+  },
+  "dudley": {
+    "transparencyUrl": "https://www.dudley.gov.uk/council-community/local-transparency/council-expenditure-over-500/"
+  },
+  "westmorland-and-furness": {
+    "transparencyUrl": "https://www.westmorlandandfurness.gov.uk/your-council/transparency"
+  },
+  "north-yorkshire": {
+    "transparencyUrl": "https://hub.datanorthyorkshire.org/dataset/north-yorkshire-council-2024-2025-over-f500-spend-by-quarter"
+  },
+  "lincolnshire": {
+    "transparencyUrl": "https://www.lincolnshire.gov.uk/finances-budgets/expenditure-500"
+  },
+  "east-sussex": {
+    "transparencyUrl": "https://www.eastsussex.gov.uk/your-council/finance/spend/payments-to-suppliers-over-500",
+    "packages": [
+      "36cf574e-c3ae-4aad-ab38-aa9cca1f9ebe"
+    ]
+  },
+  "buckinghamshire": {
+    "transparencyUrl": "https://www.buckinghamshire.gov.uk/your-council/spending-contracts-and-transparency/spending-over-500/",
+    "packages": [
+      "6dfb5f32-2cb6-499e-b9e7-f1eb023e0ca1"
+    ]
+  },
+  "cambridgeshire": {
+    "transparencyUrl": "https://www.cambridgeshire.gov.uk/council/finance-and-budget/council-spending"
+  },
+  "wiltshire": {
+    "transparencyUrl": "https://www.wiltshire.gov.uk/article/1392/Council-payments",
+    "packages": [
+      "e154cc09-c406-489b-add1-01d6f7f67b4e"
+    ]
+  },
+  "cheshire-west-and-chester": {
+    "transparencyUrl": "https://www.cheshirewestandchester.gov.uk/your-council/datasets-and-statistics/open-data/expenditure-over-500"
+  },
+  "brighton-and-hove-city": {
+    "transparencyUrl": "https://www.brighton-hove.gov.uk/council-and-democracy/council-data-and-finance/payments-over-ps250"
+  },
+  "barking-and-dagenham": {
+    "transparencyUrl": "https://www.lbbd.gov.uk/council-and-democracy/performance-and-spending/corporate-procurement/payments-over-ps250-and-ps500"
+  },
+  "barnsley": {
+    "transparencyUrl": "https://www.barnsley.gov.uk/services/our-council/information-we-publish/expenditure-over-gbp500/"
+  },
+  "bath-and-north-east-somerset": {
+    "transparencyUrl": "https://beta.bathnes.gov.uk/expenditure-over-ps500"
+  },
+  "bedford": {
+    "transparencyUrl": "https://www.bedford.gov.uk/your-council/about-council/council-budgets-and-spending/supplier-payments/payments-over-ps250"
+  },
+  "bexley": {
+    "transparencyUrl": "https://www.bexley.gov.uk/bexley-business-employment/business-services/contracts-tenders-and-procurement/expenditure-records/publication-payments-over-ps500"
+  },
+  "blackburn-with-darwen": {
+    "transparencyUrl": "https://datashare.blackburn.gov.uk/node/2",
+    "packages": [
+      "82d65f66-d3ad-4981-a55a-4dbb521fcc33"
+    ]
+  },
+  "blackpool": {
+    "transparencyUrl": "https://www.blackpool.gov.uk/Your-Council/Transparency-and-open-data/Budget,-spending-and-procurement/Payments-over-250.aspx"
+  },
+  "bracknell-forest": {
+    "transparencyUrl": "https://www.bracknell-forest.gov.uk/council-and-democracy/finance-and-transparency/transparency"
+  },
+  "city-of-london": {
+    "transparencyUrl": "https://www.cityoflondon.gov.uk/about-us/budgets-spending/local-authority-expenditure"
+  },
+  "darlington": {
+    "transparencyUrl": "https://www.darlington.gov.uk/your-council/council-information/financial-information/spending-data/",
+    "packages": [
+      "2ea818dc-8338-49ed-8ffe-812d92b71b5b"
+    ]
+  },
+  "derby": {
+    "transparencyUrl": "https://www.derby.gov.uk/council-and-democracy/open-data-freedom-of-information/open-data-transparency/"
+  },
+  "halton": {
+    "transparencyUrl": "https://www3.halton.gov.uk/Pages/councildemocracy/opendata/Payments-over-500.aspx"
+  },
+  "hammersmith-and-fulham": {
+    "transparencyUrl": "https://www.lbhf.gov.uk/councillors-and-democracy/data-and-information/transparency/procurement-and-financial-data"
+  },
+  "harrow": {
+    "transparencyUrl": "https://www.harrow.gov.uk/downloads/download/12587/council-budgets-and-spending"
+  },
+  "hartlepool": {
+    "transparencyUrl": "https://www.hartlepool.gov.uk/downloads/download/262/council_expenditure"
+  },
+  "herefordshire": {
+    "transparencyUrl": "https://www.herefordshire.gov.uk/council/open-data-principles/5"
+  },
+  "isle-of-wight": {
+    "transparencyUrl": "https://www.iow.gov.uk/council-and-councillors/transparency-our-data/our-finances/spending-and-finance/"
+  },
+  "kensington-and-chelsea": {
+    "transparencyUrl": "https://www.rbkc.gov.uk/council-councillors-and-democracy/open-data-and-transparency/transparency-and-open-data"
+  },
+  "kingston-upon-thames": {
+    "transparencyUrl": "https://www.kingston.gov.uk/council-democracy/local-government-transparency-code/2"
+  },
+  "knowsley": {
+    "transparencyUrl": "https://www.knowsley.gov.uk/your-council/publication-scheme/what-we-spend-and-how-we-spend-it"
+  },
+  "merton": {
+    "transparencyUrl": "https://www.merton.gov.uk/council-and-local-democracy/data-protection-and-freedom-of-information/open-data/spending-over-500"
+  },
+  "middlesbrough": {
+    "transparencyUrl": "https://middlesbrough-council-middlesbrough.opendata.arcgis.com/search?q=spend%20over%20500"
+  },
+  "north-east-lincolnshire": {
+    "transparencyUrl": "https://www.nelincs.gov.uk/your-council/finances-spending-and-contracts/council-spending/published-spending-data/"
+  },
+  "north-lincolnshire": {
+    "transparencyUrl": "https://www.northlincs.gov.uk/your-council/supplier-payments/"
+  },
+  "north-somerset": {
+    "transparencyUrl": "https://www.n-somerset.gov.uk/council-democracy/accounts-spending-insurance/accounts-budget/spending-over-ps250",
+    "packages": [
+      "8d1aca9e-5eb9-4db5-a2c4-01ca92fc7a25"
+    ]
+  },
+  "peterborough": {
+    "transparencyUrl": "https://data.cambridgeshireinsight.org.uk/dataset/peterborough-payments-over-%C2%A3500-suppliers"
+  },
+  "portsmouth": {
+    "transparencyUrl": "https://www.portsmouth.gov.uk/services/council-and-democracy/transparency/payments-to-suppliers/"
+  },
+  "reading": {
+    "transparencyUrl": "https://www.reading.gov.uk/the-council-and-democracy/finance-and-legal-information/council-spending-over-500/"
+  },
+  "redcar-and-cleveland": {
+    "transparencyUrl": "https://www.redcar-cleveland.gov.uk/about-the-council/budget-and-accounts/invoices-over-500"
+  },
+  "richmond-upon-thames": {
+    "transparencyUrl": "https://www.richmond.gov.uk/council_payments_to_suppliers"
+  },
+  "rotherham": {
+    "transparencyUrl": "https://www.rotherham.gov.uk/council/data-transparency-code/2",
+    "packages": [
+      "a6b62903-8634-4585-a4f4-5e1f3837126d"
+    ]
+  },
+  "rutland": {
+    "transparencyUrl": "https://www.rutland.gov.uk/council-councillors/budgets-finance/council-spending"
+  },
+  "sandwell": {
+    "transparencyUrl": "https://www.sandwell.gov.uk/info/200202/performance_and_spending/1079/payments_over_500",
+    "dataGovId": "c72d7b5c-196c-45e0-9ddd-c1998395de76",
+    "packages": [
+      "c72d7b5c-196c-45e0-9ddd-c1998395de76"
+    ]
+  },
+  "slough": {
+    "transparencyUrl": "https://www.slough.gov.uk/downloads/download/206/payments-to-suppliers-over-500"
+  },
+  "solihull": {
+    "transparencyUrl": "https://www.solihull.gov.uk/About-the-Council/What-we-spend-and-how-we-spend-it",
+    "packages": [
+      "9f9a9555-56ad-412c-a812-aaf7328dd17c"
+    ]
+  },
+  "south-tyneside": {
+    "transparencyUrl": "https://www.southtyneside.gov.uk/article/1350/Council-spending-over-500"
+  },
+  "southampton": {
+    "transparencyUrl": "https://www.southampton.gov.uk/council-democracy/council-data/expenditure-over-fivehundred/"
+  },
+  "southend-on-sea": {
+    "transparencyUrl": "https://www.southend.gov.uk/council-budgets-spending/spending-500"
+  },
+  "st-helens": {
+    "transparencyUrl": "https://www.sthelens.gov.uk/article/4545/Payments-to-suppliers"
+  },
+  "sutton": {
+    "transparencyUrl": "https://www.sutton.gov.uk/w/local-government-transparency-code"
+  },
+  "swindon": {
+    "transparencyUrl": "https://www.swindon.gov.uk/downloads/download/2285/payments_to_suppliers_of_more_than_500_in_2022"
+  },
+  "telford-and-wrekin": {
+    "transparencyUrl": "https://www.telford.gov.uk/info/20110/budgets_and_spending/55/expenditure_over_100"
+  },
+  "thurrock": {
+    "transparencyUrl": "https://www.thurrock.gov.uk/what-we-spend/payments-to-suppliers"
+  },
+  "torbay": {
+    "transparencyUrl": "https://www.torbay.gov.uk/council/finance/expenditure/"
+  },
+  "walsall": {
+    "transparencyUrl": "https://go.walsall.gov.uk/your-council/open-data/datasets"
+  },
+  "warrington": {
+    "transparencyUrl": "https://www.warrington.gov.uk/council-spending-over-ps500"
+  },
+  "west-berkshire": {
+    "transparencyUrl": "https://www.westberks.gov.uk/article/40316/Expenditure-Over-500"
+  },
+  "windsor-and-maidenhead": {
+    "transparencyUrl": "https://www.rbwm.gov.uk/home/council-and-democracy/transparency/budget-spending-and-procurement"
+  },
+  "wokingham": {
+    "transparencyUrl": "https://www.wokingham.gov.uk/council-and-meetings/open-data/datasets-and-open-data/"
+  },
+  "british": {
+    "dataGovId": "e6644704-4080-4531-9365-c34d882be1ec"
+  },
+  "rushmoor-borough": {
+    "dataGovId": "19e89a08-df99-4e26-be44-24e16a3ecf94"
+  },
+  "leeds-city": {
+    "dataGovId": "80446967-46ef-4283-bf65-1014ecfc4fbc"
+  },
+  "eden": {
+    "dataGovId": "4039c4f0-235d-47f1-96ae-9d74cb97d833",
+    "packages": [
+      "4039c4f0-235d-47f1-96ae-9d74cb97d833"
+    ]
+  },
+  "bristol-city": {
+    "dataGovId": "2dd91623-cbbc-4837-ba9f-1cfd1f38bb07"
+  },
+  "south-lakeland": {
+    "dataGovId": "2e54a908-7530-406f-9b51-7224f8c3b5a6",
+    "packages": [
+      "2e54a908-7530-406f-9b51-7224f8c3b5a6"
+    ]
+  },
+  "blaby": {
+    "dataGovId": "742deb95-3faa-499a-b4b7-1783660e060c",
+    "packages": [
+      "742deb95-3faa-499a-b4b7-1783660e060c"
+    ]
+  },
+  "eden-district": {
+    "dataGovId": "4039c4f0-235d-47f1-96ae-9d74cb97d833"
+  },
+  "london-camden": {
+    "dataGovId": "08863de4-962e-46ec-ad83-b50b37be7688"
+  },
+  "east-devon-district": {
+    "dataGovId": "03f9f076-0889-4f93-9530-2eff82bda945"
+  },
+  "south-lakeland-district": {
+    "dataGovId": "2e54a908-7530-406f-9b51-7224f8c3b5a6"
+  },
+  "wirral": {
+    "dataGovId": "cd60f6d6-56bd-4511-90d0-31e012430f6c",
+    "packages": [
+      "cd60f6d6-56bd-4511-90d0-31e012430f6c"
+    ]
+  },
+  "rochdale": {
+    "dataGovId": "b7e5bb16-dc43-44d3-979d-529fd7f5af13"
+  },
+  "barrow-borough": {
+    "dataGovId": "8b35a2eb-7b48-4dd5-80a8-7c37609a8fcd"
+  },
+  "tunbridge-wells-borough": {
+    "dataGovId": "ba746270-485e-4c39-88dc-53ceb0e5df2f"
+  },
+  "cambridgeshire-insight": {
+    "dataGovId": "ad098feb-8d3b-48cc-841d-2bc19c188695"
+  },
+  "east-devon": {
+    "packages": [
+      "03f9f076-0889-4f93-9530-2eff82bda945",
+      "b69dcd4a-5805-4dc2-81f6-d9816a0edef9"
+    ]
+  },
+  "oxford-city": {
+    "packages": [
+      "3061d52e-23c8-45fc-8912-8d96f73b2158"
+    ]
+  },
+  "craven": {
+    "packages": [
+      "cc7ccd4c-0e20-4f95-8297-0d558e7d33be"
+    ]
+  },
+  "stockport": {
+    "packages": [
+      "b731aec2-caa9-4c07-866b-9cdf58eafd00"
+    ]
+  },
+  "gloucester-city": {
+    "packages": [
+      "b395a0d9-6891-440a-a423-b50efac39522"
+    ]
+  },
+  "rushmoor": {
+    "packages": [
+      "19e89a08-df99-4e26-be44-24e16a3ecf94",
+      "008353cd-eddc-4338-b204-282e9548b9d1"
+    ]
+  },
+  "royal-of-kensington-and-chelsea": {
+    "packages": [
+      "cb01d404-1bce-47e8-ba0b-e80dd9017a2a",
+      "a8721b76-fa73-41b5-8e7d-58973d365def"
+    ]
+  },
+  "fareham": {
+    "packages": [
+      "80a85f01-e0e9-4254-a8d6-94f36519d82f"
+    ]
+  },
+  "tendring": {
+    "packages": [
+      "6d2c18bd-6e24-456a-a5a6-619202efd763"
+    ]
+  },
+  "southampton-city": {
+    "packages": [
+      "1d2ab054-8306-4b6f-aa83-8f5d3231197e"
+    ]
+  },
+  "babergh": {
+    "packages": [
+      "74bd5bc6-18f2-4cfd-9393-8aa36349475b"
+    ]
+  },
+  "chichester": {
+    "packages": [
+      "309f3671-317f-4ada-b9dc-af867bcf6b79"
+    ]
+  },
+  "lewes": {
+    "packages": [
+      "075c2dae-d1ac-42f3-8b42-bcc04d8edd98"
+    ]
+  },
+  "cheltenham": {
+    "packages": [
+      "206dbdb8-b950-4eee-ad2b-bc6eec18cd4d"
+    ]
+  },
+  "south-gloucestershire": {
+    "packages": [
+      "ec6ff3c4-a296-4fbc-99ec-0882108f73b1"
+    ]
+  },
+  "luton": {
+    "packages": [
+      "eed3436e-c4a1-453e-8f6c-baa9b3fc9990"
+    ]
+  },
+  "wigan": {
+    "packages": [
+      "546a96e6-4f09-4998-9df0-52363f240355"
+    ]
+  },
+  "london-of-harrow": {
+    "packages": [
+      "391721ae-eb4d-481e-ad58-d6aded72aca4",
+      "bc21b2be-7387-4b26-a7c7-c7a33caca9e1",
+      "57d99c39-f863-442d-a2ae-3852086e4c17"
+    ]
+  },
+  "east-staffordshire": {
+    "packages": [
+      "7a3c46ca-6842-420a-ba3f-c396a1398bef"
+    ]
+  },
+  "south-ribble": {
+    "packages": [
+      "e7221656-1ed0-4302-af1c-8301da71b066"
+    ]
+  },
+  "newark-and-sherwood": {
+    "packages": [
+      "9cdebbe8-c691-470c-9cf8-7e4f8a9325ce"
+    ]
+  },
+  "stockton-on-tees": {
+    "packages": [
+      "85b7ad53-a62b-4a7c-bafb-f1f4b2b9d423"
+    ]
+  },
+  "east-lindsey": {
+    "packages": [
+      "74afd70d-be3c-4120-be6c-16273b92170b"
+    ]
+  },
+  "south-holland": {
+    "packages": [
+      "8b6f97d3-b0fd-42b0-9bc1-4af0ed053aaf"
+    ]
+  },
+  "harrogate": {
+    "packages": [
+      "2632e9ba-c6cb-439f-abb9-eb5d66898dd6"
+    ]
+  },
+  "st-albans-city-and": {
+    "packages": [
+      "a8115902-f58c-4629-9006-ba25361c6dee"
+    ]
+  },
+  "london-of-richmond-upon-thames": {
+    "packages": [
+      "3611411f-ea59-4770-b8d6-cb29480d4497"
+    ]
+  },
+  "royal-of-kingston-upon-thames": {
+    "packages": [
+      "db140e39-afe3-4944-9355-c422b8401ad6"
+    ]
+  },
+  "tunbridge-wells": {
+    "packages": [
+      "002445de-71a7-4517-b1dd-9893bacedea7",
+      "84fddc1d-2274-4c3d-b06f-cc6d71788bf6",
+      "bfea87e5-ed0e-4d88-9451-04b9a77b9806",
+      "998c8d7b-08d2-4d58-a395-3afbd45b29cd",
+      "6202e6b0-a8cd-4803-8af7-d7bef0f76b5c",
+      "3f8cdc37-1232-46e0-901c-1370e688acca",
+      "3cda6b5d-719d-4a81-8fc3-8c19cabc72aa",
+      "4f504efc-be38-4b03-a4b8-2cb72804a085",
+      "8d776129-552b-4a74-98a7-30f424fc3376",
+      "5685de3e-20e5-41a5-9224-7cd592940c7a",
+      "9bb13da4-bedf-4701-8677-1b75adc0f0e4",
+      "ba746270-485e-4c39-88dc-53ceb0e5df2f",
+      "12f8706f-fe31-4c26-910c-392a172b50e7"
+    ]
+  },
+  "norwich-city": {
+    "packages": [
+      "01d9974a-15f3-4d0d-a6d0-ecb08b4b4234"
+    ]
+  },
+  "city-of-york": {
+    "packages": [
+      "27bc1dc6-d62f-4b93-a326-13989f5bfb56"
+    ]
+  },
+  "woking": {
+    "packages": [
+      "3bfc288e-08c7-41b4-ba22-7c5757335674"
+    ]
+  },
+  "leeds": {
+    "transparencyUrl": "https://datamillnorth.org/dataset/council-spending-2gpp0"
+  },
+  "arun": {
+    "transparencyUrl": "https://www.arun.gov.uk/over-500"
+  },
+  "ashfield": {
+    "transparencyUrl": "https://www.ashfield.gov.uk/your-council/procurement/payments-to-suppliers/"
+  },
+  "ashford": {
+    "transparencyUrl": "https://www.ashford.gov.uk/transparency/local-government-transparency-code/payments-over-250-and-credit-card-expenditure-supplier-spend/"
+  },
+  "bassetlaw": {
+    "transparencyUrl": "https://data.bassetlaw.gov.uk/payments-to-suppliers/",
+    "scrapeProfile": {
+      "5CCN - Level 5 Cost Centre Name": "service",
+      "9AN - Level 9 Account Name": "description",
+      "5AN - Level 5 Account Name": "category"
+    }
+  },
+  "adur": {
+    "transparencyUrl": "https://www.adur-worthing.gov.uk/about-the-councils/open-data/payments-to-suppliers/",
+    "filePattern": "^(?!.*Joint).*Adur DC",
+    "scrapeProfile": {
+      "Department": "directorate",
+      "DepartmentSubsection": "service"
+    }
+  },
+  "worthing": {
+    "transparencyUrl": "https://www.adur-worthing.gov.uk/about-the-councils/open-data/payments-to-suppliers/",
+    "filePattern": "^(?!.*Joint).*Worthing BC",
+    "scrapeProfile": {
+      "Department": "directorate",
+      "DepartmentSubsection": "service"
+    }
+  }
+}

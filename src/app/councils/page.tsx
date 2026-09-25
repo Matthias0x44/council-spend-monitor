@@ -1,30 +1,11 @@
-import { getDb } from "@/db";
-import { councils, transactions } from "@/db/schema";
-import { eq, sql } from "drizzle-orm";
+import { getCouncilDirectory } from "@/lib/queries";
 import Link from "next/link";
 import { CouncilSearch } from "@/components/council-search";
 
 export const dynamic = "force-dynamic";
 
 export default async function CouncilsPage() {
-  const db = await getDb();
-  const allCouncils = await db
-    .select({
-      id: councils.id,
-      name: councils.name,
-      slug: councils.slug,
-      region: councils.region,
-      scrapeStatus: councils.scrapeStatus,
-      lastScrapedAt: councils.lastScrapedAt,
-      transactionCount: sql<number>`COALESCE(COUNT(${transactions.id}), 0)`,
-    })
-    .from(councils)
-    .leftJoin(transactions, eq(transactions.councilId, councils.id))
-    .groupBy(councils.id)
-    .orderBy(councils.name)
-    .all();
-
-  const active = allCouncils.filter((c) => c.scrapeStatus === "active");
+  const active = await getCouncilDirectory();
 
   const regions = [...new Set(active.map((c) => c.region).filter(Boolean))].sort();
 
@@ -35,18 +16,18 @@ export default async function CouncilsPage() {
           All Councils
         </h1>
         <p className="text-sm" style={{ color: "#6b7280" }}>
-          {active.length} local authorities with published spending data
+          {active.length} English authorities in the retained period; {active.filter(c => c.hasPayments).length} with ingested payments
         </p>
       </div>
 
       <div className="max-w-lg">
-        <CouncilSearch />
+        <CouncilSearch initialCouncils={active} />
       </div>
 
       {active.length > 0 && (
         <div className="flex flex-col gap-6">
           <h2 className="text-lg font-semibold" style={{ color: "#111" }}>
-            Available
+            Council coverage
           </h2>
           {regions.map((region) => {
             const regionCouncils = active.filter((c) => c.region === region);
@@ -68,9 +49,9 @@ export default async function CouncilsPage() {
                         <div className="font-medium" style={{ color: "#111" }}>
                           {c.name}
                         </div>
-                        {c.transactionCount > 0 && (
+                        {(
                           <div className="text-xs" style={{ color: "#6b7280" }}>
-                            {c.transactionCount.toLocaleString()} transactions
+                            {c.hasPayments ? "Payments available · partial coverage" : "No data ingested"}
                           </div>
                         )}
                       </div>
@@ -102,9 +83,9 @@ export default async function CouncilsPage() {
                         <div className="font-medium" style={{ color: "#111" }}>
                           {c.name}
                         </div>
-                        {c.transactionCount > 0 && (
+                        {(
                           <div className="text-xs" style={{ color: "#6b7280" }}>
-                            {c.transactionCount.toLocaleString()} transactions
+                            {c.hasPayments ? "Payments available · partial coverage" : "No data ingested"}
                           </div>
                         )}
                       </div>

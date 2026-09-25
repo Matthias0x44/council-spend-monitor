@@ -1,0 +1,96 @@
+{
+  "generatedAt": "2026-07-11T20:24:52.239Z",
+  "attachedCount": 15,
+  "attached": [
+    {
+      "id": "4039c4f0-235d-47f1-96ae-9d74cb97d833",
+      "title": "Payments to suppliers with a value over £500",
+      "org": "Eden District Council",
+      "slug": "eden-district"
+    },
+    {
+      "id": "c72d7b5c-196c-45e0-9ddd-c1998395de76",
+      "title": "Payments to suppliers with a value over £500 from Sandwell Metropolitan Borough Council",
+      "org": "Sandwell Metropolitan Borough Council",
+      "slug": "sandwell"
+    },
+    {
+      "id": "08863de4-962e-46ec-ad83-b50b37be7688",
+      "title": "Camden Council Spend Over 500 GBP",
+      "org": "London Borough of Camden",
+      "slug": "london-camden"
+    },
+    {
+      "id": "9e9b0128-9095-4bde-b24b-d04e60789016",
+      "title": "Council spend over £500",
+      "org": "Plymouth City Council",
+      "slug": "plymouth"
+    },
+    {
+      "id": "2d6c7585-c281-4285-ad35-44db26215c95",
+      "title": "Procurement card spend over £500",
+      "org": "British Council",
+      "slug": "british"
+    },
+    {
+      "id": "056eab66-de31-4d14-ad3a-134f01014b96",
+      "title": "East Devon Grants over £500",
+      "org": "East Devon District Council",
+      "slug": "east-devon-district"
+    },
+    {
+      "id": "03f9f076-0889-4f93-9530-2eff82bda945",
+      "title": "East Devon Spend over £500",
+      "org": "East Devon District Council",
+      "slug": "east-devon-district"
+    },
+    {
+      "id": "2e54a908-7530-406f-9b51-7224f8c3b5a6",
+      "title": "Payments to suppliers over £250",
+      "org": "South Lakeland District Council",
+      "slug": "south-lakeland-district"
+    },
+    {
+      "id": "e32c1ade-5608-4952-b36c-58e5b73eba2a",
+      "title": "Expenditure exceeding 500 GBP (Supplier Spend)",
+      "org": "Trafford Council",
+      "slug": "trafford"
+    },
+    {
+      "id": "cd60f6d6-56bd-4511-90d0-31e012430f6c",
+      "title": "Wirral Expenditure Exceeding £500",
+      "org": "Wirral Metropolitan Borough Council",
+      "slug": "wirral"
+    },
+    {
+      "id": "e6644704-4080-4531-9365-c34d882be1ec",
+      "title": "Items of expenditure over £25,000",
+      "org": "British Council",
+      "slug": "british"
+    },
+    {
+      "id": "b7e5bb16-dc43-44d3-979d-529fd7f5af13",
+      "title": "Council Spending",
+      "org": "Rochdale Borough Council",
+      "slug": "rochdale"
+    },
+    {
+      "id": "8b35a2eb-7b48-4dd5-80a8-7c37609a8fcd",
+      "title": "Transparency Data Contracts",
+      "org": "Barrow Borough Council",
+      "slug": "barrow-borough"
+    },
+    {
+      "id": "05cc719e-3dac-4342-b2b4-e350bd4b37c3",
+      "title": "Council spending on procurement cards",
+      "org": "Eden District Council",
+      "slug": "eden-district"
+    },
+    {
+      "id": "db11db3f-ea07-4114-862f-b24b2ad12807",
+      "title": "Tunbridge Wells Open Data - Transparency - Local Authority Land 2017",
+      "org": "Tunbridge Wells Borough Council",
+      "slug": "tunbridge-wells-borough"
+    }
+  ]
+}

@@ -12,7 +12,7 @@ for (const step of steps) {
   console.log(`${"=".repeat(60)}\n`);
   try {
     execSync(step.cmd, { stdio: "inherit" });
-  } catch (err) {
+  } catch {
     console.error(`\nStep "${step.name}" failed. Continuing...`);
   }
 }

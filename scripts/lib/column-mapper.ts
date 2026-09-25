@@ -18,6 +18,7 @@ export type ColumnMapping = Record<string, CanonicalField>;
 
 const FIELD_VARIANTS: Record<CanonicalField, string[]> = {
   supplier: [
+    "supplier(t)",
     "vendor name",
     "supplier name",
     "supplier",
@@ -40,6 +41,8 @@ const FIELD_VARIANTS: Record<CanonicalField, string[]> = {
   ],
   amount: [
     "amount excluding vat",
+    "amount exc vat",
+    "amount excl vat",
     "amount",
     "gross amount",
     "net amount",
@@ -47,6 +50,7 @@ const FIELD_VARIANTS: Record<CanonicalField, string[]> = {
     "value",
     "payment amount",
     "amount paid",
+    "paid amount",
     "amount (£)",
     "amount(£)",
     "amount £",
@@ -60,6 +64,8 @@ const FIELD_VARIANTS: Record<CanonicalField, string[]> = {
     "invoiced",
     "invoiced amount",
     "payment value",
+    "gross value",
+    "net",
     // Stockport's "All Spend" CSVs use a snake_case header. normalizeHeader
     // collapses underscores into spaces so we list it both ways for clarity.
     "net_amount",
@@ -77,6 +83,8 @@ const FIELD_VARIANTS: Record<CanonicalField, string[]> = {
     "paid date",
   ],
   service: [
+    "cost centre(t)",
+    "expense area",
     "cost centre description",
     "cost centre name",
     "service area",
@@ -91,6 +99,7 @@ const FIELD_VARIANTS: Record<CanonicalField, string[]> = {
     "service area description",
   ],
   directorate: [
+    "directorate(t)",
     "directorate",
     "directorate name",
     "portfolio",
@@ -101,11 +110,11 @@ const FIELD_VARIANTS: Record<CanonicalField, string[]> = {
     "strategic director area",
   ],
   category: [
+    "proclass(t)",
     "proclass description",
     "proclass category",
     "category",
     "expense type",
-    "expense area",
     "subjective",
     "expenditure category",
     "spend classification",
@@ -117,6 +126,7 @@ const FIELD_VARIANTS: Record<CanonicalField, string[]> = {
     "proclass level 1 description",
   ],
   description: [
+    "account code(t)",
     "purpose of spend",
     "description",
     "purpose",
@@ -398,7 +408,11 @@ export function validateSupplierColumn(
     if (!topValue || count > topValue.count) topValue = { value, count };
   }
   const dominationRatio = topValue ? topValue.count / nonEmpty : 0;
-  const looksLikePublisher = nonEmpty >= 20 && dominationRatio >= 0.8;
+  // "REDACTED…" dominating is legitimate personal-data redaction, not a
+  // publisher-column failure — don't trigger remapping to "Supplier Type".
+  const topIsRedacted = topValue ? /^redacted\b/i.test(topValue.value) : false;
+  const looksLikePublisher =
+    nonEmpty >= 20 && dominationRatio >= 0.8 && !topIsRedacted;
   const avgLen = totalLen / nonEmpty;
   const distinctRatio = valueCounts.size / nonEmpty;
   const looksLikeFlagColumn =

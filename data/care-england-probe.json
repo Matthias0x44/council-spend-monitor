@@ -1,0 +1,49 @@
+{
+  "generatedAt": "2026-07-11T23:05:16.239Z",
+  "goodCount": 6,
+  "badCount": 4,
+  "good": [
+    {
+      "slug": "leicester",
+      "files": 1
+    },
+    {
+      "slug": "north-somerset",
+      "files": 5
+    },
+    {
+      "slug": "sunderland",
+      "files": 12
+    },
+    {
+      "slug": "swindon",
+      "files": 12
+    },
+    {
+      "slug": "west-berkshire",
+      "files": 171
+    },
+    {
+      "slug": "west-northamptonshire",
+      "files": 1
+    }
+  ],
+  "bad": [
+    {
+      "slug": "newcastle",
+      "reason": "Error: HTTP 404 fetching https://www.newcastle.gov.uk/local-government/transparency-and-open-data/payments-over-500"
+    },
+    {
+      "slug": "plymouth-city",
+      "reason": "Error: HTTP 404 fetching https://www.plymouth.gov.uk/transparency-and-open-data"
+    },
+    {
+      "slug": "royal-greenwich",
+      "reason": "Error: HTTP 404 fetching https://www.royalgreenwich.gov.uk/info/200210/transparency"
+    },
+    {
+      "slug": "sandwell",
+      "reason": "Error: HTTP 404 fetching https://www.sandwell.gov.uk/info/200202/performance_and_spending/1079/payments_over_500"
+    }
+  ]
+}

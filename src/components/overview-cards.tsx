@@ -26,9 +26,9 @@ export function OverviewCards({ overview }: Props) {
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <Card
-        label="Total Spend"
+        label="Selected Net Payments"
         value={formatCompact(overview.spend.total)}
-        sub={`${overview.spend.transactionCount.toLocaleString()} transactions`}
+        sub={`${overview.spend.transactionCount.toLocaleString()} sample transactions`}
         icon={<PoundSterling className="h-4 w-4" />}
         accent="primary"
       />
@@ -45,7 +45,7 @@ export function OverviewCards({ overview }: Props) {
         <Card
           label="Avg Transaction"
           value={formatCurrency(avg)}
-          sub="Per payment (>£500)"
+          sub="Per selected transaction"
           icon={<Receipt className="h-4 w-4" />}
           accent="primary"
         />
@@ -70,7 +70,7 @@ export function OverviewCards({ overview }: Props) {
         <Card
           label="Year-on-Year"
           value="—"
-          sub="No prior year data"
+          sub="Complete comparable periods not verified"
           icon={<ArrowUpDown className="h-4 w-4" />}
           accent="muted"
         />
@@ -79,7 +79,7 @@ export function OverviewCards({ overview }: Props) {
       <Card
         label="Suppliers"
         value={(overview.supplierCount ?? 0).toLocaleString()}
-        sub="Unique suppliers paid"
+        sub="In selected payments"
         icon={<Users className="h-4 w-4" />}
         accent="primary"
       />

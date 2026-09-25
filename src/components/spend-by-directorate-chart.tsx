@@ -55,7 +55,7 @@ export function SpendByDirectorateChart({ data }: { data: DataItem[] }) {
               contentStyle={{ fontSize: 12, background: "#fff", border: "1px solid #e5e7eb", color: "#111" }}
               itemStyle={{ color: "#111" }}
             />
-            <Bar dataKey="value" radius={[0, 4, 4, 0]}>
+            <Bar dataKey="value" radius={[0, 4, 4, 0]} isAnimationActive={false}>
               {chartData.map((_, i) => (
                 <Cell key={i} fill={COLORS[i % COLORS.length]} />
               ))}

@@ -16,7 +16,7 @@ import * as schema from "../src/db/schema";
 import * as path from "path";
 import * as fs from "fs";
 
-const DB_PATH = path.join(process.cwd(), "data", "council-spend.db");
+const DB_PATH = process.env.LOCAL_DB_PATH || path.join(process.cwd(), "data", "council-spend.db");
 
 function slugify(name: string): string {
   return name
@@ -126,7 +126,7 @@ interface ManualCouncil {
   dataGovId?: string;
 }
 
-const MANUAL_COUNCILS: ManualCouncil[] = [
+export const MANUAL_COUNCILS: ManualCouncil[] = [
   // Already scraped
   { name: "Kirklees Council", slug: "kirklees", region: "West Yorkshire", transparencyUrl: "https://www.kirklees.gov.uk/beta/information-and-data/expenditure-data.aspx" },
 
@@ -360,7 +360,7 @@ async function main() {
   sqlite.close();
 }
 
-main().catch((err) => {
+if (process.argv[1]?.endsWith("seed-registry.ts")) main().catch((err) => {
   console.error("Seed registry failed:", err);
   process.exit(1);
 });

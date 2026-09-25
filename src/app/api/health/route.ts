@@ -20,7 +20,8 @@ export async function GET() {
     diagnostics.council_count = row?.cnt ?? 0;
   } catch (err: unknown) {
     diagnostics.db_connected = false;
-    diagnostics.error = err instanceof Error ? err.message : String(err);
+    console.error("Database health check failed", err);
+    diagnostics.error = "Database unavailable";
     return NextResponse.json(diagnostics, { status: 500 });
   }
 
