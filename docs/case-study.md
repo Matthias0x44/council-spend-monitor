@@ -4,7 +4,7 @@
 
 English councils publish payment files for transparency, but their formats, thresholds, date conventions and archive policies differ. A single chart can hide those differences. This project explored how to make payments searchable while keeping the publisher's evidence and gaps visible.
 
-The design aim was a national dashboard covering five UK financial years including the current year. The verified authority register contained 337 current or predecessor authorities during the September 2026 window. A full national dataset was **not** achieved. Operating a large live import became too expensive, so the hosted service was retired and the repository now carries a small offline demo.
+The design aim was a national dashboard covering five UK financial years including the current year. The verified authority register contained 337 current or predecessor authorities during the September 2026 window. A full national dataset was **not** achieved. Operating a large live import became too expensive, so the Cloudflare service was retired and the repository now carries a small offline demo. A separate legacy Vercel deployment is under the account owner's control.
 
 ## How records moved through the prototype
 

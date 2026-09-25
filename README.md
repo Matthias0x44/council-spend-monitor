@@ -2,7 +2,7 @@
 
 An interactive transparency dashboard for **payments published by English local authorities**. It shows the original source for each example payment, distinguishes missing data from zero expenditure, and explains or declines each suggested service classification.
 
-**Portfolio status:** This repository is an offline demonstration. The hosted Worker and its D1 database were retired on 25 September 2026 after the national import proved too costly to operate. No scheduled scraper or hosted site remains. The demo runs locally with a small, committed fixture; it makes no claim of complete national coverage.
+**Portfolio status:** This repository is an offline demonstration. The Cloudflare Worker and its D1 database were retired on 25 September 2026 after the national import proved too costly to operate. No scheduled scraper remains. A separate legacy Vercel deployment is being handled by the account owner and is not part of this demo. The demo runs locally with a small, committed fixture; it makes no claim of complete national coverage.
 
 ![Coventry dashboard showing sample scope, partial coverage, payment summary and charts](docs/dashboard-demo.png)
 
